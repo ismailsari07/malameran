@@ -40,6 +40,39 @@ Then visit <http://localhost:8000>. VS Code Live Server works too.
 `assets/css/styles.css` holds the design tokens, shared UI and the landing
 page. `assets/css/app.css` holds the auth, intake and dashboard surfaces.
 
+## Brand and theme
+
+The site is dark-only, and both halves of the palette are sampled from the
+logo artwork: the ink ramp from its ground (`#010A19`) and the single accent
+from its gold (`#C59455`). There is no second accent — anything that needs to
+draw the eye is gold.
+
+Every colour is a token in the `:root` block of `styles.css`:
+
+| Tokens                  | Use                                                    |
+| ----------------------- | ------------------------------------------------------ |
+| `--ink-950` … `--ink-600` | Page depth. `950` is recessed, `600` is a hover surface |
+| `--gold`, `--gold-600/700` | Accent, hover, pressed                               |
+| `--gold-200`, `--gold-050` | Hairlines and tinted fills                            |
+| `--text*`, `--muted`, `--heading` | Type ramp                                     |
+
+Section rhythm on the landing page uses three levels: the page itself
+(`--ink-900`), `.panel-section` raised off it, and `.deep-section` recessed
+into it. On dark, depth comes from a hairline plus shadow, never from tint
+alone.
+
+Logo assets in `assets/img/`:
+
+| File                     | Use                                                   |
+| ------------------------ | ----------------------------------------------------- |
+| `malameran-mark.png`     | The monogram, used at 42px in header, footer and auth  |
+| `malameran-emblem.png`   | Full globe emblem — for large format only              |
+| `favicon.png`            | Browser tab                                            |
+| `apple-touch-icon.png`   | iOS home screen                                        |
+
+The full emblem's globe and arc turn to noise below roughly 100px, which is
+why UI chrome uses the tighter monogram crop instead.
+
 ## Stage-one limitations
 
 These are deliberate for this milestone:
