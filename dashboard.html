@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard | Malameran</title>
+  <meta name="description" content="Review the procurement projects you have submitted to Malameran." />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="stylesheet" href="assets/css/app.css" />
+  <script src="assets/js/store.js"></script>
+  <script src="assets/js/forms.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <!-- Bounces signed-out visitors to login before the page paints. -->
+  <script>window.AppAuth.requireAuth();</script>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="navbar container">
+      <a class="brand" href="index.html" aria-label="Malameran home">
+        <span class="brand-mark" aria-hidden="true">M</span>
+        <span class="brand-name">Malameran</span>
+      </a>
+
+      <div class="nav-links" id="nav-links">
+        <a href="index.html">Home</a>
+        <a href="index.html#services">Services</a>
+        <a href="index.html#industries">Industries</a>
+        <a href="index.html#about">About</a>
+        <a href="index.html#contact">Contact</a>
+      </div>
+
+      <div class="nav-actions" data-nav-actions></div>
+
+      <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="nav-links">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </header>
+
+  <main class="app-page">
+    <div class="container">
+      <div class="dash">
+        <!-- Sidebar. Projects is the only item for now; the list is
+             built by dashboard.js so the count stays in sync. -->
+        <aside class="dash-side" data-dash-side></aside>
+
+        <section class="dash-main" data-dash-main></section>
+      </div>
+    </div>
+  </main>
+
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/dashboard.js"></script>
+</body>
+</html>

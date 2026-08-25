@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log in | Malameran</title>
+  <meta name="description" content="Log in to your Malameran account to start a project and track your procurement requests." />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="stylesheet" href="assets/css/app.css" />
+  <script src="assets/js/store.js"></script>
+  <script src="assets/js/forms.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script>window.AppAuth.redirectIfSignedIn();</script>
+</head>
+<body>
+  <div class="auth-shell">
+    <aside class="auth-brand">
+      <a class="brand" href="index.html">
+        <span class="brand-mark" aria-hidden="true">M</span>
+        <span>Malameran</span>
+      </a>
+
+      <div class="auth-pitch">
+        <span class="eyebrow inverted">Client access</span>
+        <h2>Manage your sourcing projects in one place.</h2>
+        <p>Sign in to submit new procurement requirements and review everything you have sent us so far.</p>
+        <div class="auth-points">
+          <span>Submit project requirements</span>
+          <span>Track every request you send</span>
+          <span>One place for your procurement history</span>
+        </div>
+      </div>
+
+      <p class="auth-foot">© <span data-year>2026</span> Malameran</p>
+    </aside>
+
+    <main class="auth-main">
+      <div class="auth-card">
+        <a class="auth-back" href="index.html">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+          Back to website
+        </a>
+
+        <h1>Welcome back</h1>
+        <p class="auth-sub">Log in to continue to your dashboard.</p>
+
+        <form class="auth-form" data-login-form novalidate>
+          <div class="alert alert-error" data-form-alert hidden role="alert"></div>
+
+          <div class="field">
+            <label for="login-email">Email Address</label>
+            <input id="login-email" name="email" type="email" placeholder="jane@company.com" autocomplete="email" autofocus>
+            <p class="field-error"></p>
+          </div>
+
+          <div class="field">
+            <label for="login-password">Password</label>
+            <input id="login-password" name="password" type="password" placeholder="••••••••" autocomplete="current-password">
+            <p class="field-error"></p>
+          </div>
+
+          <button class="btn btn-primary btn-block" type="submit">Log in</button>
+        </form>
+
+        <p class="auth-alt">
+          Don’t have an account?
+          <a href="signup.html" data-keep-next>Sign up</a>
+        </p>
+
+        <p class="auth-disclaimer">
+          Prototype notice: accounts are stored in this browser only. There is no email
+          verification and no server, so your details do not leave this device.
+        </p>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.querySelector('[data-year]').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
