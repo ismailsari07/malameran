@@ -734,6 +734,43 @@
     line-height: 1.5;
   }
 
+
+  /* ==========================================================================
+     Added in block 4b for For Suppliers, About and Contact. All flat — none of
+     those three pages has a 375px artboard.
+     ======================================================================= */
+
+  /* About "Why we exist". t-h2-success-request is 52/1.03 at -0.035em. */
+  .t-h2-why {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 52px;
+    line-height: 1.03;
+    letter-spacing: -0.03em;
+  }
+  /* For Suppliers closing band. t-h2-section is 56 at 1.03 / -0.03em. */
+  .t-h2-cta-supplier {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 56px;
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+  }
+  /* Contact sidebar email address. */
+  .t-contact-value {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 17px;
+  }
+  /* Contact "2 days". t-h2-statement is 44/700 at line-height 1.08. */
+  .t-stat-figure {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 44px;
+    line-height: 1;
+    letter-spacing: -0.035em;
+  }
+
   /* ==========================================================================
      Desktop step. Only the roles with a real 375 <-> 1440 pair appear here;
      the rest have no mobile counterpart in the source and stay single-size

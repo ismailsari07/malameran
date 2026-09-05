@@ -21,9 +21,9 @@ team by email, and the submitter receives a confirmation.
 - [x] How It Works
 - [x] Services
 - [x] Industries
-- [ ] For Suppliers
-- [ ] About
-- [ ] Contact
+- [x] For Suppliers
+- [x] About
+- [x] Contact
 - [ ] Privacy policy
 - [ ] Terms
 - [ ] 404 and error pages
@@ -73,9 +73,8 @@ team by email, and the submitter receives a confirmation.
 - [ ] Open up `src/app/robots.ts` — it is `Disallow: /` for every crawler right now
 - [ ] Delete `src/app/tokens/` — temporary internal token verification page
 - [ ] Write a README with setup instructions before delivery
-- [ ] Decide which supplier application surface wins: the dark form embedded in the
-      For Suppliers page, or the light `/suppliers/apply` page. See the open questions in
-      `docs/design.md`
+- [x] Decide which supplier application surface wins — the embedded dark form is
+      dropped; `/suppliers/apply` wins. See `docs/decisions.md`
 - [ ] Give the 14 single-size type roles a mobile value as the pages using them are built —
       listed in `docs/design.md` under "Type roles with no mobile counterpart"
 - [ ] Revisit `lg: 1024px` when Home is built: the 82px hero is authored at 1440 and

@@ -50,6 +50,8 @@ const RHYTHMS = {
   success: "pt-13 pb-15 lg:pt-24 lg:pb-26",
   /** App form body: 36px 0 56px mobile, 72px 0 104px desktop */
   "form-body": "pt-9 pb-14 lg:pt-18 lg:pb-26",
+  /** Contact's form band: 56px top, 112px bottom. */
+  "form-band": "pt-12 pb-16 lg:pt-14 lg:pb-28",
   /** No vertical padding — the child owns its own rhythm. */
   none: "",
 } as const;

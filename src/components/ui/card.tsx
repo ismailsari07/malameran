@@ -24,6 +24,10 @@ const TONES = {
   panel: "border border-white/14",
   /** A filled aside on a dark ground: the same 14% border over a 3.5% fill. */
   "dark-panel": "border border-white/14 bg-white/[3.5%]",
+  /** A form card: the faintest fill in the source, at 2%. */
+  "dark-form": "border border-white/14 bg-white/2",
+  /** A sidebar card beside a form, at 3%. */
+  "dark-aside": "border border-white/14 bg-white/3",
   /** Accent-tinted, but bordered at the 45% mix rather than full accent. */
   "emphasis-soft":
     "border border-(--accent-tint-border) bg-(--accent-card-fill)",
@@ -47,6 +51,7 @@ const PADDING = {
   "34-32-38": "px-8 pt-8.5 pb-9.5",
   "36-34-40": "px-8.5 pt-9 pb-10",
   "28-22-30": "px-5.5 pt-7 pb-7.5",
+  "44-44-48": "px-11 pt-11 pb-12",
   "52-56-56": "px-14 pt-13 pb-14",
 } as const;
 
@@ -69,6 +74,7 @@ const PADDING_LG = {
   "34-32-38": "lg:px-8 lg:pt-8.5 lg:pb-9.5",
   "36-34-40": "lg:px-8.5 lg:pt-9 lg:pb-10",
   "28-22-30": "lg:px-5.5 lg:pt-7 lg:pb-7.5",
+  "44-44-48": "lg:px-11 lg:pt-11 lg:pb-12",
   "52-56-56": "lg:px-14 lg:pt-13 lg:pb-14",
 } as const;
 

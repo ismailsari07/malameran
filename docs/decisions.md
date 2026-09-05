@@ -5,6 +5,45 @@ Format: date · decision · why · consequence.
 
 ---
 
+## 2026-09-05 · For Suppliers loses its embedded application form
+
+The artboard carries an eleven-field dark form on For Suppliers and a separate
+light `/suppliers/apply` page. The embedded form is dropped; the band keeps its
+copy and links to `/suppliers/apply`.
+**Why:** two submission surfaces for one application is not what `docs/scope.md`
+describes, and the light Request Form pair is already the chosen treatment for
+form pages — the same call made for the sourcing form on 2026-09-05.
+**Consequence:** the open question in `docs/design.md` about two supplier surfaces
+is answered. `/suppliers/apply` is block 8; the CTA points at the route before it
+exists. Contact is now the only page on the site with a dark form.
+
+## 2026-09-05 · One mailbox and no street address, on every page
+
+`info@malameran.com` everywhere; city and country only. The artboards show
+`hello@malameran.com`, `suppliers@malameran.com` and a King Street address across
+Contact, For Suppliers, About and the footer.
+**Why:** nothing in the project should reference a mailbox or a street address the
+client has not confirmed exists. Split routing between buyer and supplier mail is a
+phase 2 question; for now both forms land in one inbox, which is already the
+decision on record.
+**Consequence:** every divergence is noted at its `TODO(copy):` in the content
+file, so the client sees exactly what the design said and what shipped instead.
+
+## 2026-09-05 · Contact does not close on a CTA band
+
+Every other marketing page ends on `--dark-strong`. Contact ends on the form.
+**Why:** the artboard does, and the reason holds — a visitor at the bottom of a
+contact form is already doing the thing a closing CTA would ask for.
+**Consequence:** the section-rhythm note in `docs/design.md` records Contact as the
+documented exception rather than an omission.
+
+## 2026-09-05 · The About image slot is dropped, as Home's was
+
+**Why:** same as Home — there is no corporate photography and none is planned.
+**Consequence:** both image slots in the design are now unbuilt, and the prose
+column takes the space on both pages. The slots stay described in
+`docs/design.md` in case photography ever arrives.
+
 ## 2026-09-05 · The header's active state is read on the client, by the nav alone
 
 `SiteNav` is a small client component calling `usePathname`; `SiteHeader` stays a

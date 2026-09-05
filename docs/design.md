@@ -385,6 +385,7 @@ The design has **no elevation system**. Depth comes from gradient grounds and ha
 | Supplier-page CTA band | `112px 0 124px` |
 | Success page | `96px 40px 104px` |
 | App form body | `72px` top, `104px` bottom |
+| Contact form band | `56px` top, `112px` bottom |
 | Footer | `64px 0 36px` |
 
 Mobile compresses everything to `64px 20px` for standard sections, `52px 20px 60px` for the
@@ -419,7 +420,11 @@ Body paragraphs settle around `620px`; headings around `760–900px`.
 
 ### Section rhythm
 
-Marketing pages alternate ground colour top to bottom, always ending on `--dark-strong`:
+Marketing pages alternate ground colour top to bottom, ending on `--dark-strong` —
+with one exception. **Contact does not close on a CTA band.** Its artboard ends on the
+form section, then the footer. The visitor is already doing what a closing CTA would ask
+them to do, so pushing them to `/request` from the bottom of a contact form is noise.
+Decided 2026-09-05; every other marketing page ends on `--dark-strong`:
 
 ```
 header (#1F1E23)
@@ -647,7 +652,7 @@ The design system is implemented in `src/app/globals.css`. Tailwind v4 has no
 | `@theme static` | Colour, font-family, radius and breakpoint tokens | Generates utilities (`text-ink`, `rounded-12`) **and** emits every token as a CSS variable. `static` is deliberate: without it Tailwind tree-shakes tokens no utility references yet, which would empty out a design system defined ahead of the components that use it. |
 | `:root` | The seven gradient grounds and `--paper-fade` | Layered multi-stop gradients are not a scale, so they must not become utilities. Kept as variables and applied through the `.ground-*` classes. |
 | `:root`, second block | The six derived accent `color-mix()` expressions | Computed values, not a scale. Kept as expressions so changing `--color-accent` propagates. |
-| `@layer components` | `.ground-*` classes and the 63 `.t-*` typography roles | Applied wholesale to an element; each role carries size, weight, line-height, letter-spacing and family together so a heading cannot be assembled wrongly. |
+| `@layer components` | `.ground-*` classes and the 67 `.t-*` typography roles | Applied wholesale to an element; each role carries size, weight, line-height, letter-spacing and family together so a heading cannot be assembled wrongly. |
 | `@utility` | `.focus-ring`, `.focus-ring-dark`, `.focus-outline` | Declared with `@utility`, not `@layer components`, because only utilities accept variants — components need `focus:focus-ring` on the field itself and `focus-visible:focus-outline` on links and buttons. |
 | top level | `@keyframes mal-spin` | Tailwind does not manage keyframes. |
 
@@ -745,6 +750,18 @@ three pages has a 375px artboard:
 `t-prose-step` was already in the type scale above as "Body (step / industry copy)";
 it simply had no class until the pages using it were built.
 
+Four more, added for For Suppliers, About and Contact. Also flat:
+
+| Class | Value | Used by | Nearest role, and why it is not that |
+| --- | --- | --- | --- |
+| `t-h2-why` | 52 / 1.03 / −0.03 / 800 | About "Why we exist" | `t-h2-success-request` is 52/1.03 at −0.035em |
+| `t-h2-cta-supplier` | 56 / 1.02 / −0.035 / 800 | For Suppliers closing band | `t-h2-section` is 56 at 1.03 / −0.03em |
+| `t-contact-value` | 17 / 600 | Contact email address | nothing within 2px at that weight |
+| `t-stat-figure` | 44 / 700 / lh 1 / −0.035 | Contact "2 days" | `t-h2-statement` is 44/700 at line-height 1.08 |
+
+`t-h2-why` and `t-stat-figure` were both already in the type scale ("Why-we-exist h2",
+"Stat figure") without a class.
+
 ### Type roles with no mobile counterpart
 
 Mobile artboards exist for only 4 of the 12 pages, so 19 of the 36 content roles have a
@@ -814,6 +831,20 @@ already set:
 | Sector row `1fr 1fr` gap 72, padding 48 | stacked, gap 24, padding 32; the chip grid stays two columns, because the chips are short and one column leaves the row very tall |
 | CTA heading 72px | unchanged — `t-h2-cta-page` is one of the roles with no mobile value, and stays flat until an artboard gives one |
 
+**Mobile layout for For Suppliers, About and Contact.** Same position as the three pages
+above — no 375px artboard — and the same patterns:
+
+| Desktop | Below `lg` |
+| --- | --- |
+| Any card grid | one column, gap 12 |
+| Card padding / radius | `22px`, two radius steps down |
+| Criteria card, numeral beside the copy at gap 26 | numeral above the heading, as Home's trust cards |
+| About `1fr 520px` gap 96 | stacked, as Home's "the problem" |
+| For Suppliers three-up process row | one column, gap 24 |
+| Contact `1fr 420px` gap 64 | stacked, form first, the three aside cards below |
+| Contact field pairs `1fr 1fr` gap 22/24 | one column, gap 22 |
+| Contact form card `44px 44px 48px` | `22px` |
+
 **Keyboard focus for links and buttons.** The source has a focus state for form fields only
 (`.focus-ring`, `.focus-ring-dark`). `.focus-outline` is a 2px accent outline at 2px offset,
 applied as `focus-visible:focus-outline`. An outline rather than a box-shadow so it reads on
@@ -838,6 +869,27 @@ First real use of two tokens declared in block 1 and unused until now:
 `--color-numeral-idle` (`#B9B7B1`) on the three steps Malameran owns, and
 `--color-text-eyebrow` (`#8A8882`) on their "Us" labels.
 
+## For Suppliers, About, Contact: notes from the build
+
+None of these three has a 375px artboard either.
+
+| Element | Artboard | This document said | Resolution |
+| --- | --- | --- | --- |
+| Contact closing band | none — the page ends on the form | every marketing page ends on `--dark-strong` | followed the artboard; the section-rhythm note above now records the exception |
+| For Suppliers closing band | 56px heading, ghost `mailto:` button, `112px 0 124px` | the rhythm is recorded; a 56px CTA heading is not | its own section and the new `t-h2-cta-supplier`; `FinalCtaBand` is untouched |
+| For Suppliers application band | `112px 0 112px` | standard is `112px 0 120px` | folded to `standard`; 8px at the bottom |
+| Contact form band | `56px` top, `112px` bottom | no matching entry | new `form-band` rhythm |
+| Dark card fills | 0.02 on both form cards, 0.03 on the Contact sidebar cards | four fills listed, "faintest to lightest use order" | real tones — `dark-form` and `dark-aside`. Only the 0.04 → 0.035 fold from block 3 stands |
+| Email and office card rules | `rgba(255,255,255,0.10)` | listed as a header/footer edge | `Rule tone="dark"` (0.12), as in 4a |
+| Contact office hours line | 15 / 1.55 | `t-fineprint` is 15 / 1.5 | folded; a one-line footnote |
+| Contact email label | 14.5, no line-height | `t-node-body` is 14.5 / 1.45 | folded; single line |
+| Contact hero lead | `margin-top: 26px` | every other page uses 28 | folded to 28 |
+
+This block is the first real use of the **dark field treatment** and of `.focus-ring-dark`,
+both declared in block 1 and unused until now. Both render as documented: a 4.5% white
+fill inside a 14% white border at radius 12, placeholder at 32%, and an accent border on
+focus with no ring.
+
 ## Home page: where the artboards disagree
 
 Recorded when the page was built, so the next page does not re-discover them.
@@ -859,10 +911,7 @@ Everything else matched between the two artboards.
 
 ## Open questions
 
-- **Two supplier application surfaces.** The For Suppliers page carries a full embedded dark
-  application form (11 inputs, a select, a textarea and its own "Submit application" button),
-  and `/suppliers/apply` is a second, light-treatment form for the same thing. One of them
-  should win, the way the sourcing form did. Not yet decided.
-- **Dark form treatment scope.** After the sourcing form moved to the light treatment, dark
-  form fields remain on Contact and on the For Suppliers embedded form. If the embedded form
-  is dropped, Contact is the only dark form on the site.
+- ~~**Two supplier application surfaces.**~~ **Resolved 2026-09-05:** the embedded dark form
+  on For Suppliers is dropped; `/suppliers/apply` wins. See `docs/decisions.md`.
+- ~~**Dark form treatment scope.**~~ **Resolved by the above:** Contact is the only dark form
+  on the site. Its fields are the only implementation of the dark treatment.
