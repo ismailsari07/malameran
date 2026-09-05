@@ -4,9 +4,9 @@ Stage is done when: the site is live, both forms work, incoming requests reach t
 team by email, and the submitter receives a confirmation.
 
 ## Setup
-- [ ] Next.js project initialised, TypeScript strict mode on
-- [ ] Tailwind configured with design tokens from the approved design
-- [ ] Repo structure and `.env.example` in place
+- [x] Next.js project initialised, TypeScript strict mode on
+- [x] Tailwind configured with design tokens from the approved design
+- [x] Repo structure and `.env.example` in place
 - [ ] Vercel project connected, preview deployments working
 - [ ] Supabase project created (client's account), local CLI linked
 
@@ -58,6 +58,7 @@ team by email, and the submitter receives a confirmation.
 
 ## Launch
 - [ ] SEO: titles, meta descriptions, Open Graph, sitemap, robots.txt
+      (robots.txt currently `Disallow: /` — must be opened up before launch)
 - [ ] Analytics installed and receiving events
 - [ ] Responsive check at 375px and 1440px
 - [ ] Lighthouse pass on performance and accessibility
@@ -65,3 +66,17 @@ team by email, and the submitter receives a confirmation.
 - [ ] `npm run build` clean
 - [ ] Deployed to production
 - [ ] Client walkthrough and written sign-off
+
+## Open items carried from the setup block
+
+- [ ] Open up `src/app/robots.ts` — it is `Disallow: /` for every crawler right now
+- [ ] Delete `src/app/tokens/` — temporary internal token verification page
+- [ ] Write a README with setup instructions before delivery
+- [ ] Decide which supplier application surface wins: the dark form embedded in the
+      For Suppliers page, or the light `/suppliers/apply` page. See the open questions in
+      `docs/design.md`
+- [ ] Give the 14 single-size type roles a mobile value as the pages using them are built —
+      listed in `docs/design.md` under "Type roles with no mobile counterpart"
+- [ ] Revisit `lg: 1024px` when Home is built: the 82px hero is authored at 1440 and
+      currently applies from 1024 up
+- [ ] Confirm the Supabase key names against the real project when it is created

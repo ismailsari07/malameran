@@ -24,7 +24,9 @@
 
 ## Tailwind
 
-- Design tokens live in `tailwind.config.ts`. Use them, don't hardcode hex values.
+- Tailwind v4 — no `tailwind.config.ts`. Design tokens live in `src/app/globals.css`.
+  Use them, don't hardcode hex values.
+- Headings and body copy take a `.t-*` role class, never hand-assembled type properties.
 - No arbitrary values (`w-[437px]`) unless there is a real reason
 - Order: layout → spacing → typography → colour → state
 

@@ -7,10 +7,14 @@ not a product catalogue.
 
 ## Commands
 
-- `npm run dev` — local dev server
-- `npm run build` — must pass before any commit
-- `npm run lint`
-- `npx supabase migration new <name>` / `npx supabase db push`
+- `pnpm dev` — local dev server
+- `pnpm build` — must pass before any commit
+- `pnpm lint`
+- `pnpm typecheck` — `tsc --noEmit`
+- `pnpm format` — Prettier
+- `pnpm dlx supabase migration new <name>` / `pnpm dlx supabase db push`
+
+pnpm only. The package manager is pinned in `package.json`.
 
 ## Stack
 
@@ -47,7 +51,8 @@ Naming, commits, branches and component structure: `docs/conventions.md`
 
 ## Definition of done
 
-Feature works · `npm run build` passes · RLS verified from a second account ·
+Feature works · `pnpm build`, `pnpm lint` and `pnpm typecheck` all pass ·
+RLS verified from a second account ·
 no console errors · responsive at 375px and 1440px · task checked off in
 `docs/tasks/`.
 
@@ -69,6 +74,11 @@ Skip doc updates for trivial changes. Never invent a decision that wasn't made.
 ## Design
 
 - Visual reference: `design/*.html`. Reference only — never imported by the app.
-- Tokens live in `tailwind.config.ts`. Never hardcode a hex value.
+- Tailwind v4: there is no `tailwind.config.ts`. Tokens live in `src/app/globals.css` —
+  `@theme static` for colour/font/radius/breakpoint, `:root` for the gradient grounds,
+  `@layer components` for ground and typography role classes, `@utility` for focus rings.
+  Never hardcode a hex value. A new token goes in `docs/design.md` first.
+- Use the `.t-*` typography role classes rather than assembling size, weight, line-height
+  and family by hand.
 - Rebuild designs as proper components; do not paste export markup into the app.
 - Token table and layout rules: `docs/design.md`

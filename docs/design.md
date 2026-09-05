@@ -20,7 +20,12 @@ The design has two distinct visual modes and they do not share a palette:
 Notably: the sourcing-request form on `Malameran Sourcing Request` is **dark-on-dark**,
 while the same form rebuilt in `Malameran Request Form` is **light**. The Request Form /
 Supplier Application pair is the later, more considered treatment — it has step states,
-validation, upload, success and failure states. Prefer it for the real app forms.
+validation, upload, success and failure states.
+
+**Decided 2026-09-05:** the light Request Form treatment wins. The dark
+`Malameran Sourcing Request` artboard is discarded and will not be built — see
+`docs/decisions.md`. Its type values are therefore not implemented; `/request` takes the
+Request Form pair and `/suppliers/apply` the Supplier Application pair.
 
 ---
 
@@ -44,11 +49,14 @@ Accent is a canvas prop with alternates offered: `#E2751B` (default), `#D9601F`,
 
 ### Dark backgrounds (gradient tokens)
 
-Four named dark grounds. All are layered gradients, not flat fills.
+Layered gradients, not flat fills. The source reuses two names for different values —
+`--dark-hero` appears with three different glow strengths and `--dark-quiet` with two
+compositions. See "Grounds: three `--dark-hero` variants" under Notes for implementation for
+how they are split in code.
 
 | Token | Composition |
 | --- | --- |
-| `--dark-hero` | paper-fade at bottom → radial accent glow `1200px 700px at 76% 16%` at 13–15% → `linear-gradient(168deg, #201F24 0%, #1A191E 55%, #17171A 100%)` |
+| `--dark-hero` | paper-fade at bottom → radial accent glow `1200px 700px at 76% 16%` at 15% (Home), 14% (inner pages) or 13% with no paper-fade (Contact, Sourcing Request) → `linear-gradient(168deg, #201F24 0%, #1A191E 55%, #17171A 100%)` |
 | `--dark-soft` | paper-fade at bottom → radial accent glow `1000px 620px at 10% 6%` at 9% → `linear-gradient(180deg, #1C1B20 0%, #17171A 100%)` |
 | `--dark-quiet` | `linear-gradient(180deg, #1A191E 0%, #18171C 100%)` (marketing pages) |
 | `--dark-quiet` | `radial-gradient(700px 480px at 90% 4%, accent 10%, transparent)` → `linear-gradient(180deg, #1E1D22 0%, #17171A 100%)` (form pages — same name, different value) |
@@ -599,13 +607,84 @@ radius 20), each capped at `460px` wide. No photography is specified anywhere el
 
 ## Notes for implementation
 
-- Colour, radius and type values above belong in `tailwind.config.ts` per the project rules.
-  The `color-mix` expressions should stay expressions so a change of accent propagates.
-- The `box-shadow: inset 0 0 0 1px` + `background-clip: padding-box` pairing throughout is a
-  canvas artefact. Use a normal `border`.
+The design system is implemented in `src/app/globals.css`. Tailwind v4 has no
+`tailwind.config.ts` — configuration is CSS-first, in three parts:
+
+| Part | Holds | Why there |
+|---|---|---|
+| `@theme static` | Colour, font-family, radius and breakpoint tokens | Generates utilities (`text-ink`, `rounded-12`) **and** emits every token as a CSS variable. `static` is deliberate: without it Tailwind tree-shakes tokens no utility references yet, which would empty out a design system defined ahead of the components that use it. |
+| `:root` | The seven gradient grounds and `--paper-fade` | Layered multi-stop gradients are not a scale, so they must not become utilities. Kept as variables and applied through the `.ground-*` classes. |
+| `@layer components` | `.ground-*` classes and the 36 `.t-*` typography roles | Applied wholesale to an element; each role carries size, weight, line-height, letter-spacing and family together so a heading cannot be assembled wrongly. |
+| `@utility` | `.focus-ring`, `.focus-ring-dark` | Declared with `@utility`, not `@layer components`, because only utilities accept variants — components need `focus:focus-ring` on the field itself. |
+
+Other rules that survive from the extraction:
+
+- Keep the `color-mix()` expressions as expressions so changing `--color-accent`
+  propagates. Tailwind emits a static fallback plus an `@supports (color: color-mix(…))`
+  block carrying the real expression; both are correct.
+- The `box-shadow: inset 0 0 0 1px` + `background-clip: padding-box` pairing throughout the
+  source is a canvas artefact. Use a normal `border`.
 - The `#E4E3E0` page background and the `0 24px 60px rgba(0,0,0,0.16)` artboard shadow are
-  canvas chrome, not site design.
-- The dark sourcing-request form (`Malameran Sourcing Request`) and the light one
-  (`Malameran Request Form`) are two treatments of the same page. Pick one before building.
-- There are no breakpoints in the source. The two artboards give the endpoints; the
-  intermediate behaviour is a decision still to be made.
+  canvas chrome, not site design. Neither is a token.
+- Breakpoints are `md: 768px` and `lg: 1024px`. The source has none — the two artboards give
+  the endpoints only. `lg` is where the 1440-authored sizes take effect, so an 82px hero
+  applies from 1024px up; revisit when Home is built.
+
+### Grounds: three `--dark-hero` variants
+
+The source defines `--dark-hero` three times and `--dark-quiet` twice, with different values
+under the same name. They are separate variables in the implementation:
+
+| Variable | Glow | Paper-fade | Used by |
+|---|---|---|---|
+| `--dark-hero-home` | 15% | yes | Home hero |
+| `--dark-hero` | 14% | yes | About, Services, Industries, For Suppliers, How It Works |
+| `--dark-hero-form` | 13% | no | Contact |
+| `--dark-soft` | 9% | yes | Alternating sections |
+| `--dark-quiet` | — | no | Marketing quiet band |
+| `--dark-quiet-form` | 10% | no | Form-page sidebar |
+| `--dark-strong` | 20% | no | Final CTA band |
+
+### Type roles with no mobile counterpart
+
+Mobile artboards exist for only 4 of the 12 pages, so 19 of the 36 roles have a single size
+read from a desktop artboard and **do not scale yet**. They carry no breakpoint override.
+When the pages using them are built and checked at 375px, these are the ones that need a
+mobile value decided:
+
+`t-h1-page` 68 · `t-h1-contact` 64 · `t-h2-cta-page` 72 · `t-h2-statement` 44 ·
+`t-h2-industry` 38 · `t-h2-step` 34 · `t-h2-form-card` 30 · `t-h2-success-request` 52 ·
+`t-h2-success-apply` 50 · `t-h3-card-lg` 26 · `t-h3-process` 22 · `t-numeral-row` 64 ·
+`t-numeral-criteria` 56 · `t-numeral-service` 26 · `t-body-lg` 16.5 · `t-body` 16 ·
+`t-body-sm` 15.5 · `t-fineprint` 15 · `t-label` 14.5
+
+The last five are single-size because the source gives them the *same* value on both
+artboards — those are settled, not gaps. The other fourteen are genuine gaps.
+
+The remaining 17 roles have a real 375 ↔ 1440 pair and change at `lg`.
+
+### Folds applied
+
+Two near-duplicate source values were collapsed. Both are recorded because each moves a real
+value; reverse either by splitting the class:
+
+| Fold | Delta |
+|---|---|
+| Engagement-model h3 28px → `t-h3-card-lg` 26px | −2px; weight and line-height unchanged |
+| Home "the problem" h2 line-height 1.02 → `t-h2-section` 1.03 | +0.01 lh on a 56px heading; mobile counterpart identical (36/1.05) |
+
+Everything else that looked foldable was kept separate, because the size delta hid a change
+of weight or line-height: `t-numeral-step` (800/lh 1) vs `t-numeral-trust` (800/lh 0.9) vs
+`t-numeral-row` (700/lh 0.9), all at 64px desktop; `t-numeral-tile` (26/800) vs
+`t-numeral-service` (26/700); `t-h3-card` (−.015em) vs `t-h3-industry` (−.02em), two separate
+real pairs.
+
+## Open questions
+
+- **Two supplier application surfaces.** The For Suppliers page carries a full embedded dark
+  application form (11 inputs, a select, a textarea and its own "Submit application" button),
+  and `/suppliers/apply` is a second, light-treatment form for the same thing. One of them
+  should win, the way the sourcing form did. Not yet decided.
+- **Dark form treatment scope.** After the sourcing form moved to the light treatment, dark
+  form fields remain on Contact and on the For Suppliers embedded form. If the embedded form
+  is dropped, Contact is the only dark form on the site.

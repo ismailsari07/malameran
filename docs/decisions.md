@@ -5,6 +5,57 @@ Format: date · decision · why · consequence.
 
 ---
 
+## 2026-09-05 · Tailwind v4, with tokens in CSS and no `tailwind.config.ts`
+
+Design tokens live in `src/app/globals.css`: `@theme static` for colour, font, radius and
+breakpoint tokens; `:root` for the gradient grounds; `@layer components` for ground and
+typography role classes; `@utility` for the focus rings.
+**Why:** Tailwind v4 is CSS-first and ships no `tailwind.config.ts`. `static` is needed
+because Tailwind otherwise tree-shakes tokens that no utility references yet, which would
+gut a design system defined ahead of its components. The focus rings are `@utility` rather
+than components because only utilities accept variants, and they are needed as
+`focus:focus-ring`.
+**Consequence:** "tokens live in `tailwind.config.ts`" is no longer true and has been
+corrected in `CLAUDE.md`. A new token is added in `docs/design.md` first, then `globals.css`.
+
+## 2026-09-05 · Sourcing request form uses the light Request Form treatment
+
+The dark `Malameran Sourcing Request` artboard is discarded and will not be built.
+**Why:** the Request Form / Supplier Application pair is the later and more complete
+treatment — it has step states, validation, upload, success, failure and rate-limit states,
+which the dark artboard does not.
+**Consequence:** `/request` takes the 56↔36 type pair and `/suppliers/apply` the 52↔33 pair.
+Contact's 64px heading has no mobile counterpart and does not scale yet. Dark form fields
+survive on Contact and on the For Suppliers embedded form, so the dark treatment stays
+documented.
+
+## 2026-09-05 · Supabase publishable / secret keys, not anon / service_role
+
+`NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` and `SUPABASE_SECRET_KEY`.
+**Why:** the dashboard already marks the anon / service_role JWT pair as legacy. Starting on
+the current system avoids a migration later. Verified before use that
+`@supabase/supabase-js@2.115.0` and `@supabase/ssr@0.12.6` forward these keys verbatim with
+no JWT parsing.
+**Consequence:** the secret key bypasses RLS exactly as `service_role` did. `src/lib/env.ts`
+is the only module that reads `process.env`, so a future rename touches one file.
+
+## 2026-09-05 · pnpm is the package manager
+
+Pinned via `"packageManager": "pnpm@10.14.0"`; `pnpm-lock.yaml` is committed.
+**Why:** faster installs and a strict node_modules layout that catches undeclared
+dependencies before they reach a deploy.
+**Consequence:** every command in `CLAUDE.md` and the docs is `pnpm`, not `npm`. Vercel
+picks the package manager up from the lockfile.
+
+## 2026-09-05 · Separate Supabase projects for development and production
+
+**Why:** running migrations and RLS experiments against the database that holds real
+sourcing requests is the kind of mistake that is only made once. Stage F1-A already collects
+live enquiries.
+**Consequence:** two sets of Supabase env values — local `.env.local` and Vercel preview
+point at the dev project, Vercel production at the production project. Both projects live in
+the client's account.
+
 ## 2026-08-30 · Design direction comes from a written brief, one page at a time
 
 Home page design is approved before any other page is built.

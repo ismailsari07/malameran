@@ -1,0 +1,535 @@
+@import "tailwindcss";
+
+/* ============================================================================
+   Malameran design tokens.
+   Every value is read from docs/design.md, which was extracted from the
+   canvas export in design/. Do not add a value here that is not in that
+   document — add it there first.
+   ========================================================================= */
+
+/* `static` so every token is emitted even before a utility uses it —
+   this file is the design system, not a usage-driven subset. */
+@theme static {
+  /* --- Core ------------------------------------------------------------ */
+  --color-ink: #1a191e;
+  --color-paper: #f9f9f7;
+  --color-accent: #e2751b;
+  --color-head-bg: #1f1e23;
+  --color-footer: #151418;
+  --color-line: #dcdbd6;
+  --color-muted: #6c6a66;
+  --color-err: #b4402a;
+
+  /* --- Dark surfaces --------------------------------------------------- */
+  --color-on-accent: #101010; /* button label on accent; color-mix darkening base */
+  --color-select-option: #111111; /* <option> text inside dark selects */
+  --color-border-dark-card: #2a292e; /* dark sidebar card on a light page */
+  --color-step-complete: #8a4408; /* numeral on a completed step pill */
+
+  /* --- Light surfaces -------------------------------------------------- */
+  --color-surface: #ffffff; /* form card, input, chip, file row */
+  --color-surface-dropzone: #fcfcfa;
+  --color-surface-info: #f4f3ef; /* info panel; read-only / locked input */
+  --color-border-card: #e4e3df; /* card border on paper */
+  --color-rule: #dddcd8; /* hairline between prose blocks */
+  --color-track-idle: #deddd8; /* inactive step-progress track */
+  --color-border-field: #d3d2cc; /* input / select / chip border */
+  --color-track: #edece8; /* upload progress track; success-card divider */
+  --color-border-reserved: #e2e1dc; /* dashed verification-challenge slot */
+  --color-border-dropzone: #c4c2bb; /* dashed dropzone */
+  --color-border-dashed-field: #c9c7c0; /* dashed "add another" input */
+  --color-border-hover: #a9a6a0; /* chip / Back button hover */
+  --color-placeholder: #a6a39d; /* placeholder text on light forms */
+  --color-disabled: #b0ada6; /* disabled Back label; reserved-slot text */
+  --color-numeral-idle: #b9b7b1; /* dimmed step numeral */
+
+  /* --- Text ------------------------------------------------------------ */
+  --color-text-label: #26251f; /* form field labels */
+  --color-text-prose: #1e1e1c; /* long-form prose */
+  --color-text-body: #3a3936; /* card body on paper, marketing */
+  --color-text-body-alt: #3a3833; /* body on form pages; chip label */
+  --color-text-support: #5a5852; /* card body / supporting copy */
+  --color-text-eyebrow: #8a8882; /* muted uppercase eyebrow on paper */
+  --color-text-small: #918e88; /* small print, Optional tags, hints */
+  --color-chevron: #8b8880; /* select chevron stroke, light */
+
+  /* --- Error ----------------------------------------------------------- */
+  --color-err-heading: #7e2c1b;
+  --color-err-body: #6b3327;
+  --color-err-border: #e5c3ba;
+  --color-err-bg: #fcf3f1; /* error banner background */
+  --color-err-field-bg: #fdf7f5; /* invalid input; rejected-file dropzone */
+  --color-err-border-hover: #e0bfb6; /* remove button border on hover */
+
+  /* --- Type ------------------------------------------------------------ */
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-display:
+    var(--font-inter-tight), var(--font-inter), system-ui, sans-serif;
+
+  /* --- Radius ---------------------------------------------------------- */
+  --radius-pill: 999px;
+  --radius-28: 28px;
+  --radius-24: 24px;
+  --radius-22: 22px;
+  --radius-20: 20px;
+  --radius-18: 18px;
+  --radius-16: 16px;
+  --radius-14: 14px;
+  --radius-12: 12px;
+  --radius-8: 8px;
+  --radius-6: 6px;
+  --radius-2: 2px;
+
+  /* --- Breakpoints ----------------------------------------------------- */
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+}
+
+/* ============================================================================
+   Dark grounds. Layered gradients — kept as variables, never flattened into
+   utilities. Three --dark-hero variants because the source has three.
+   ========================================================================= */
+
+:root {
+  color-scheme: light;
+
+  /* Bottom paper-fade shared by --dark-hero-home, --dark-hero and --dark-soft */
+  --paper-fade: linear-gradient(
+    180deg,
+    rgba(249, 249, 247, 0) calc(100% - 160px),
+    rgba(249, 249, 247, 0.045) calc(100% - 60px),
+    rgba(249, 249, 247, 0.13) 100%
+  );
+
+  /* Home hero — 15% glow */
+  --dark-hero-home:
+    var(--paper-fade),
+    radial-gradient(
+      1200px 700px at 76% 16%,
+      color-mix(in oklab, var(--color-accent) 15%, transparent) 0%,
+      transparent 72%
+    ),
+    linear-gradient(168deg, #201f24 0%, #1a191e 55%, #17171a 100%);
+
+  /* Inner-page hero — 14% glow */
+  --dark-hero:
+    var(--paper-fade),
+    radial-gradient(
+      1200px 700px at 76% 16%,
+      color-mix(in oklab, var(--color-accent) 14%, transparent) 0%,
+      transparent 72%
+    ),
+    linear-gradient(168deg, #201f24 0%, #1a191e 55%, #17171a 100%);
+
+  /* Compact hero on Contact — no paper-fade, 13% glow */
+  --dark-hero-form:
+    radial-gradient(
+      1200px 700px at 76% 16%,
+      color-mix(in oklab, var(--color-accent) 13%, transparent) 0%,
+      transparent 72%
+    ),
+    linear-gradient(168deg, #201f24 0%, #1a191e 55%, #17171a 100%);
+
+  --dark-soft:
+    var(--paper-fade),
+    radial-gradient(
+      1000px 620px at 10% 6%,
+      color-mix(in oklab, var(--color-accent) 9%, transparent) 0%,
+      transparent 74%
+    ),
+    linear-gradient(180deg, #1c1b20 0%, #17171a 100%);
+
+  /* Marketing pages */
+  --dark-quiet: linear-gradient(180deg, #1a191e 0%, #18171c 100%);
+
+  /* Form pages — same name in the source, different value */
+  --dark-quiet-form:
+    radial-gradient(
+      700px 480px at 90% 4%,
+      color-mix(in oklab, var(--color-accent) 10%, transparent) 0%,
+      transparent 70%
+    ),
+    linear-gradient(180deg, #1e1d22 0%, #17171a 100%);
+
+  --dark-strong:
+    radial-gradient(
+      1100px 680px at 50% 118%,
+      color-mix(in oklab, var(--color-accent) 20%, transparent) 0%,
+      transparent 70%
+    ),
+    linear-gradient(180deg, #17171a 0%, #1e1d22 100%);
+}
+
+@layer base {
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    text-wrap: pretty;
+  }
+}
+
+/* ============================================================================
+   Focus. Declared with @utility rather than inside @layer components so they
+   accept variants — components use `focus:focus-ring` on the field itself.
+   ========================================================================= */
+
+@utility focus-ring {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(226, 117, 27, 0.2);
+}
+
+/* Dark forms take an accent border only — the source gives them no ring */
+@utility focus-ring-dark {
+  border-color: var(--color-accent);
+}
+
+@layer components {
+  /* --- Grounds --------------------------------------------------------- */
+  .ground-hero-home {
+    background: var(--dark-hero-home);
+  }
+  .ground-hero {
+    background: var(--dark-hero);
+  }
+  .ground-hero-form {
+    background: var(--dark-hero-form);
+  }
+  .ground-soft {
+    background: var(--dark-soft);
+  }
+  .ground-quiet {
+    background: var(--dark-quiet);
+  }
+  .ground-quiet-form {
+    background: var(--dark-quiet-form);
+  }
+  .ground-strong {
+    background: var(--dark-strong);
+  }
+
+  /* ==========================================================================
+     Typography roles. 35 classes: 16 with a real 375 <-> 1440 pair, 19 that
+     the source gives only once and which therefore do not scale yet.
+     See "Type roles with no mobile counterpart" in docs/design.md.
+     ======================================================================= */
+
+  /* --- H1 (named per page, sizes map to specific artboards) ------------- */
+  .t-h1-hero {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 44px;
+    line-height: 1;
+    letter-spacing: -0.035em;
+  }
+  .t-h1-page {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 68px;
+    line-height: 1;
+    letter-spacing: -0.035em;
+  }
+  .t-h1-contact {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 64px;
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+  }
+  .t-h1-request {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 36px;
+    line-height: 1.04;
+    letter-spacing: -0.035em;
+  }
+  .t-h1-apply {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 33px;
+    line-height: 1.06;
+    letter-spacing: -0.035em;
+  }
+
+  /* --- H2 --------------------------------------------------------------- */
+  .t-h2-section {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 36px;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+  }
+  .t-h2-cta {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 44px;
+    line-height: 1;
+    letter-spacing: -0.035em;
+  }
+  .t-h2-cta-page {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 72px;
+    line-height: 1;
+    letter-spacing: -0.035em;
+  }
+  .t-h2-panel {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+  }
+  .t-h2-statement {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 44px;
+    line-height: 1.08;
+    letter-spacing: -0.028em;
+  }
+  .t-h2-industry {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 38px;
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+  }
+  .t-h2-step {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 34px;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+  }
+  .t-h2-form-card {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 30px;
+    letter-spacing: -0.02em;
+  }
+  .t-h2-success-request {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 52px;
+    line-height: 1.03;
+    letter-spacing: -0.035em;
+  }
+  .t-h2-success-apply {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 50px;
+    line-height: 1.04;
+    letter-spacing: -0.035em;
+  }
+
+  /* --- H3 --------------------------------------------------------------- */
+  .t-h3-card-lg {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 26px;
+    letter-spacing: -0.02em;
+  }
+  .t-h3-card {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 21px;
+    letter-spacing: -0.015em;
+  }
+  .t-h3-industry {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 21px;
+    letter-spacing: -0.02em;
+  }
+  .t-h3-process {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: -0.015em;
+  }
+  .t-h3-card-sm {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 19px;
+  }
+
+  /* --- Numerals --------------------------------------------------------- */
+  .t-numeral-step {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 46px;
+    line-height: 1;
+    letter-spacing: -0.045em;
+  }
+  .t-numeral-trust {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 48px;
+    line-height: 0.9;
+    letter-spacing: -0.045em;
+  }
+  .t-numeral-row {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 64px;
+    line-height: 0.9;
+    letter-spacing: -0.045em;
+  }
+  .t-numeral-criteria {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 56px;
+    line-height: 0.9;
+    letter-spacing: -0.045em;
+  }
+  .t-numeral-tile {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 23px;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+  .t-numeral-service {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+
+  /* --- Eyebrows --------------------------------------------------------- */
+  .t-eyebrow {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .t-eyebrow-sm {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* --- Body ------------------------------------------------------------- */
+  .t-lead {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 1.55;
+  }
+  .t-prose {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 1.65;
+  }
+  .t-body-lg {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 16.5px;
+    line-height: 1.6;
+  }
+  .t-body {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .t-body-sm {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 15.5px;
+    line-height: 1.55;
+  }
+  .t-fineprint {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .t-label {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 14.5px;
+  }
+  .t-hint {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 13px;
+  }
+
+  /* ==========================================================================
+     Desktop step. Only the 16 roles with a real 375 <-> 1440 pair appear here;
+     the other 19 have no mobile counterpart in the source and stay single-size
+     until the pages that use them are built and checked at 375px.
+     ======================================================================= */
+  @media (min-width: 1024px) {
+    .t-h1-hero {
+      font-size: 82px;
+      line-height: 0.98;
+    }
+    .t-h1-request {
+      font-size: 56px;
+      line-height: 1.02;
+    }
+    .t-h1-apply {
+      font-size: 52px;
+      line-height: 1.04;
+    }
+    .t-h2-section {
+      font-size: 56px;
+      line-height: 1.03;
+    }
+    .t-h2-cta {
+      font-size: 76px;
+    }
+    .t-h2-panel {
+      font-size: 40px;
+      line-height: 1.08;
+    }
+    .t-h3-card {
+      font-size: 23px;
+    }
+    .t-h3-industry {
+      font-size: 24px;
+    }
+    .t-h3-card-sm {
+      font-size: 20px;
+      letter-spacing: -0.012em;
+    }
+    .t-numeral-step {
+      font-size: 64px;
+    }
+    .t-numeral-trust {
+      font-size: 64px;
+    }
+    .t-numeral-tile {
+      font-size: 26px;
+    }
+    .t-eyebrow {
+      font-size: 12.5px;
+    }
+    .t-eyebrow-sm {
+      font-size: 11.5px;
+    }
+    .t-lead {
+      font-size: 19px;
+    }
+    .t-prose {
+      font-size: 18px;
+    }
+    .t-hint {
+      font-size: 13.5px;
+    }
+  }
+}

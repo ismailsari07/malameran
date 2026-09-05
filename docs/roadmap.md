@@ -2,8 +2,14 @@
 
 ## Neredeyiz
 
-**Faz 1 · Aşama A — Tanıtım sitesi ve talep toplama.** Onaylandı, başlıyor.
-Tasarım henüz yapılmadı; ilk iş tasarım yönünün belirlenmesi.
+**Faz 1 · Aşama A — Tanıtım sitesi ve talep toplama.** Devam ediyor.
+
+Tasarım yönü belirlendi: `design/*.html` referans dosyaları çıkarıldı, token
+tablosu `docs/design.md` içine yazıldı. Proje kurulumu tamamlandı — Next.js,
+TypeScript, Tailwind v4, tasarım tokenları ve Supabase istemcileri hazır.
+
+Sıradaki adım: paylaşılan bileşenler (header, footer, buton, form kontrolleri,
+bölüm sarmalayıcı), ardından Home sayfası.
 
 ## Faz 1 aşamaları
 
