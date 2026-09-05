@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:#1A191E; --paper:#F9F9F7; --accent:#E2751B; --head-bg:#1F1E23;
+    --line:#DCDBD6; --muted:#6C6A66; --err:#B4402A;
+    --dark-quiet: radial-gradient(700px 480px at 90% 4%, color-mix(in oklab, var(--accent) 10%, transparent) 0%, transparent 70%), linear-gradient(180deg, #1E1D22 0%, #17171A 100%);
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:#E4E3E0; font-family:'Inter', system-ui, sans-serif; -webkit-font-smoothing:antialiased; }
+  h1, h2, h3, .tight { font-family:'Inter Tight','Inter', system-ui, sans-serif; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { color: var(--accent); text-decoration: underline; }
+  input, textarea, select, button { font-family: inherit; }
+  input::placeholder, textarea::placeholder { color:#A6A39D; }
+  @keyframes mal-spin { to { transform: rotate(360deg); } }
+</style>
+</helmet>
+
+<section style="display:flex; flex-direction:column; gap:64px; padding:56px; font-family:'Inter',sans-serif">
+
+  <div style="display:flex; align-items:flex-start; gap:56px">
+
+    <div style="display:flex; flex-direction:column; gap:14px">
+      <div style="font-weight:600; font-size:12px; letter-spacing:0.06em; text-transform:uppercase; color:#6C6A66">/request — Desktop 1440</div>
+
+      <div data-screen-label="Request — Desktop" style="width:1440px; background:var(--paper); box-shadow:0 24px 60px rgba(0,0,0,0.16); overflow:hidden">
+
+        <header style="background:var(--head-bg); padding:0 40px">
+          <div style="max-width:1200px; margin:0 auto; height:76px; display:flex; align-items:center; justify-content:space-between">
+            <a href="Malameran%20Home.dc.html" style="display:flex; align-items:center; gap:12px; text-decoration:none" style-hover="text-decoration:none">
+              <div style="width:12px; height:12px; background:var(--accent)"></div>
+              <div class="tight" style="font-size:19px; font-weight:700; letter-spacing:0.10em; color:#fff">MALAMERAN</div>
+            </a>
+            <a href="Malameran%20Home.dc.html" style="font-size:14.5px; font-weight:500; color:rgba(255,255,255,0.60)" style-hover="color:#fff; text-decoration:none">Back to site</a>
+          </div>
+        </header>
+
+        <div style="padding:0 40px 104px; border-top:1px solid var(--line)">
+          <div style="max-width:1200px; margin:0 auto; padding-top:72px">
+
+            <h1 class="tight" style="margin:0; font-size:56px; line-height:1.02; letter-spacing:-0.035em; font-weight:800; color:var(--ink); text-wrap:pretty">Tell us what you need.</h1>
+            <p style="margin:18px 0 0; font-size:19px; line-height:1.5; color:var(--muted)">Three short steps. No account, no obligation.</p>
+
+            <div style="display:grid; grid-template-columns:minmax(0,1fr) 372px; gap:48px; align-items:start; margin-top:52px">
+
+              <div style="background:#fff; border:1px solid var(--line); border-radius:24px; padding:36px 40px 40px">
+
+                <div style="display:flex; gap:10px">
+                  <div style="flex:1">
+                    <div style="height:3px; border-radius:2px; background:{{ track1 }}"></div>
+                    <div style="margin-top:14px; display:flex; align-items:center; gap:10px">
+                      <div style="width:22px; height:22px; border-radius:999px; display:flex; align-items:center; justify-content:center; font-size:11.5px; font-weight:700; background:{{ pill1bg }}; color:{{ pill1fg }}; border:1px solid {{ pill1bd }}">1</div>
+                      <div style="font-size:14.5px; font-weight:600; color:{{ label1 }}">What you need</div>
+                    </div>
+                  </div>
+                  <div style="flex:1">
+                    <div style="height:3px; border-radius:2px; background:{{ track2 }}"></div>
+                    <div style="margin-top:14px; display:flex; align-items:center; gap:10px">
+                      <div style="width:22px; height:22px; border-radius:999px; display:flex; align-items:center; justify-content:center; font-size:11.5px; font-weight:700; background:{{ pill2bg }}; color:{{ pill2fg }}; border:1px solid {{ pill2bd }}">2</div>
+                      <div style="font-size:14.5px; font-weight:600; color:{{ label2 }}">Your requirements</div>
+                    </div>
+                  </div>
+                  <div style="flex:1">
+                    <div style="height:3px; border-radius:2px; background:{{ track3 }}"></div>
+                    <div style="margin-top:14px; display:flex; align-items:center; gap:10px">
+                      <div style="width:22px; height:22px; border-radius:999px; display:flex; align-items:center; justify-content:center; font-size:11.5px; font-weight:700; background:{{ pill3bg }}; color:{{ pill3fg }}; border:1px solid {{ pill3bd }}">3</div>
+                      <div style="font-size:14.5px; font-weight:600; color:{{ label3 }}">How we reach you</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div style="height:1px; background:var(--line); margin:30px 0 32px"></div>
+
+                <sc-if value="{{ isStep1 }}" hint-placeholder-val="{{ true }}">
+                  <div style="display:flex; flex-direction:column; gap:26px">
+                    <div>
+                      <label style="display:block; font-size:14.5px; font-weight:600; color:#26251F; margin-bottom:8px">Product description</label>
+                      <div style="font-size:14px; line-height:1.5; color:var(--muted); margin-bottom:10px">Describe what you need made. A specification, a drawing or a photo of something similar is enough.</div>
+                      <textarea rows="6" placeholder="e.g. Powder-coated aluminium window profiles, 6063-T5, 2.0mm wall, RAL 7016 finish" style="width:100%; padding:14px 16px; font-size:16px; line-height:1.5; color:var(--ink); background:#fff; border:1px solid #D3D2CC; border-radius:12px; outline:none; resize:vertical" style-focus="border-color:var(--accent); box-shadow:0 0 0 3px rgba(226,117,27,0.20)"></textarea>
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:26px 24px">
+                      <div>
+                        <div style="display:flex; align-items:baseline; gap:8px; margin-bottom:8px">
+                          <label style="font-size:14.5px; font-weight:600; color:#26251F">Industry</label>
+                          <span style="font-size:11.5px; font-weight:500; letter-spacing:0.05em; text-transform:uppercase; color:#918E88">Optional</span>
+                        </div>
+                        <div style="position:relative">
+                          <select style="width:100%; padding:14px 42px 14px 16px; font-size:16px; color:var(--ink); background:#fff; border:1px solid #D3D2CC; border-radius:12px; outline:none; appearance:none; -webkit-appearance:none" style-focus="border-color:var(--accent); box-shadow:0 0 0 3px rgba(226,117,27,0.20)">
+                            <option>Select an industry</option>
+                            <option>Construction &amp; building products</option>
+                            <option>Industrial &amp; machinery</option>
+                            <option>Consumer goods</option>
+                            <option>Packaging</option>
+                            <option>Automotive &amp; transport</option>
+                            <option>Energy &amp; electrical</option>
+                          </select>
+                          <div style="position:absolute; right:17px; top:19px; width:8px; height:8px; border-right:2px solid #8B8880; border-bottom:2px solid #8B8880; transform:rotate(45deg); pointer-events:none"></div>
+                        </div>
+                      </div>
+                      <div>
+                        <div style="display:flex; align-items:baseline; gap:8px; margin-bottom:8px">
+                          <label style="font-size:14.5px; font-weight:600; color:#26251F">Request type</label>
+                          <span style="font-size:11.5px; font-weight:500; letter-spacing:0.05em; text-transform:uppercase; color:#918E88">Optional</span>
+                        </div>
+                        <div style="position:relative">
+                          <select style="width:100%; padding:14px 42px 14px 16px; font-size:16px; color:var(--ink); background:#fff; border:1px solid #D3D2CC; border-radius:12px; outline:none; appearance:none; -webkit-appearance:none" style-focus="border-color:var(--accent); box-shadow:0 0 0 3px rgba(226,117,27,0.20)">
+                            <option>Select a request type</option>
+                            <option>New product sourcing</option>
+                            <option>Repeat order</option>
+                            <option>Replace an existing supplier</option>
+                            <option>Not sure yet</option>
+                          </select>
+                          <div style="position:absolute; right:17px; top:19px; width:8px; height:8px; border-right:2px solid #8B8880; border-bottom:2px solid #8B8880; transform:rotate(45deg); pointer-events:none"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div style="max-width:400px">
+                      <div style="display:flex; align-items:baseline; gap:8px; margin-bottom:8px">
+                        <label style="font-size:14.5px; font-weight:600; color:#26251F">Quantity</label>
+                        <span style="font-size:11.5px; font-weight:500; letter-spacing:0.05em; text-transform:uppercase; color:#918E88">Optional</span>
+                      </div>
+                      <input type="text" placeholder="5,000" style="width:100%; padding:14px 16px; font-size:16px; color:var(--ink); background:#fff; border:1px solid #D3D2CC; border-radius:12px; outline:none" style-focus="border-color:var(--accent); box-shadow:0 0 0 3px rgba(226,117,27,0.20)">
+                      <div style="margin-top:8px; font-size:13.5px; color:#918E88">Units, kilograms, metres or pallets — whatever fits.</div>
+                    </div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ isStep2 }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex; flex-direction:column; gap:26px">
+                    <div style="font-size:16px; line-height:1.55; color:#3A3833; background:#F4F3EF; border:1px solid var(--line); border-radius:14px; padding:16px 18px">All optional. Anything you leave blank, we will ask about later.</div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:26px 24px">
+                      <div>
+                        <label style="display:block; font-size:14.5px; font-weight:600; color:#26251F; margin-bottom:8px">Target price per unit</label>
+                        <input type="text" placeholder="CAD 12.50" style="width:100%; padding:14px 16px; font-size:16px; color:var(--ink); background:#fff; border:1px solid #D3D2CC; border-radius:12px; outline:none" style-focus="border-color:var(--accent); box-shadow:0 0 0 3px rgba(226,117,27,0.20)">
+                      </div>
+                      <div>
+                        <label style="display:block; font-size:14.5px; font-weight:600; color:#26251F; margin-bottom:8px">Target delivery date</label>
+                        <input type="date" style="width:100%; padding:13px 16px; font-size:16px; color:var(--ink); background:#fff; border:1px solid #D3D2CC; border-radius:12px; outline:none" style-focus="border-color:var(--accent); box-shadow:0 0 0 3px rgba(226,117,27,0.20)">
+                      </div>
+                    </div>
+                    <div style="max-width:480px">
+                      <label style="display:block; font-size:14.5px; font-weight:600; color:#26251F; margin-bottom:8px">Preferred manufacturing country</label>
+                      <div style="position:relative">
+                        <select style="width:100%; padding:14px 42px 14px 16px; font-size:16px; color:var(--ink); background:#fff; border:1px solid #D3D2CC; border-radius:12px; outline:none; appearance:none; -webkit-appearance:none" style-focus="border-color:var(--accent); box-shadow:0 0 0 3px rgba(226,117,27,0.20)">
+                          <option>No preference</option>
+                          <option>China</option>
+                          <option>India</option>
+                          <option>Vietnam</option>
+                          <option>Türkiye</option>
+                          <option>Mexico</option>
+                          <option>Poland</option>
+                        </select>
+                        <div style="position:absolute; right:17px; top:19px; width:8px; height:8px; border-right:2px solid #8B8880; border-bottom:2px solid #8B8880; transform:rotate(45deg); pointer-events:none"></div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label style="display:block; font-size:14.5px; font-weight:600; color:#26251F; margin-bottom:10px">Required certifications</label>
+                      <div style="display:flex; flex-wrap:wrap; gap:10px">
+                        <button type="button" style="font-size:14.5px; font-weight:600; color:#101010; background:color-mix(in oklab, var(--accent) 22%, #ffffff); border:1px solid var(--accent); border-radius:999px; padding:9px 15px; cursor:pointer">CE ✕</button>
+                        <button type="button" style="font-size:14.5px; font-weight:600; color:#101010; background:color-mix(in oklab, var(--accent) 22%, #ffffff); border:1px solid var(--accent); border-radius:999px; padding:9px 15px; cursor:pointer">ISO 9001 ✕</button>
+                        <button type="button" style="font-size:14.5px; font-weight:500; color:#3A3833; background:#fff; border:1px solid #D3D2CC; border-radius:999px; padding:9px 15px; cursor:pointer" style-hover="border-color:#A9A6A0">FDA</button>
+                        <button type="button" style="font-size:14.5px; font-weight:500; color:#3A3833; background:#fff; border:1px solid #D3D2CC; border-radius:999px; padding:9px 15px; cursor:pointer" style-hover="border-color:#A9A6A0">FSC</button>
+                        <button type="button" style="font-size:14.5px; font-weight:500; color:#3A3833; background:#fff; border:1px solid #D3D2CC; border-radius:999px; padding:9px 15px; cursor:pointer" style-hover="border-color:#A9A6A0">REACH</button>
+                        <button type="button" style="font-size:14.5px; font-weight:500; color:#3A3833; background:#fff; border:1px solid #D3D2CC; border-radius:999px; padding:9px 15px; cursor:pointer" style-hover="border-color:#A9A6A0">RoHS</button>
+                      </div>
+                      <input type="text" placeholder="Add another certification and press enter" style="margin-top:12px; width:100%; max-width:480px; padding:14px 16px; font-size:16px; color:var(--ink); background:#fff; border:1px dashed #C9C7C0; border-radius:12px; outline:none" style-focus="border-style:solid; border-color:var(--accent); box-shadow:0 0 0 3px rgba(226,117,27,0.20)">
+                    </div>
+
+                    <div>
+                      <label style="display:block; font-size:14.5px; font-weight:600; color:#26251F; margin-bottom:10px">Drawings, specs or photos</label>
+                      <div style="border:1px dashed #C4C2BB; border-radius:16px; background:#FCFCFA; padding:32px 24px; text-align:center">
+                        <div style="font-size:16.5px; font-weight:600; color:#26251F">Drag files here</div>
+                        <div style="margin-top:8px; font-size:14px; line-height:1.5; color:var(--muted)">or <span style="color:var(--accent); font-weight:600; text-decoration:underline; text-underline-offset:3px; cursor:pointer">browse your device</span></div>
+                        <div style="margin-top:14px; font-size:13px; color:#918E88">PDF, images, DWG or spreadsheets · up to 10MB per file · 5 files maximum</div>
+                      </div>
+
+                      <div style="display:flex; flex-direction:column; gap:10px; margin-top:12px">
+                        <div style="border:1px solid var(--line); border-radius:12px; background:#fff; padding:14px 16px">
+                          <div style="display:flex; align-items:center; justify-content:space-between; gap:16px">
+                            <div style="min-width:0">
+                              <div style="font-size:14.5px; font-weight:600; color:#26251F; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">window-profile-rev-C.pdf</div>
+                              <div style="margin-top:3px; font-size:13px; color:#918E88">2.4 MB · uploaded</div>
+                            </div>
+                            <button type="button" style="flex:0 0 auto; font-size:13.5px; font-weight:600; color:var(--muted); background:transparent; border:1px solid var(--line); border-radius:8px; padding:7px 12px; cursor:pointer" style-hover="color:var(--err); border-color:#E0BFB6">Remove</button>
+                          </div>
+                          <div style="margin-top:12px; height:3px; border-radius:2px; background:#EDECE8"><div style="width:100%; height:3px; border-radius:2px; background:var(--accent)"></div></div>
+                        </div>
+                        <div style="border:1px solid var(--line); border-radius:12px; background:#fff; padding:14px 16px">
+                          <div style="display:flex; align-items:center; justify-content:space-between; gap:16px">
+                            <div style="min-width:0">
+                              <div style="font-size:14.5px; font-weight:600; color:#26251F; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">extrusion-die-drawing.dwg</div>
+                              <div style="margin-top:3px; font-size:13px; color:#918E88">6.1 MB · uploading 64%</div>
+                            </div>
+                            <button type="button" style="flex:0 0 auto; font-size:13.5px; font-weight:600; color:var(--muted); background:transparent; border:1px solid var(--line); border-radius:8px; padding:7px 12px; cursor:pointer" style-hover="color:var(--err); border-color:#E0BFB6">Cancel</button>
+                          </div>
+                          <div style="margin-top:12px; height:3px; border-radius:2px; background:#EDECE8"><div style="width:64%; height:3px; border-radius:2px; background:var(--accent)"></div></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ isStep3 }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex; flex-direction:column; gap:26px">
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:26px 24px">
+                      <div>
+                        <label style="display:block; font-size:14.5px; font-weight:600; color:#26251F; margin-bottom:8px">Full name</label>
+                        <input type="text" placeholder="Jane Doe" style="width:100%; padding:14px 16px; font-size:16px; color:var(--ink); background:#fff; border:1px solid #D3D2CC; border-radius:12px; outline:none" style-focus="border-color:var(--accent); box-shadow:0 0 0 3px rgba(226,117,27,0.20)">
+                      </div>
+                      <div>
+                        <div style="display:flex; align-items:baseline; gap:8px; margin-bottom:8px">
+                          <label style="font-size:14.5px; font-weight:600; color:#26251F">Company</label>
+                          <span style="font-size:11.5px; font-weight:500; letter-spacing:0.05em; text-transform:uppercase; color:#918E88">Optional</span>
+                        </div>
+                        <input type="text" placeholder="Acme Industrial" style="width:100%; padding:14px 16px; font-size:16px; color:var(--ink); background:#fff; border:1px solid #D3D2CC; border-radius:12px; outline:none" style-focus="border-color:var(--accent); box-shadow:0 0 0 3px rgba(226,117,27,0.20)">
+                      </div>
+                      <div>
+                        <label style="display:block; font-size:14.5px; font-weight:600; color:#26251F; margin-bottom:8px">Email</label>
+                        <input type="email" placeholder="jane@company.com" style="width:100%; padding:14px 16px; font-size:16px; color:var(--ink); background:#fff; border:1px solid #D3D2CC; border-radius:12px; outline:none" style-focus="border-color:var(--accent); box-shadow:0 0 0 3px rgba(226,117,27,0.20)">
+                      </div>
+                      <div>
+                        <div style="display:flex; align-items:baseline; gap:8px; margin-bottom:8px">
+                          <label style="font-size:14.5px; font-weight:600; color:#26251F">Phone</label>
+                          <span style="font-size:11.5px; font-weight:500; letter-spacing:0.05em; text-transform:uppercase; color:#918E88">Optional</span>
+                        </div>
+                        <input type="tel" placeholder="+1 555 000 0000" style="width:100%; padding:14px 16px; font-size:16px; color:var(--ink); background:#fff; border:1px solid #D3D2CC; border-radius:12px; outline:none" style-focus="border-color:var(--accent); box-shadow:0 0 0 3px rgba(226,117,27,0.20)">
+                      </div>
+                    </div>
+                    <div>
+                      <div style="display:flex; align-items:baseline; gap:8px; margin-bottom:8px">
+                        <label style="font-size:14.5px; font-weight:600; color:#26251F">Anything else we should know</label>
+                        <span style="font-size:11.5px; font-weight:500; letter-spacing:0.05em; text-transform:uppercase; color:#918E88">Optional</span>
+                      </div>
+                      <textarea rows="4" placeholder="Timelines, packaging, existing supplier history — anything that gives us context." style="width:100%; padding:14px 16px; font-size:16px; line-height:1.5; color:var(--ink); background:#fff; border:1px solid #D3D2CC; border-radius:12px; outline:none; resize:vertical" style-focus="border-color:var(--accent); box-shadow:0 0 0 3px rgba(226,117,27,0.20)"></textarea>
+                    </div>
+
+                    <div>
+                      <button type="button" style="width:100%; background:var(--accent); color:#101010; font-size:17px; font-weight:700; padding:19px 30px; border:0; border-radius:14px; cursor:pointer" style-hover="background:color-mix(in oklab, var(--accent) 82%, #ffffff)">Send request</button>
+                      <div style="min-height:78px; margin-top:14px; display:flex; align-items:center; justify-content:center; border:1px dashed #E2E1DC; border-radius:12px">
+                        <div style="font-size:12.5px; color:#B0ADA6">Reserved for a verification challenge — appears only if triggered</div>
+                      </div>
+                      <div style="margin-top:14px; font-size:14.5px; line-height:1.5; color:var(--muted); text-align:center">No obligation. Nothing is produced until you approve the quote and the sample.</div>
+                    </div>
+                  </div>
+                </sc-if>
+
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; margin-top:34px; padding-top:26px; border-top:1px solid var(--line)">
+                  <button type="button" onClick="{{ back }}" style="font-size:15.5px; font-weight:600; color:{{ backColor }}; background:transparent; border:1px solid var(--line); border-radius:12px; padding:14px 22px; cursor:pointer" style-hover="border-color:#A9A6A0">Back</button>
+                  <div style="display:flex; align-items:center; gap:20px">
+                    <div style="font-size:14px; color:#918E88">{{ stepCounter }}</div>
+                    <button type="button" onClick="{{ next }}" style="font-size:15.5px; font-weight:700; color:#101010; background:var(--accent); border:0; border-radius:12px; padding:15px 28px; cursor:pointer" style-hover="background:color-mix(in oklab, var(--accent) 82%, #ffffff)">{{ nextLabel }}</button>
+                  </div>
+                </div>
+              </div>
+
+              <div style="position:sticky; top:24px; background:var(--dark-quiet); border:1px solid #2A292E; border-radius:24px; padding:32px 30px 34px">
+                <div style="font-weight:600; font-size:11.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--accent)">What happens next</div>
+                <div style="display:flex; flex-direction:column; gap:0; margin-top:24px">
+                  <div style="display:flex; gap:16px">
+                    <div style="flex:0 0 auto; display:flex; flex-direction:column; align-items:center">
+                      <div style="width:26px; height:26px; border-radius:999px; border:1px solid rgba(255,255,255,0.22); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#fff">1</div>
+                      <div style="width:1px; flex:1; background:rgba(255,255,255,0.16)"></div>
+                    </div>
+                    <div style="padding-bottom:22px; font-size:15.5px; line-height:1.5; color:rgba(255,255,255,0.80)">We read your request and come back with questions if anything is missing.</div>
+                  </div>
+                  <div style="display:flex; gap:16px">
+                    <div style="flex:0 0 auto; display:flex; flex-direction:column; align-items:center">
+                      <div style="width:26px; height:26px; border-radius:999px; border:1px solid rgba(255,255,255,0.22); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#fff">2</div>
+                      <div style="width:1px; flex:1; background:rgba(255,255,255,0.16)"></div>
+                    </div>
+                    <div style="padding-bottom:22px; font-size:15.5px; line-height:1.5; color:rgba(255,255,255,0.80)">We shortlist and audit factories against your specification.</div>
+                  </div>
+                  <div style="display:flex; gap:16px">
+                    <div style="flex:0 0 auto">
+                      <div style="width:26px; height:26px; border-radius:999px; border:1px solid var(--accent); background:color-mix(in oklab, var(--accent) 20%, #17171A); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:var(--accent)">3</div>
+                    </div>
+                    <div style="font-size:15.5px; line-height:1.5; color:rgba(255,255,255,0.80)">You receive a quotation with landed cost and lead time.</div>
+                  </div>
+                </div>
+                <div style="margin-top:28px; padding-top:22px; border-top:1px solid rgba(255,255,255,0.14); font-size:15px; line-height:1.5; color:rgba(255,255,255,0.62)">A named sourcing specialist owns your project.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:14px">
+      <div style="font-weight:600; font-size:12px; letter-spacing:0.06em; text-transform:uppercase; color:#6C6A66">/request — Mobile 375</div>
+
+      <div data-screen-label="Request — Mobile" style="width:375px; background:var(--paper); box-shadow:0 24px 60px rgba(0,0,0,0.16); overflow:hidden">
+        <header style="background:var(--head-bg); height:60px; padding:0 20px; display:flex; align-items:center; justify-content:space-between">
+          <div style="display:flex; align-items:center; gap:10px">
+            <div style="width:11px; height:11px; background:var(--accent)"></div>
+            <div class="tight" style="font-size:17px; font-weight:700; letter-spacing:0.10em; color:#fff">MALAMERAN</div>
+          </div>
+          <a href="Malameran%20Home.dc.html" style="font-size:13.5px; font-weight:500; color:rgba(255,255,255,0.60)" style-hover="text-decoration:none">Back to site</a>
+        </header>
+
+        <div style="padding:36px 20px 56px">
+          <h1 class="tight" style="margin:0; font-size:36px; line-height:1.04; letter-spacing:-0.035em; font-weight:800; color:var(--ink); text-wrap:pretty">Tell us what you need.</h1>
+          <p style="margin:14px 0 0; font-size:17px; line-height:1.5; color:var(--muted)">Three short steps. No account, no obligation.</p>
+
+          <div style="margin-top:24px; background:var(--dark-quiet); border:1px solid #2A292E; border-radius:18px; padding:20px">
+            <div style="font-weight:600; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:var(--accent); margin-bottom:12px">What happens next</div>
+            <div style="font-size:15px; line-height:1.55; color:rgba(255,255,255,0.80)">We read your request → we shortlist and audit factories → you receive a quotation with landed cost and lead time.</div>
+            <div style="margin-top:14px; padding-top:14px; border-top:1px solid rgba(255,255,255,0.14); font-size:14.5px; line-height:1.5; color:rgba(255,255,255,0.60)">A named sourcing specialist owns your project.</div>
+          </div>
+
+          <div style="margin-top:24px; display:flex; gap:6px">
+            <div style="flex:1; height:3px; border-radius:2px; background:var(--accent)"></div>
+            <div style="flex:1; height:3px; border-radius:2px; background:#DEDDD8"></div>
+            <div style="flex:1; height:3px; border-radius:2px; background:#DEDDD8"></div>
+          </div>
+          <div style="margin-top:12px; display:flex; align-items:center; justify-content:space-between">
+            <div style="font-size:15px; font-weight:700; color:var(--ink)">What you need</div>
+            <div style="font-size:13.5px; color:#918E88">Step 1 of 3</div>
+          </div>
+
+          <div style="margin-top:22px; display:flex; flex-direction:column; gap:22px">
+            <div>
+              <label style="display:block; font-size:14.5px; font-weight:600; color:#26251F; margin-bottom:6px">Product description</label>
+              <div style="font-size:13.5px; line-height:1.5; color:var(--muted); margin-bottom:10px">Describe what you need made. A specification, a drawing or a photo of something similar is enough.</div>
+              <textarea rows="6" placeholder="e.g. Powder-coated aluminium window profiles, 2.0mm wall" style="width:100%; padding:15px; font-size:16px; line-height:1.5; color:var(--ink); background:#fff; border:1px solid #D3D2CC; border-radius:12px; outline:none; resize:vertical" style-focus="border-color:var(--accent); box-shadow:0 0 0 3px rgba(226,117,27,0.20)"></textarea>
+            </div>
+            <div>
+              <div style="display:flex; align-items:baseline; gap:8px; margin-bottom:8px">
+                <label style="font-size:14.5px; font-weight:600; color:#26251F">Industry</label>
+                <span style="font-size:11px; font-weight:500; letter-spacing:0.05em; text-transform:uppercase; color:#918E88">Optional</span>
+              </div>
+              <div style="position:relative">
+                <select style="width:100%; padding:15px 42px 15px 15px; font-size:16px; color:var(--ink); background:#fff; border:1px solid #D3D2CC; border-radius:12px; outline:none; appearance:none; -webkit-appearance:none" style-focus="border-color:var(--accent); box-shadow:0 0 0 3px rgba(226,117,27,0.20)">
+                  <option>Select an industry</option>
+                  <option>Construction &amp; building products</option>
+                  <option>Industrial &amp; machinery</option>
+                  <option>Consumer goods</option>
+                  <option>Packaging</option>
+                </select>
+                <div style="position:absolute; right:17px; top:20px; width:8px; height:8px; border-right:2px solid #8B8880; border-bottom:2px solid #8B8880; transform:rotate(45deg); pointer-events:none"></div>
+              </div>
+            </div>
+            <div>
+              <div style="display:flex; align-items:baseline; gap:8px; margin-bottom:8px">
+                <label style="font-size:14.5px; font-weight:600; color:#26251F">Request type</label>
+                <span style="font-size:11px; font-weight:500; letter-spacing:0.05em; text-transform:uppercase; color:#918E88">Optional</span>
+              </div>
+              <div style="position:relative">
+                <select style="width:100%; padding:15px 42px 15px 15px; font-size:16px; color:var(--ink); background:#fff; border:1px solid #D3D2CC; border-radius:12px; outline:none; appearance:none; -webkit-appearance:none" style-focus="border-color:var(--accent); box-shadow:0 0 0 3px rgba(226,117,27,0.20)">
+                  <option>Select a request type</option>
+                  <option>New product sourcing</option>
+                  <option>Repeat order</option>
+                  <option>Replace an existing supplier</option>
+                  <option>Not sure yet</option>
+                </select>
+                <div style="position:absolute; right:17px; top:20px; width:8px; height:8px; border-right:2px solid #8B8880; border-bottom:2px solid #8B8880; transform:rotate(45deg); pointer-events:none"></div>
+              </div>
+            </div>
+            <div>
+              <div style="display:flex; align-items:baseline; gap:8px; margin-bottom:8px">
+                <label style="font-size:14.5px; font-weight:600; color:#26251F">Quantity</label>
+                <span style="font-size:11px; font-weight:500; letter-spacing:0.05em; text-transform:uppercase; color:#918E88">Optional</span>
+              </div>
+              <input type="text" placeholder="5,000" style="width:100%; padding:15px; font-size:16px; color:var(--ink); background:#fff; border:1px solid #D3D2CC; border-radius:12px; outline:none" style-focus="border-color:var(--accent); box-shadow:0 0 0 3px rgba(226,117,27,0.20)">
+              <div style="margin-top:8px; font-size:13px; color:#918E88">Units, kilograms, metres or pallets.</div>
+            </div>
+          </div>
+
+          <div style="margin-top:28px; display:flex; flex-direction:column; gap:12px">
+            <button type="button" style="width:100%; font-size:16.5px; font-weight:700; color:#101010; background:var(--accent); border:0; border-radius:14px; padding:18px; cursor:pointer">Continue</button>
+            <button type="button" style="width:100%; font-size:16px; font-weight:600; color:#A6A39D; background:transparent; border:1px solid var(--line); border-radius:14px; padding:17px; cursor:pointer">Back</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex; flex-direction:column; gap:20px">
+    <div style="font-weight:600; font-size:12px; letter-spacing:0.06em; text-transform:uppercase; color:#6C6A66">States</div>
+
+    <div style="display:flex; flex-wrap:wrap; gap:32px">
+
+      <div style="width:604px; background:#fff; border:1px solid var(--line); border-radius:20px; padding:28px 30px 30px">
+        <div style="font-size:12.5px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; color:var(--err); margin-bottom:20px">1 · Field validation error</div>
+        <div style="display:flex; gap:10px; margin-bottom:24px">
+          <div style="flex:1">
+            <div style="height:3px; border-radius:2px; background:var(--accent)"></div>
+            <div style="margin-top:12px; display:flex; align-items:center; gap:8px">
+              <div style="width:20px; height:20px; border-radius:999px; background:var(--accent); color:#101010; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700">1</div>
+              <div style="font-size:13.5px; font-weight:600; color:var(--ink)">What you need</div>
+              <div style="display:flex; align-items:center; gap:4px; font-size:11.5px; font-weight:700; color:var(--err); border:1px solid #E5C3BA; background:#FCF3F1; border-radius:999px; padding:2px 8px">! 1 issue</div>
+            </div>
+          </div>
+          <div style="flex:1">
+            <div style="height:3px; border-radius:2px; background:#DEDDD8"></div>
+            <div style="margin-top:12px; display:flex; align-items:center; gap:8px">
+              <div style="width:20px; height:20px; border-radius:999px; border:1px solid #D3D2CC; color:#918E88; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700">2</div>
+              <div style="font-size:13.5px; font-weight:600; color:#918E88">Your requirements</div>
+            </div>
+          </div>
+        </div>
+        <label style="display:block; font-size:14.5px; font-weight:600; color:#26251F; margin-bottom:8px">Product description</label>
+        <textarea rows="3" style="width:100%; padding:14px 16px; font-size:16px; line-height:1.5; color:var(--ink); background:#FDF7F5; border:1px solid var(--err); border-radius:12px; outline:none; resize:none"></textarea>
+        <div style="display:flex; align-items:flex-start; gap:8px; margin-top:10px">
+          <div style="flex:0 0 auto; width:17px; height:17px; margin-top:1px; border-radius:999px; background:var(--err); color:#fff; font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center">!</div>
+          <div style="font-size:14px; line-height:1.45; color:var(--err); font-weight:500">Tell us what you need made — one line is enough to start.</div>
+        </div>
+      </div>
+
+      <div style="width:604px; background:#fff; border:1px solid var(--line); border-radius:20px; padding:28px 30px 30px">
+        <div style="font-size:12.5px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; color:#918E88; margin-bottom:20px">2 · Submitting — form locked</div>
+        <div style="opacity:0.5; pointer-events:none">
+          <label style="display:block; font-size:14.5px; font-weight:600; color:#26251F; margin-bottom:8px">Email</label>
+          <input type="email" value="jane@acme-industrial.ca" readonly style="width:100%; padding:14px 16px; font-size:16px; color:var(--ink); background:#F4F3EF; border:1px solid #D3D2CC; border-radius:12px; outline:none">
+        </div>
+        <button type="button" disabled style="margin-top:22px; width:100%; display:flex; align-items:center; justify-content:center; gap:12px; background:color-mix(in oklab, var(--accent) 42%, #F4F3EF); color:rgba(16,16,16,0.55); font-size:17px; font-weight:700; padding:19px 30px; border:0; border-radius:14px; cursor:not-allowed">
+          <span style="width:17px; height:17px; border-radius:999px; border:2px solid rgba(16,16,16,0.25); border-top-color:rgba(16,16,16,0.7); display:inline-block; animation:mal-spin 0.8s linear infinite"></span>
+          Sending request…
+        </button>
+        <div style="margin-top:14px; text-align:center; font-size:14px; color:#918E88">Do not close this page — this takes a few seconds.</div>
+      </div>
+
+      <div style="width:604px; background:#fff; border:1px solid var(--line); border-radius:20px; padding:28px 30px 30px">
+        <div style="font-size:12.5px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; color:var(--err); margin-bottom:20px">4 · Submission failed — data preserved</div>
+        <div style="border:1px solid #E5C3BA; background:#FCF3F1; border-radius:14px; padding:18px 20px">
+          <div style="font-size:16.5px; font-weight:700; color:#7E2C1B">We could not send your request.</div>
+          <div style="margin-top:8px; font-size:15px; line-height:1.5; color:#6B3327">Nothing you typed has been lost. Try again, or email it to <a href="mailto:sourcing@malameran.com" style="color:#7E2C1B; font-weight:600; text-decoration:underline">sourcing@malameran.com</a>.</div>
+          <button type="button" style="margin-top:16px; font-size:15px; font-weight:700; color:#101010; background:var(--accent); border:0; border-radius:12px; padding:13px 22px; cursor:pointer">Try again</button>
+        </div>
+        <div style="margin-top:18px; opacity:0.9">
+          <label style="display:block; font-size:14.5px; font-weight:600; color:#26251F; margin-bottom:8px">Full name</label>
+          <input type="text" value="Jane Doe" style="width:100%; padding:14px 16px; font-size:16px; color:var(--ink); background:#fff; border:1px solid #D3D2CC; border-radius:12px; outline:none">
+        </div>
+      </div>
+
+      <div style="width:604px; background:#fff; border:1px solid var(--line); border-radius:20px; padding:28px 30px 30px">
+        <div style="font-size:12.5px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; color:#918E88; margin-bottom:20px">5 · Rate limited</div>
+        <div style="border:1px solid var(--line); background:#F4F3EF; border-radius:14px; padding:18px 20px">
+          <div style="font-size:16.5px; font-weight:700; color:var(--ink)">We have already received a few requests from this connection.</div>
+          <div style="margin-top:8px; font-size:15px; line-height:1.5; color:#3A3833">Please wait about 15 minutes before sending another, or write to <a href="mailto:sourcing@malameran.com" style="font-weight:600; text-decoration:underline">sourcing@malameran.com</a> and we will pick it up from there.</div>
+        </div>
+        <div style="margin-top:20px; font-size:12.5px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; color:#918E88; margin-bottom:14px">6 · File rejected</div>
+        <div style="border:1px dashed var(--err); border-radius:16px; background:#FDF7F5; padding:26px 24px; text-align:center">
+          <div style="font-size:16px; font-weight:600; color:#7E2C1B">factory-tour.mov could not be added</div>
+          <div style="margin-top:8px; font-size:14px; line-height:1.5; color:#6B3327">Video files are not supported. Accepted: PDF, images, DWG or spreadsheets, up to 10MB per file, 5 files maximum.</div>
+          <div style="margin-top:14px; font-size:14px; font-weight:600; color:var(--accent); text-decoration:underline; text-underline-offset:3px; cursor:pointer">Choose a different file</div>
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px">
+        <div style="font-size:12.5px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; color:#918E88">3 · Success — full page</div>
+        <div data-screen-label="Request success" style="width:1240px; background:var(--paper); border:1px solid var(--line); overflow:hidden">
+          <header style="background:var(--head-bg); padding:0 40px">
+            <div style="max-width:1160px; margin:0 auto; height:76px; display:flex; align-items:center; justify-content:space-between">
+              <div style="display:flex; align-items:center; gap:12px">
+                <div style="width:12px; height:12px; background:var(--accent)"></div>
+                <div class="tight" style="font-size:19px; font-weight:700; letter-spacing:0.10em; color:#fff">MALAMERAN</div>
+              </div>
+              <a href="Malameran%20Home.dc.html" style="font-size:14.5px; font-weight:500; color:rgba(255,255,255,0.60)" style-hover="text-decoration:none">Back to site</a>
+            </div>
+          </header>
+          <div style="padding:96px 40px 104px">
+            <div style="max-width:760px; margin:0 auto">
+              <div style="font-weight:600; font-size:12.5px; letter-spacing:0.06em; text-transform:uppercase; color:color-mix(in oklab, var(--accent) 74%, #101010)">Request received</div>
+              <h2 class="tight" style="margin:22px 0 0; font-size:52px; line-height:1.03; letter-spacing:-0.035em; font-weight:800; color:var(--ink); text-wrap:pretty">Your request is with a sourcing specialist.</h2>
+              <p style="margin:22px 0 0; font-size:19px; line-height:1.55; color:#3A3833; text-wrap:pretty">Reference <span style="font-weight:700; color:var(--ink)">MAL-40219</span>. A named specialist reviews it and replies within two business days — with questions if anything is missing, or with a shortlist if it is not.</p>
+              <div style="margin-top:36px; background:#fff; border:1px solid var(--line); border-radius:20px; padding:28px 30px">
+                <div style="font-weight:600; font-size:11.5px; letter-spacing:0.06em; text-transform:uppercase; color:#918E88; margin-bottom:18px">What happens next</div>
+                <div style="display:flex; flex-direction:column; gap:14px">
+                  <div style="display:flex; gap:14px; font-size:16px; line-height:1.5; color:#26251F"><span style="font-weight:700; color:var(--accent)">Within 2 business days</span><span>A specialist replies with questions or a factory shortlist.</span></div>
+                  <div style="height:1px; background:#EDECE8"></div>
+                  <div style="display:flex; gap:14px; font-size:16px; line-height:1.5; color:#26251F"><span style="font-weight:700; color:var(--accent)">1–2 weeks</span><span>Audited options and a quotation with landed cost and lead time.</span></div>
+                </div>
+              </div>
+              <p style="margin:28px 0 0; font-size:16px; line-height:1.55; color:var(--muted)">A confirmation email is on its way to jane@acme-industrial.ca. If it does not arrive within the hour, check your spam folder or write to sourcing@malameran.com.</p>
+              <div style="margin-top:34px"><a href="Malameran%20Home.dc.html" style="font-size:16px; font-weight:600; color:var(--muted); text-decoration:underline; text-underline-offset:4px" style-hover="color:var(--ink)">Return to the home page</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { step: 1 };
+  renderVals() {
+    const s = this.state.step;
+    const A = '#E2751B', dim = '#DEDDD8';
+    const pill = (n) => n < s
+      ? { bg: 'color-mix(in oklab, #E2751B 20%, #ffffff)', fg: '#8A4408', bd: A }
+      : n === s
+        ? { bg: A, fg: '#101010', bd: A }
+        : { bg: '#ffffff', fg: '#918E88', bd: '#D3D2CC' };
+    const p1 = pill(1), p2 = pill(2), p3 = pill(3);
+    return {
+      isStep1: s === 1, isStep2: s === 2, isStep3: s === 3,
+      track1: s >= 1 ? A : dim, track2: s >= 2 ? A : dim, track3: s >= 3 ? A : dim,
+      pill1bg: p1.bg, pill1fg: p1.fg, pill1bd: p1.bd,
+      pill2bg: p2.bg, pill2fg: p2.fg, pill2bd: p2.bd,
+      pill3bg: p3.bg, pill3fg: p3.fg, pill3bd: p3.bd,
+      label1: s === 1 ? '#1A191E' : '#6C6A66',
+      label2: s === 2 ? '#1A191E' : '#6C6A66',
+      label3: s === 3 ? '#1A191E' : '#6C6A66',
+      stepCounter: 'Step ' + s + ' of 3',
+      nextLabel: s === 3 ? 'Review' : 'Continue',
+      backColor: s === 1 ? '#B0ADA6' : '#6C6A66',
+      next: () => this.setState({ step: Math.min(3, this.state.step + 1) }),
+      back: () => this.setState({ step: Math.max(1, this.state.step - 1) })
+    };
+  }
+}
+</script>
+</body>
+</html>

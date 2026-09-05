@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<style>
+  :root {
+    --ink:#1A191E; --paper:#F9F9F7; --accent:#E2751B; --head-bg:#1F1E23;
+    --dark-hero: linear-gradient(180deg, rgba(249,249,247,0) calc(100% - 160px), rgba(249,249,247,0.045) calc(100% - 60px), rgba(249,249,247,0.13) 100%), radial-gradient(1200px 700px at 76% 16%, color-mix(in oklab, var(--accent) 14%, transparent) 0%, transparent 72%), linear-gradient(168deg, #201F24 0%, #1A191E 55%, #17171A 100%);
+    --dark-soft: linear-gradient(180deg, rgba(249,249,247,0) calc(100% - 160px), rgba(249,249,247,0.045) calc(100% - 60px), rgba(249,249,247,0.13) 100%), radial-gradient(1000px 620px at 10% 6%, color-mix(in oklab, var(--accent) 9%, transparent) 0%, transparent 74%), linear-gradient(180deg, #1C1B20 0%, #17171A 100%);
+    --dark-strong: radial-gradient(1100px 680px at 50% 118%, color-mix(in oklab, var(--accent) 20%, transparent) 0%, transparent 70%), linear-gradient(180deg, #17171A 0%, #1E1D22 100%);
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:#E4E3E0; font-family:'Inter', system-ui, sans-serif; -webkit-font-smoothing:antialiased; }
+  h1, h2, h3, .tight { font-family:'Inter Tight','Inter', system-ui, sans-serif; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { color: var(--accent); text-decoration: underline; }
+</style>
+</helmet>
+
+<section style="padding:56px; font-family:'Inter',sans-serif">
+  <div style="display:flex; flex-direction:column; gap:14px">
+    <div style="font-weight:600; font-size:12px; letter-spacing:0.06em; text-transform:uppercase; color:#6C6A66">About — Desktop 1440</div>
+
+    <div data-screen-label="About" style="width:1440px; background:var(--paper); box-shadow:0 24px 60px rgba(0,0,0,0.16); overflow:hidden">
+
+      <dc-import name="Site Header" variant="desktop" active="About" hint-size="1440px,88px"></dc-import>
+
+      <div style="background:var(--dark-hero); padding:0 40px">
+        <div style="max-width:1200px; margin:0 auto; padding:96px 0 112px">
+          <div style="font-weight:600; font-size:12.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--accent); margin-bottom:26px">About</div>
+          <h1 class="tight" style="margin:0; max-width:900px; font-size:68px; line-height:1.0; letter-spacing:-0.035em; font-weight:800; color:#fff; text-wrap:pretty">One accountable party, on your side of the table.</h1>
+          <p style="margin:28px 0 0; max-width:640px; font-size:19px; line-height:1.55; color:rgba(255,255,255,0.74); text-wrap:pretty">Malameran is a Canadian sourcing company. We are paid by the buyer, we are registered where the buyer is, and the contract sits with us.</p>
+        </div>
+      </div>
+
+      <div style="background:var(--paper); padding:0 40px">
+        <div style="max-width:1200px; margin:0 auto; padding:112px 0 120px; display:grid; grid-template-columns:1fr 520px; gap:96px">
+          <div>
+            <div style="font-weight:600; font-size:12.5px; letter-spacing:0.06em; text-transform:uppercase; color:color-mix(in oklab, var(--accent) 74%, #101010); margin-bottom:26px">Why we exist</div>
+            <h2 class="tight" style="margin:0; max-width:520px; font-size:52px; line-height:1.03; letter-spacing:-0.03em; font-weight:800; color:var(--ink); text-wrap:pretty">We kept watching good orders fail for the same reasons.</h2>
+            <div style="height:230px; margin-top:44px; max-width:460px">
+              <image-slot id="mal-about-texture" shape="rounded" radius="20" placeholder="factory floor or shipping photo — optional"></image-slot>
+            </div>
+          </div>
+          <div style="padding-top:8px">
+            <p style="margin:0; font-size:18px; line-height:1.65; color:#1E1E1C; text-wrap:pretty">Our team has spent years on both sides of an import: specifying product for buyers in North America, and standing on factory floors in Asia explaining why a shipment was rejected. The failures were rarely about the manufacturer being bad. They were about nobody owning the middle.</p>
+            <div style="height:1px; background:#DDDCD8; margin:32px 0"></div>
+            <p style="margin:0; font-size:18px; line-height:1.65; color:#1E1E1C; text-wrap:pretty">An agent takes a commission from the factory. A trading company hides the factory entirely. Neither is accountable for the thing a buyer actually needs: that the product matches the spec, arrives when promised, and clears customs without a fight.</p>
+            <div style="height:1px; background:#DDDCD8; margin:32px 0"></div>
+            <p style="margin:0; font-size:18px; line-height:1.65; color:#1E1E1C; text-wrap:pretty">So we built the alternative. One company, paid by you, that owns every step between your specification and your loading dock — and tells you the truth when something slips.</p>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--dark-soft); padding:0 40px">
+        <div style="max-width:1200px; margin:0 auto; padding:112px 0 120px">
+          <div style="font-weight:600; font-size:12.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--accent); margin-bottom:26px">How we operate</div>
+          <h2 class="tight" style="margin:0 0 52px; max-width:760px; font-size:56px; line-height:1.03; letter-spacing:-0.03em; font-weight:800; color:#fff; text-wrap:pretty">Four rules we do not bend.</h2>
+          <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:20px">
+            <div style="border:1px solid rgba(255,255,255,0.12); box-shadow:inset 0 0 0 1px rgba(255,255,255,0.12); background-clip:padding-box; border-radius:22px; background:rgba(255,255,255,0.035); padding:34px 32px 38px">
+              <h3 class="tight" style="margin:0 0 12px; font-size:26px; font-weight:700; letter-spacing:-0.02em; color:#fff">The buyer pays us</h3>
+              <p style="margin:0; font-size:16.5px; line-height:1.6; color:rgba(255,255,255,0.68); text-wrap:pretty">We take no commission from suppliers. Our incentive is your outcome, not the size of the factory's invoice.</p>
+            </div>
+            <div style="border:1px solid rgba(255,255,255,0.12); box-shadow:inset 0 0 0 1px rgba(255,255,255,0.12); background-clip:padding-box; border-radius:22px; background:rgba(255,255,255,0.035); padding:34px 32px 38px">
+              <h3 class="tight" style="margin:0 0 12px; font-size:26px; font-weight:700; letter-spacing:-0.02em; color:#fff">You see the factory</h3>
+              <p style="margin:0; font-size:16.5px; line-height:1.6; color:rgba(255,255,255,0.68); text-wrap:pretty">We do not hide who makes your product. You get the audit report, the name and the address.</p>
+            </div>
+            <div style="border:1px solid rgba(255,255,255,0.12); box-shadow:inset 0 0 0 1px rgba(255,255,255,0.12); background-clip:padding-box; border-radius:22px; background:rgba(255,255,255,0.035); padding:34px 32px 38px">
+              <h3 class="tight" style="margin:0 0 12px; font-size:26px; font-weight:700; letter-spacing:-0.02em; color:#fff">Bad news travels fast</h3>
+              <p style="margin:0; font-size:16.5px; line-height:1.6; color:rgba(255,255,255,0.68); text-wrap:pretty">A delay or a defect reaches you the day we learn it, with the options already worked out.</p>
+            </div>
+            <div style="border:1px solid rgba(255,255,255,0.12); box-shadow:inset 0 0 0 1px rgba(255,255,255,0.12); background-clip:padding-box; border-radius:22px; background:rgba(255,255,255,0.035); padding:34px 32px 38px">
+              <h3 class="tight" style="margin:0 0 12px; font-size:26px; font-weight:700; letter-spacing:-0.02em; color:#fff">We say no</h3>
+              <p style="margin:0; font-size:16.5px; line-height:1.6; color:rgba(255,255,255,0.68); text-wrap:pretty">If a product is outside what we can stand behind, we decline the project rather than learn on your order.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--paper); padding:0 40px">
+        <div style="max-width:1200px; margin:0 auto; padding:112px 0 120px">
+          <div style="font-weight:600; font-size:12.5px; letter-spacing:0.06em; text-transform:uppercase; color:color-mix(in oklab, var(--accent) 74%, #101010); margin-bottom:26px">The company</div>
+          <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:16px">
+            <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:20px; padding:30px 28px 32px">
+              <div style="font-weight:600; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:#8A8882; margin-bottom:14px">Registered</div>
+              <div class="tight" style="font-size:26px; font-weight:700; letter-spacing:-0.02em; color:var(--ink)">Ontario, Canada</div>
+              <p style="margin:10px 0 0; font-size:15.5px; line-height:1.55; color:#5A5852">Malameran Sourcing Inc.</p>
+            </div>
+            <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:20px; padding:30px 28px 32px">
+              <div style="font-weight:600; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:#8A8882; margin-bottom:14px">Head office</div>
+              <div class="tight" style="font-size:26px; font-weight:700; letter-spacing:-0.02em; color:var(--ink)">Toronto</div>
+              <p style="margin:10px 0 0; font-size:15.5px; line-height:1.55; color:#5A5852">150 King Street West, Suite 200</p>
+            </div>
+            <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:20px; padding:30px 28px 32px">
+              <div style="font-weight:600; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:#8A8882; margin-bottom:14px">Sourcing regions</div>
+              <div class="tight" style="font-size:26px; font-weight:700; letter-spacing:-0.02em; color:var(--ink)">Asia, Türkiye, EU</div>
+              <p style="margin:10px 0 0; font-size:15.5px; line-height:1.55; color:#5A5852">Audited factories in eleven countries</p>
+            </div>
+            <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:20px; padding:30px 28px 32px">
+              <div style="font-weight:600; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:#8A8882; margin-bottom:14px">Working languages</div>
+              <div class="tight" style="font-size:26px; font-weight:700; letter-spacing:-0.02em; color:var(--ink)">EN · FR · TR · ZH</div>
+              <p style="margin:10px 0 0; font-size:15.5px; line-height:1.55; color:#5A5852">Negotiation in the supplier's language</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--dark-strong); padding:0 40px">
+        <div style="max-width:1200px; margin:0 auto; padding:128px 0 140px; text-align:center">
+          <h2 class="tight" style="margin:0; font-size:72px; line-height:1.0; letter-spacing:-0.035em; font-weight:800; color:#fff">Work with us.</h2>
+          <p style="margin:28px auto 0; max-width:620px; font-size:19px; line-height:1.55; color:rgba(255,255,255,0.74); text-wrap:pretty">Send a specification and we will tell you honestly whether we are the right party for it.</p>
+          <div style="margin-top:40px">
+            <a href="Malameran%20Sourcing%20Request.dc.html" style="display:inline-block; background:var(--accent); color:#101010; font-size:17px; font-weight:700; padding:19px 30px; border-radius:14px; text-decoration:none" style-hover="background:color-mix(in oklab, var(--accent) 82%, #ffffff); text-decoration:none">Start a sourcing request</a>
+          </div>
+        </div>
+      </div>
+
+      <dc-import name="Site Footer" variant="desktop" hint-size="1440px,420px"></dc-import>
+
+    </div>
+  </div>
+</section>
+</x-dc>
+</body>
+</html>

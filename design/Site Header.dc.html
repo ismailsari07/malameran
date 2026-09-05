@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --ink:#1A191E; --paper:#F9F9F7; --accent:#E2751B; --head-bg:#1F1E23; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:#E4E3E0; font-family:'Inter', system-ui, sans-serif; -webkit-font-smoothing:antialiased; }
+  h1, h2, h3, .tight { font-family:'Inter Tight','Inter', system-ui, sans-serif; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { color: var(--accent); text-decoration: underline; }
+</style>
+</helmet>
+
+<sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+  <header style="background:var(--head-bg); padding:0 40px">
+    <div style="max-width:1200px; margin:0 auto; height:88px; display:flex; align-items:center; justify-content:space-between; gap:40px">
+      <a href="Malameran%20Home.dc.html" style="display:flex; align-items:center; gap:12px; height:40px; flex:0 0 auto; text-decoration:none" style-hover="text-decoration:none">
+        <div style="width:13px; height:13px; background:var(--accent)"></div>
+        <div class="tight" style="font-size:21px; font-weight:700; letter-spacing:0.10em; color:#fff">MALAMERAN</div>
+      </a>
+      <nav style="display:flex; align-items:center; gap:32px; margin-left:auto">
+        <sc-for list="{{ nav }}" as="item" hint-placeholder-count="6">
+          <a href="{{ item.href }}" style="font-size:15px; font-weight:500; color:{{ item.color }}" style-hover="color:#fff">{{ item.label }}</a>
+        </sc-for>
+      </nav>
+      <a href="Malameran%20Sourcing%20Request.dc.html" style="flex:0 0 auto; background:var(--accent); color:#101010; font-size:15px; font-weight:700; padding:13px 22px; border-radius:12px; text-decoration:none" style-hover="background:color-mix(in oklab, var(--accent) 82%, #ffffff); text-decoration:none">Start a sourcing request</a>
+    </div>
+  </header>
+</sc-if>
+
+<sc-if value="{{ isMobile }}">
+  <header style="background:var(--head-bg); height:64px; display:flex; align-items:center; justify-content:space-between; padding:0 20px; border-bottom:1px solid rgba(255,255,255,0.10)">
+    <a href="Malameran%20Home.dc.html" style="display:flex; align-items:center; gap:9px; height:32px; text-decoration:none" style-hover="text-decoration:none">
+      <div style="width:11px; height:11px; background:var(--accent)"></div>
+      <div class="tight" style="font-size:17px; font-weight:700; letter-spacing:0.10em; color:#fff">MALAMERAN</div>
+    </a>
+    <div style="display:flex; flex-direction:column; gap:5px; width:44px; height:44px; align-items:flex-end; justify-content:center">
+      <div style="width:24px; height:2px; background:#fff"></div>
+      <div style="width:24px; height:2px; background:#fff"></div>
+    </div>
+  </header>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:88},&quot;active&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;variant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;desktop&quot;,&quot;mobile&quot;],&quot;default&quot;:&quot;desktop&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const p = this.props || {};
+    const variant = p.variant ?? 'desktop';
+    const active = p.active ?? '';
+    const pages = [
+      ['How It Works', 'Malameran How It Works.dc.html'],
+      ['Services', 'Malameran Services.dc.html'],
+      ['Industries', 'Malameran Industries.dc.html'],
+      ['For Suppliers', 'Malameran For Suppliers.dc.html'],
+      ['About', 'Malameran About.dc.html'],
+      ['Contact', 'Malameran Contact.dc.html'],
+    ];
+    return {
+      isDesktop: variant === 'desktop',
+      isMobile: variant === 'mobile',
+      nav: pages.map(([label, href]) => ({
+        label,
+        href: encodeURI(href),
+        color: label === active ? '#ffffff' : 'rgba(255,255,255,0.72)',
+      })),
+    };
+  }
+}
+</script>
+</body>
+</html>

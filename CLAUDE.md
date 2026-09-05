@@ -50,3 +50,25 @@ Naming, commits, branches and component structure: `docs/conventions.md`
 Feature works · `npm run build` passes · RLS verified from a second account ·
 no console errors · responsive at 375px and 1440px · task checked off in
 `docs/tasks/`.
+
+## Docs maintenance
+
+You own the files in `docs/`. Keep them current without being asked.
+
+After finishing any task, in the same commit:
+- Tick the matching box in `docs/tasks/`
+- Add real decisions to `docs/decisions.md` (date, decision, why, consequence)
+- Update the "current position" in `docs/roadmap.md` when a stage starts or ends
+- Log out-of-scope requests in `docs/change-requests.md`
+- Update `docs/scope.md` when scope actually changes, and say so in the reply
+
+Exception: `docs/design.md` is generated once and edited only when told.
+
+Skip doc updates for trivial changes. Never invent a decision that wasn't made.
+
+## Design
+
+- Visual reference: `design/*.html`. Reference only — never imported by the app.
+- Tokens live in `tailwind.config.ts`. Never hardcode a hex value.
+- Rebuild designs as proper components; do not paste export markup into the app.
+- Token table and layout rules: `docs/design.md`

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:#1A191E; --paper:#F9F9F7; --accent:#E2751B; --head-bg:#1F1E23;
+    --dark-hero: linear-gradient(180deg, rgba(249,249,247,0) calc(100% - 160px), rgba(249,249,247,0.045) calc(100% - 60px), rgba(249,249,247,0.13) 100%), radial-gradient(1200px 700px at 76% 16%, color-mix(in oklab, var(--accent) 14%, transparent) 0%, transparent 72%), linear-gradient(168deg, #201F24 0%, #1A191E 55%, #17171A 100%);
+    --dark-soft: linear-gradient(180deg, rgba(249,249,247,0) calc(100% - 160px), rgba(249,249,247,0.045) calc(100% - 60px), rgba(249,249,247,0.13) 100%), radial-gradient(1000px 620px at 10% 6%, color-mix(in oklab, var(--accent) 9%, transparent) 0%, transparent 74%), linear-gradient(180deg, #1C1B20 0%, #17171A 100%);
+    --dark-strong: radial-gradient(1100px 680px at 50% 118%, color-mix(in oklab, var(--accent) 20%, transparent) 0%, transparent 70%), linear-gradient(180deg, #17171A 0%, #1E1D22 100%);
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:#E4E3E0; font-family:'Inter', system-ui, sans-serif; -webkit-font-smoothing:antialiased; }
+  h1, h2, h3, .tight { font-family:'Inter Tight','Inter', system-ui, sans-serif; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { color: var(--accent); text-decoration: underline; }
+</style>
+</helmet>
+
+<section style="padding:56px; font-family:'Inter',sans-serif">
+  <div style="display:flex; flex-direction:column; gap:14px">
+    <div style="font-weight:600; font-size:12px; letter-spacing:0.06em; text-transform:uppercase; color:#6C6A66">How it works — Desktop 1440</div>
+
+    <div data-screen-label="How It Works" style="width:1440px; background:var(--paper); box-shadow:0 24px 60px rgba(0,0,0,0.16); overflow:hidden">
+
+      <dc-import name="Site Header" variant="desktop" active="How It Works" hint-size="1440px,88px"></dc-import>
+
+      <div style="background:var(--dark-hero); padding:0 40px">
+        <div style="max-width:1200px; margin:0 auto; padding:96px 0 112px; display:grid; grid-template-columns:1fr 420px; gap:80px; align-items:end">
+          <div>
+            <div style="font-weight:600; font-size:12.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--accent); margin-bottom:26px">How it works</div>
+            <h1 class="tight" style="margin:0; font-size:68px; line-height:1.0; letter-spacing:-0.035em; font-weight:800; color:#fff; text-wrap:pretty">Five steps. Two of them are yours.</h1>
+            <p style="margin:28px 0 0; max-width:600px; font-size:19px; line-height:1.55; color:rgba(255,255,255,0.74); text-wrap:pretty">You brief us and you approve. Everything between those two moments is our job, and you are told where it stands in writing.</p>
+          </div>
+          <div style="border:1px solid rgba(255,255,255,0.14); box-shadow:inset 0 0 0 1px rgba(255,255,255,0.14); background-clip:padding-box; border-radius:22px; background:rgba(255,255,255,0.035); padding:28px">
+            <div style="font-weight:600; font-size:11.5px; letter-spacing:0.06em; text-transform:uppercase; color:rgba(255,255,255,0.45); margin-bottom:18px">Typical timeline</div>
+            <div style="display:flex; flex-direction:column; gap:14px">
+              <div style="display:flex; justify-content:space-between; gap:16px; font-size:15.5px; color:rgba(255,255,255,0.72)"><span>Shortlist</span><span style="color:#fff; font-weight:600">3–5 days</span></div>
+              <div style="height:1px; background:rgba(255,255,255,0.1)"></div>
+              <div style="display:flex; justify-content:space-between; gap:16px; font-size:15.5px; color:rgba(255,255,255,0.72)"><span>Quotation</span><span style="color:#fff; font-weight:600">1–2 weeks</span></div>
+              <div style="height:1px; background:rgba(255,255,255,0.1)"></div>
+              <div style="display:flex; justify-content:space-between; gap:16px; font-size:15.5px; color:rgba(255,255,255,0.72)"><span>Sample</span><span style="color:#fff; font-weight:600">2–4 weeks</span></div>
+              <div style="height:1px; background:rgba(255,255,255,0.1)"></div>
+              <div style="display:flex; justify-content:space-between; gap:16px; font-size:15.5px; color:rgba(255,255,255,0.72)"><span>Production</span><span style="color:#fff; font-weight:600">4–10 weeks</span></div>
+              <div style="height:1px; background:rgba(255,255,255,0.1)"></div>
+              <div style="display:flex; justify-content:space-between; gap:16px; font-size:15.5px; color:rgba(255,255,255,0.72)"><span>Freight and clearance</span><span style="color:#fff; font-weight:600">2–6 weeks</span></div>
+            </div>
+            <div style="margin-top:20px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.12); font-size:14.5px; line-height:1.5; color:rgba(255,255,255,0.5)">Ranges depend on product, tooling and shipping mode. You get dated estimates with your quote.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--paper); padding:0 40px">
+        <div style="max-width:1200px; margin:0 auto; padding:112px 0 120px">
+
+          <div style="display:grid; grid-template-columns:120px 1fr 1fr; gap:48px; padding-bottom:44px">
+            <div class="tight" style="font-size:64px; font-weight:700; letter-spacing:-0.045em; line-height:0.9; color:color-mix(in oklab, var(--accent) 88%, #101010)">01</div>
+            <div>
+              <div style="font-weight:600; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:color-mix(in oklab, var(--accent) 74%, #101010); margin-bottom:12px">You</div>
+              <h2 class="tight" style="margin:0; font-size:34px; line-height:1.1; letter-spacing:-0.025em; font-weight:700; color:var(--ink); text-wrap:pretty">Tell us what you need</h2>
+              <p style="margin:16px 0 0; font-size:17.5px; line-height:1.6; color:#3A3936; text-wrap:pretty">A drawing, a spec sheet, a competitor's product or a photo. If you have a target price and a delivery window, tell us those too.</p>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:12px; padding-top:34px">
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:16px 18px; font-size:15.5px; line-height:1.5; color:#5A5852">Specification, drawing or sample photo</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:16px 18px; font-size:15.5px; line-height:1.5; color:#5A5852">Target price and quantity</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:16px 18px; font-size:15.5px; line-height:1.5; color:#5A5852">Certifications the market requires</div>
+            </div>
+          </div>
+          <div style="height:1px; background:#DDDCD8"></div>
+
+          <div style="display:grid; grid-template-columns:120px 1fr 1fr; gap:48px; padding:44px 0">
+            <div class="tight" style="font-size:64px; font-weight:700; letter-spacing:-0.045em; line-height:0.9; color:#B9B7B1">02</div>
+            <div>
+              <div style="font-weight:600; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:#8A8882; margin-bottom:12px">Us</div>
+              <h2 class="tight" style="margin:0; font-size:34px; line-height:1.1; letter-spacing:-0.025em; font-weight:700; color:var(--ink); text-wrap:pretty">We source and verify</h2>
+              <p style="margin:16px 0 0; font-size:17.5px; line-height:1.6; color:#3A3936; text-wrap:pretty">We build a shortlist against your spec, then visit and audit before we recommend anyone. You see a handful of factories that can actually do the job — not a directory export.</p>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:12px; padding-top:34px">
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:16px 18px; font-size:15.5px; line-height:1.5; color:#5A5852">Capability and capacity check</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:16px 18px; font-size:15.5px; line-height:1.5; color:#5A5852">On-site visit and audit report</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:16px 18px; font-size:15.5px; line-height:1.5; color:#5A5852">Business licence and export document review</div>
+            </div>
+          </div>
+          <div style="height:1px; background:#DDDCD8"></div>
+
+          <div style="display:grid; grid-template-columns:120px 1fr 1fr; gap:48px; padding:44px 0">
+            <div class="tight" style="font-size:64px; font-weight:700; letter-spacing:-0.045em; line-height:0.9; color:color-mix(in oklab, var(--accent) 88%, #101010)">03</div>
+            <div>
+              <div style="font-weight:600; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:color-mix(in oklab, var(--accent) 74%, #101010); margin-bottom:12px">You</div>
+              <h2 class="tight" style="margin:0; font-size:34px; line-height:1.1; letter-spacing:-0.025em; font-weight:700; color:var(--ink); text-wrap:pretty">You approve quote and sample</h2>
+              <p style="margin:16px 0 0; font-size:17.5px; line-height:1.6; color:#3A3936; text-wrap:pretty">One quotation with landed cost, lead time and payment terms — and a physical sample in your hands. Nothing goes into production until both have your sign-off.</p>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:12px; padding-top:34px">
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:16px 18px; font-size:15.5px; line-height:1.5; color:#5A5852">Landed cost, not factory-gate price</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:16px 18px; font-size:15.5px; line-height:1.5; color:#5A5852">Dated lead time and payment schedule</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:16px 18px; font-size:15.5px; line-height:1.5; color:#5A5852">Sample shipped to you for approval</div>
+            </div>
+          </div>
+          <div style="height:1px; background:#DDDCD8"></div>
+
+          <div style="display:grid; grid-template-columns:120px 1fr 1fr; gap:48px; padding:44px 0">
+            <div class="tight" style="font-size:64px; font-weight:700; letter-spacing:-0.045em; line-height:0.9; color:#B9B7B1">04</div>
+            <div>
+              <div style="font-weight:600; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:#8A8882; margin-bottom:12px">Us</div>
+              <h2 class="tight" style="margin:0; font-size:34px; line-height:1.1; letter-spacing:-0.025em; font-weight:700; color:var(--ink); text-wrap:pretty">We manage production and quality</h2>
+              <p style="margin:16px 0 0; font-size:17.5px; line-height:1.6; color:#3A3936; text-wrap:pretty">Progress checks on the floor, written updates at agreed intervals, and a pre-shipment inspection against the approved sample before anything is packed.</p>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:12px; padding-top:34px">
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:16px 18px; font-size:15.5px; line-height:1.5; color:#5A5852">Scheduled progress reports</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:16px 18px; font-size:15.5px; line-height:1.5; color:#5A5852">Pre-shipment inspection with photos</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:16px 18px; font-size:15.5px; line-height:1.5; color:#5A5852">Defects resolved before shipment leaves</div>
+            </div>
+          </div>
+          <div style="height:1px; background:#DDDCD8"></div>
+
+          <div style="display:grid; grid-template-columns:120px 1fr 1fr; gap:48px; padding-top:44px">
+            <div class="tight" style="font-size:64px; font-weight:700; letter-spacing:-0.045em; line-height:0.9; color:#B9B7B1">05</div>
+            <div>
+              <div style="font-weight:600; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:#8A8882; margin-bottom:12px">Us</div>
+              <h2 class="tight" style="margin:0; font-size:34px; line-height:1.1; letter-spacing:-0.025em; font-weight:700; color:var(--ink); text-wrap:pretty">We handle shipping and documents</h2>
+              <p style="margin:16px 0 0; font-size:17.5px; line-height:1.6; color:#3A3936; text-wrap:pretty">Freight booked, export paperwork prepared, customs cleared and delivery arranged to your dock. One invoice, one accountable party.</p>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:12px; padding-top:34px">
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:16px 18px; font-size:15.5px; line-height:1.5; color:#5A5852">Sea, air or consolidated freight</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:16px 18px; font-size:15.5px; line-height:1.5; color:#5A5852">Export documents and HS classification</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:16px 18px; font-size:15.5px; line-height:1.5; color:#5A5852">Customs clearance and final delivery</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div style="background:var(--dark-soft); padding:0 40px">
+        <div style="max-width:1200px; margin:0 auto; padding:112px 0 120px">
+          <div style="font-weight:600; font-size:12.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--accent); margin-bottom:26px">What you can expect</div>
+          <h2 class="tight" style="margin:0 0 52px; max-width:820px; font-size:56px; line-height:1.03; letter-spacing:-0.03em; font-weight:800; color:#fff; text-wrap:pretty">Commitments we make in writing.</h2>
+          <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:20px">
+            <div style="border:1px solid rgba(255,255,255,0.12); box-shadow:inset 0 0 0 1px rgba(255,255,255,0.12); background-clip:padding-box; border-radius:20px; background:rgba(255,255,255,0.035); padding:30px 28px 32px">
+              <h3 class="tight" style="margin:0 0 12px; font-size:23px; font-weight:700; letter-spacing:-0.02em; color:#fff">A named specialist</h3>
+              <p style="margin:0; font-size:15.5px; line-height:1.55; color:rgba(255,255,255,0.66)">One person owns your project from brief to delivery. You always know who to call.</p>
+            </div>
+            <div style="border:1px solid rgba(255,255,255,0.12); box-shadow:inset 0 0 0 1px rgba(255,255,255,0.12); background-clip:padding-box; border-radius:20px; background:rgba(255,255,255,0.035); padding:30px 28px 32px">
+              <h3 class="tight" style="margin:0 0 12px; font-size:23px; font-weight:700; letter-spacing:-0.02em; color:#fff">No hidden margin</h3>
+              <p style="margin:0; font-size:15.5px; line-height:1.55; color:rgba(255,255,255,0.66)">Our fee is agreed up front. The quote you see is the cost landed at your door.</p>
+            </div>
+            <div style="border:1px solid rgba(255,255,255,0.12); box-shadow:inset 0 0 0 1px rgba(255,255,255,0.12); background-clip:padding-box; border-radius:20px; background:rgba(255,255,255,0.035); padding:30px 28px 32px">
+              <h3 class="tight" style="margin:0 0 12px; font-size:23px; font-weight:700; letter-spacing:-0.02em; color:#fff">Your relationships stay yours</h3>
+              <p style="margin:0; font-size:15.5px; line-height:1.55; color:rgba(255,255,255,0.66)">We do not sell your specifications, and we do not resell your product to your competitors.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--dark-strong); padding:0 40px">
+        <div style="max-width:1200px; margin:0 auto; padding:128px 0 140px; text-align:center">
+          <h2 class="tight" style="margin:0; font-size:72px; line-height:1.0; letter-spacing:-0.035em; font-weight:800; color:#fff">Start at step one.</h2>
+          <p style="margin:28px auto 0; max-width:620px; font-size:19px; line-height:1.55; color:rgba(255,255,255,0.74); text-wrap:pretty">Send us the specification. We will come back with a shortlist and a plan.</p>
+          <div style="margin-top:40px">
+            <a href="Malameran%20Sourcing%20Request.dc.html" style="display:inline-block; background:var(--accent); color:#101010; font-size:17px; font-weight:700; padding:19px 30px; border-radius:14px; text-decoration:none" style-hover="background:color-mix(in oklab, var(--accent) 82%, #ffffff); text-decoration:none">Start a sourcing request</a>
+          </div>
+        </div>
+      </div>
+
+      <dc-import name="Site Footer" variant="desktop" hint-size="1440px,420px"></dc-import>
+
+    </div>
+  </div>
+</section>
+</x-dc>
+</body>
+</html>

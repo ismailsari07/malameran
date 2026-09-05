@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:#1A191E; --paper:#F9F9F7; --accent:#E2751B; --head-bg:#1F1E23;
+    --dark-hero: linear-gradient(180deg, rgba(249,249,247,0) calc(100% - 160px), rgba(249,249,247,0.045) calc(100% - 60px), rgba(249,249,247,0.13) 100%), radial-gradient(1200px 700px at 76% 16%, color-mix(in oklab, var(--accent) 14%, transparent) 0%, transparent 72%), linear-gradient(168deg, #201F24 0%, #1A191E 55%, #17171A 100%);
+    --dark-soft: linear-gradient(180deg, rgba(249,249,247,0) calc(100% - 160px), rgba(249,249,247,0.045) calc(100% - 60px), rgba(249,249,247,0.13) 100%), radial-gradient(1000px 620px at 10% 6%, color-mix(in oklab, var(--accent) 9%, transparent) 0%, transparent 74%), linear-gradient(180deg, #1C1B20 0%, #17171A 100%);
+    --dark-strong: radial-gradient(1100px 680px at 50% 118%, color-mix(in oklab, var(--accent) 20%, transparent) 0%, transparent 70%), linear-gradient(180deg, #17171A 0%, #1E1D22 100%);
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:#E4E3E0; font-family:'Inter', system-ui, sans-serif; -webkit-font-smoothing:antialiased; }
+  h1, h2, h3, .tight { font-family:'Inter Tight','Inter', system-ui, sans-serif; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { color: var(--accent); text-decoration: underline; }
+</style>
+</helmet>
+
+<section style="padding:56px; font-family:'Inter',sans-serif">
+  <div style="display:flex; flex-direction:column; gap:14px">
+    <div style="font-weight:600; font-size:12px; letter-spacing:0.06em; text-transform:uppercase; color:#6C6A66">Industries — Desktop 1440</div>
+
+    <div data-screen-label="Industries" style="width:1440px; background:var(--paper); box-shadow:0 24px 60px rgba(0,0,0,0.16); overflow:hidden">
+
+      <dc-import name="Site Header" variant="desktop" active="Industries" hint-size="1440px,88px"></dc-import>
+
+      <div style="background:var(--dark-hero); padding:0 40px">
+        <div style="max-width:1200px; margin:0 auto; padding:96px 0 112px">
+          <div style="font-weight:600; font-size:12.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--accent); margin-bottom:26px">Industries</div>
+          <h1 class="tight" style="margin:0; max-width:880px; font-size:68px; line-height:1.0; letter-spacing:-0.035em; font-weight:800; color:#fff; text-wrap:pretty">Sectors we source for.</h1>
+          <p style="margin:28px 0 0; max-width:640px; font-size:19px; line-height:1.55; color:rgba(255,255,255,0.74); text-wrap:pretty">Six sectors where we already know the factories, the certifications and the failure points. If yours is not here, it is probably still something we can source.</p>
+        </div>
+      </div>
+
+      <div style="background:var(--paper); padding:0 40px">
+        <div style="max-width:1200px; margin:0 auto; padding:112px 0 120px; display:flex; flex-direction:column; gap:0">
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:72px; padding-bottom:48px">
+            <div>
+              <div style="font-weight:600; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:color-mix(in oklab, var(--accent) 74%, #101010); margin-bottom:14px">01</div>
+              <h2 class="tight" style="margin:0; font-size:38px; line-height:1.08; letter-spacing:-0.025em; font-weight:700; color:var(--ink); text-wrap:pretty">Hospitality and hotel fit-out</h2>
+              <p style="margin:18px 0 0; font-size:17.5px; line-height:1.6; color:#3A3936; text-wrap:pretty">Room-count deadlines do not move, so lead time is the whole game. We source case goods, lighting, soft goods and joinery against a fixed opening date, and we inspect finish quality before it ships.</p>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; align-content:start; padding-top:52px">
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:14px 16px; font-size:15.5px; color:#5A5852">Case goods</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:14px 16px; font-size:15.5px; color:#5A5852">Decorative lighting</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:14px 16px; font-size:15.5px; color:#5A5852">Textiles and bedding</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:14px 16px; font-size:15.5px; color:#5A5852">Bathroom fittings</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:14px 16px; font-size:15.5px; color:#5A5852">Joinery and millwork</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:14px 16px; font-size:15.5px; color:#5A5852">FF&amp;E packages</div>
+            </div>
+          </div>
+          <div style="height:1px; background:#DDDCD8"></div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:72px; padding:48px 0">
+            <div>
+              <div style="font-weight:600; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:color-mix(in oklab, var(--accent) 74%, #101010); margin-bottom:14px">02</div>
+              <h2 class="tight" style="margin:0; font-size:38px; line-height:1.08; letter-spacing:-0.025em; font-weight:700; color:var(--ink); text-wrap:pretty">Food and beverage</h2>
+              <p style="margin:18px 0 0; font-size:17.5px; line-height:1.6; color:#3A3936; text-wrap:pretty">Food-contact compliance and documentation decide whether a shipment clears. We work with factories that already hold the certificates your market asks for, and we keep the paperwork with the goods.</p>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; align-content:start; padding-top:52px">
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:14px 16px; font-size:15.5px; color:#5A5852">Primary packaging</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:14px 16px; font-size:15.5px; color:#5A5852">Glassware</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:14px 16px; font-size:15.5px; color:#5A5852">Closures and caps</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:14px 16px; font-size:15.5px; color:#5A5852">Service equipment</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:14px 16px; font-size:15.5px; color:#5A5852">Private label runs</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:14px 16px; font-size:15.5px; color:#5A5852">Labels and sleeves</div>
+            </div>
+          </div>
+          <div style="height:1px; background:#DDDCD8"></div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:72px; padding:48px 0">
+            <div>
+              <div style="font-weight:600; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:color-mix(in oklab, var(--accent) 74%, #101010); margin-bottom:14px">03</div>
+              <h2 class="tight" style="margin:0; font-size:38px; line-height:1.08; letter-spacing:-0.025em; font-weight:700; color:var(--ink); text-wrap:pretty">Retail and packaging</h2>
+              <p style="margin:18px 0 0; font-size:17.5px; line-height:1.6; color:#3A3936; text-wrap:pretty">Colour and finish have to match across runs and across suppliers. We hold approved standards, check print against them, and consolidate multi-item programmes into one shipment.</p>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; align-content:start; padding-top:52px">
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:14px 16px; font-size:15.5px; color:#5A5852">Folding cartons</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:14px 16px; font-size:15.5px; color:#5A5852">Rigid boxes</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:14px 16px; font-size:15.5px; color:#5A5852">Point-of-sale displays</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:14px 16px; font-size:15.5px; color:#5A5852">Store fixtures</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:14px 16px; font-size:15.5px; color:#5A5852">Shipper cartons</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:14px 16px; font-size:15.5px; color:#5A5852">Bags and pouches</div>
+            </div>
+          </div>
+          <div style="height:1px; background:#DDDCD8"></div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:72px; padding:48px 0">
+            <div>
+              <div style="font-weight:600; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:color-mix(in oklab, var(--accent) 74%, #101010); margin-bottom:14px">04</div>
+              <h2 class="tight" style="margin:0; font-size:38px; line-height:1.08; letter-spacing:-0.025em; font-weight:700; color:var(--ink); text-wrap:pretty">Construction materials</h2>
+              <p style="margin:18px 0 0; font-size:17.5px; line-height:1.6; color:#3A3936; text-wrap:pretty">Heavy, high-volume and standards-bound. We check test reports against the codes your project is built to, and plan freight so a site is not waiting on a container.</p>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; align-content:start; padding-top:52px">
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:14px 16px; font-size:15.5px; color:#5A5852">Tile and stone</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:14px 16px; font-size:15.5px; color:#5A5852">Doors and frames</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:14px 16px; font-size:15.5px; color:#5A5852">Aluminium profiles</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:14px 16px; font-size:15.5px; color:#5A5852">Fabricated metal</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:14px 16px; font-size:15.5px; color:#5A5852">Plumbing fittings</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:14px 16px; font-size:15.5px; color:#5A5852">Hardware</div>
+            </div>
+          </div>
+          <div style="height:1px; background:#DDDCD8"></div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:72px; padding:48px 0">
+            <div>
+              <div style="font-weight:600; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:color-mix(in oklab, var(--accent) 74%, #101010); margin-bottom:14px">05</div>
+              <h2 class="tight" style="margin:0; font-size:38px; line-height:1.08; letter-spacing:-0.025em; font-weight:700; color:var(--ink); text-wrap:pretty">Industrial equipment</h2>
+              <p style="margin:18px 0 0; font-size:17.5px; line-height:1.6; color:#3A3936; text-wrap:pretty">Drawing-driven work where tolerance and material certificates matter more than price. We qualify on first-article inspection and keep a second source qualified behind the first.</p>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; align-content:start; padding-top:52px">
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:14px 16px; font-size:15.5px; color:#5A5852">Machined parts</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:14px 16px; font-size:15.5px; color:#5A5852">Castings</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:14px 16px; font-size:15.5px; color:#5A5852">Weldments</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:14px 16px; font-size:15.5px; color:#5A5852">Sub-assemblies</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:14px 16px; font-size:15.5px; color:#5A5852">Motors and drives</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:14px 16px; font-size:15.5px; color:#5A5852">Spare parts</div>
+            </div>
+          </div>
+          <div style="height:1px; background:#DDDCD8"></div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:72px; padding-top:48px">
+            <div>
+              <div style="font-weight:600; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:color-mix(in oklab, var(--accent) 74%, #101010); margin-bottom:14px">06</div>
+              <h2 class="tight" style="margin:0; font-size:38px; line-height:1.08; letter-spacing:-0.025em; font-weight:700; color:var(--ink); text-wrap:pretty">Consumer goods</h2>
+              <p style="margin:18px 0 0; font-size:17.5px; line-height:1.6; color:#3A3936; text-wrap:pretty">Cost per unit, safety testing and retail-ready packaging in one brief. We manage the tooling, the compliance testing and the barcode-level detail that stops a listing going live.</p>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; align-content:start; padding-top:52px">
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:14px 16px; font-size:15.5px; color:#5A5852">Housewares</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:14px 16px; font-size:15.5px; color:#5A5852">Small appliances</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:14px 16px; font-size:15.5px; color:#5A5852">Apparel and accessories</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:14px 16px; font-size:15.5px; color:#5A5852">Hardware and tools</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:14px 16px; font-size:15.5px; color:#5A5852">Outdoor and sport</div>
+              <div style="border:1px solid #E4E3DF; box-shadow:inset 0 0 0 1px #E4E3DF; background-clip:padding-box; border-radius:14px; padding:14px 16px; font-size:15.5px; color:#5A5852">Retail-ready packs</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div style="background:var(--dark-soft); padding:0 40px">
+        <div style="max-width:1200px; margin:0 auto; padding:112px 0 120px">
+          <div style="max-width:800px; margin:0 auto; text-align:center">
+            <div style="font-weight:600; font-size:12px; letter-spacing:0.06em; text-transform:uppercase; color:var(--accent); margin-bottom:22px">Not on the list</div>
+            <h2 class="tight" style="margin:0; font-size:44px; line-height:1.08; letter-spacing:-0.028em; font-weight:700; color:#fff; text-wrap:pretty">If your product is manufactured, it is probably something we can source.</h2>
+            <p style="margin:22px auto 0; max-width:620px; font-size:18px; line-height:1.6; color:rgba(255,255,255,0.68); text-wrap:pretty">Send the specification. If it is outside what we can stand behind, we will tell you that instead of taking the project.</p>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--dark-strong); padding:0 40px">
+        <div style="max-width:1200px; margin:0 auto; padding:128px 0 140px; text-align:center">
+          <h2 class="tight" style="margin:0; font-size:72px; line-height:1.0; letter-spacing:-0.035em; font-weight:800; color:#fff">Tell us what you need.</h2>
+          <div style="margin-top:40px">
+            <a href="Malameran%20Sourcing%20Request.dc.html" style="display:inline-block; background:var(--accent); color:#101010; font-size:17px; font-weight:700; padding:19px 30px; border-radius:14px; text-decoration:none" style-hover="background:color-mix(in oklab, var(--accent) 82%, #ffffff); text-decoration:none">Start a sourcing request</a>
+          </div>
+        </div>
+      </div>
+
+      <dc-import name="Site Footer" variant="desktop" hint-size="1440px,420px"></dc-import>
+
+    </div>
+  </div>
+</section>
+</x-dc>
+</body>
+</html>
