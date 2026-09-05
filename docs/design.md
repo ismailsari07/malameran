@@ -831,6 +831,22 @@ already set:
 | Sector row `1fr 1fr` gap 72, padding 48 | stacked, gap 24, padding 32; the chip grid stays two columns, because the chips are short and one column leaves the row very tall |
 | CTA heading 72px | unchanged — `t-h2-cta-page` is one of the roles with no mobile value, and stays flat until an artboard gives one |
 
+**Legal pages and the 404.** The artboards have no legal or error screens. All three
+are composed from existing pieces rather than a new visual language:
+
+- `PageHero` for the heading; a `paper` section for the body; measure capped at 720px
+- Section headings use `t-h3-card-lg` (26px) — `t-h2-step` at 34px is too heavy for a
+  document with a dozen sections
+- Body copy is `t-prose`, the long-form role
+- Bullet lists render as `Marker size={9}` + text rows. The design ships no bullet
+  glyph, and marker-plus-text is already an established pattern; a `list-disc` would
+  introduce a shape the design does not have
+- The template notice uses the info-panel treatment from the form pages —
+  `Card tone="info"`, `--line` on `--surface-info`, radius 14, padding `16px 18px`
+- Neither legal page closes on a CTA band, the same exception Contact is
+- The 404 is a single `hero` band: eyebrow, `t-h1-page`, one line of copy, one primary
+  button. It is composed inline rather than through `PageHero`, which has no CTA slot
+
 **Mobile layout for For Suppliers, About and Contact.** Same position as the three pages
 above — no 375px artboard — and the same patterns:
 

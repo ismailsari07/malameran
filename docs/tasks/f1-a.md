@@ -24,9 +24,9 @@ team by email, and the submitter receives a confirmation.
 - [x] For Suppliers
 - [x] About
 - [x] Contact
-- [ ] Privacy policy
-- [ ] Terms
-- [ ] 404 and error pages
+- [x] Privacy policy — template text, see the open item below
+- [x] Terms — template text, see the open item below
+- [x] 404 and error pages
 
 ## Sourcing request form
 - [ ] Schema and migration for `sourcing_requests`
@@ -80,6 +80,19 @@ team by email, and the submitter receives a confirmation.
 - [ ] Revisit `lg: 1024px` when Home is built: the 82px hero is authored at 1440 and
       currently applies from 1024 up
 - [ ] Confirm the Supabase key names against the real project when it is created
+
+## Legal copy — must be replaced
+
+- [ ] Replace the template privacy policy and terms with reviewed copy. Fifteen
+      `[PLACEHOLDER: ...]` values render publicly on the pages until then; the full
+      list is in `docs/decisions.md` and in the `TODO(legal):` block at the top of
+      `src/content/privacy.ts` and `src/content/terms.ts`
+- [ ] Collect the placeholder answers from the client: effective date, registered
+      entity name, retention periods, hosting regions and DPA status for Supabase /
+      Vercel / Resend, analytics provider and its cookies, access-request response
+      window, privacy-officer requirement, jurisdiction and liability-cap detail
+- [ ] Confirm PIPEDA is the right regime — a BC, Alberta or Quebec footprint changes it
+- [ ] Tell the client at delivery that this text is a template
 
 ## Open items carried from the shared-components block
 

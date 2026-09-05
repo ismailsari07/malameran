@@ -5,6 +5,41 @@ Format: date · decision · why · consequence.
 
 ---
 
+## 2026-09-05 · Template legal text ships, disclosed on the page
+
+`/privacy` and `/terms` carry generic template copy for a Canadian company running
+a business website with contact forms. It has not been reviewed by a lawyer.
+**Why:** the site cannot launch with a footer linking to two dead routes, and real
+policy text needs facts and a review the client has not yet provided. Shipping
+honestly-labelled template text is better than shipping nothing or shipping
+invented specifics.
+**How it is disclosed:** three ways, so it cannot be missed — a visible info panel
+at the top of each page reading "This is template text, not legal advice"; a
+`TODO(legal):` block at the top of each content file; and the delivery note.
+**Placeholders rather than invented facts:** every value that would need a fact we
+do not have — retention periods, hosting regions, the analytics provider, the
+registered entity name, the effective date — renders on the page as a literal
+`[PLACEHOLDER: ...]`. Fifteen distinct ones across the two documents. They are
+deliberately ugly and deliberately public.
+**Consequence:** replacing this text is a Phase 1 Stage B item. The pages stay
+indexable: the visible notice is the disclosure that matters, and a site with
+unindexable legal pages looks worse than one with labelled template text.
+
+## 2026-09-05 · Supabase, Vercel and Resend are named as processors
+
+The privacy policy names all three by name; their regions and data-processing
+agreement status stay placeholders.
+**Why:** which services process the data is a fact about the stack, not a guess.
+Where they run it, and under what agreement, is not.
+
+## 2026-09-05 · PIPEDA is named as the applicable regime
+
+Ontario has no private-sector privacy statute of its own, so the federal Act
+applies to commercial activity. Written as PIPEDA and marked for confirmation
+rather than left blank.
+**Consequence:** if the client operates in or into British Columbia, Alberta or
+Quebec, that section needs revisiting — those provinces have their own statutes.
+
 ## 2026-09-05 · For Suppliers loses its embedded application form
 
 The artboard carries an eleven-field dark form on For Suppliers and a separate

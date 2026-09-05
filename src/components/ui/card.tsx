@@ -14,6 +14,8 @@ import { Eyebrow } from "./eyebrow";
 const TONES = {
   /** On paper: transparent over --paper, 1px #E4E3DF. */
   paper: "border border-border-card",
+  /** Info panel: the form pages' notice treatment, --line on --surface-info. */
+  info: "border border-line bg-surface-info",
   /** On dark: a 3.5% white fill inside a 12% white border. */
   dark: "border border-white/12 bg-white/[3.5%]",
   /** Buyer-owned: accent-tinted fill, accent border, carries the "You" pill. */
