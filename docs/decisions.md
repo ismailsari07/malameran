@@ -5,6 +5,21 @@ Format: date · decision · why · consequence.
 
 ---
 
+## 2026-09-05 · `agentRules: false` — the build tool does not edit `CLAUDE.md`
+
+`next dev` detects an AI coding agent from environment variables and appends a managed
+`<!-- BEGIN:nextjs-agent-rules -->` block to `CLAUDE.md`, re-adding it on every run.
+Disabled with the top-level `agentRules: false` in `next.config.ts`.
+**Why:** `CLAUDE.md` is the file that governs how the agent behaves on this project. It is
+edited deliberately and reviewed in a diff; instructions must not arrive in it from a
+dependency. The block's own text told the agent to stop removing it and commit it instead,
+which is the specific thing being ruled out.
+**Consequence:** the bundled Next.js docs the block points at are still there and still
+readable at `node_modules/next/dist/docs/`; only the automatic edit is off. Verified with a
+control run: without the flag the block is written and the dev log prints "Generated
+CLAUDE.md for AI agents"; with it, `CLAUDE.md` is byte-identical after `next dev` and no
+`AGENTS.md` is created.
+
 ## 2026-09-05 · Chrome typography is a set of role classes, not inline sizes
 
 Fifteen `.t-*` roles added to `globals.css` for the wordmark, nav link, six button
