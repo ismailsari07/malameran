@@ -22,18 +22,27 @@ const TONES = {
   statement: "border border-white/22",
   /** A large centred panel: no fill, a 14% white border. */
   panel: "border border-white/14",
+  /** A filled aside on a dark ground: the same 14% border over a 3.5% fill. */
+  "dark-panel": "border border-white/14 bg-white/[3.5%]",
+  /** Accent-tinted, but bordered at the 45% mix rather than full accent. */
+  "emphasis-soft":
+    "border border-(--accent-tint-border) bg-(--accent-card-fill)",
 } as const;
 
 const PADDING = {
+  "14-16": "px-4 py-3.5",
+  "16-18": "px-4.5 py-4",
   "18": "p-4.5",
   "20": "p-5",
   "22": "p-5.5",
   "26": "p-6.5",
+  "28": "p-7",
   "30": "p-7.5",
   "24-22-26": "px-5.5 pt-6 pb-6.5",
   "26-24-28": "px-6 pt-6.5 pb-7",
   "30-28-32": "px-7 pt-7.5 pb-8",
   "30-30-34": "px-7.5 pt-7.5 pb-8.5",
+  "32-30-36": "px-7.5 pt-8 pb-9",
   "32-32-36": "p-8 pb-9",
   "34-32-38": "px-8 pt-8.5 pb-9.5",
   "36-34-40": "px-8.5 pt-9 pb-10",
@@ -43,15 +52,19 @@ const PADDING = {
 
 /** The `lg:` half of every padding above. */
 const PADDING_LG = {
+  "14-16": "lg:px-4 lg:py-3.5",
+  "16-18": "lg:px-4.5 lg:py-4",
   "18": "lg:p-4.5",
   "20": "lg:p-5",
   "22": "lg:p-5.5",
   "26": "lg:p-6.5",
+  "28": "lg:p-7",
   "30": "lg:p-7.5",
   "24-22-26": "lg:px-5.5 lg:pt-6 lg:pb-6.5",
   "26-24-28": "lg:px-6 lg:pt-6.5 lg:pb-7",
   "30-28-32": "lg:px-7 lg:pt-7.5 lg:pb-8",
   "30-30-34": "lg:px-7.5 lg:pt-7.5 lg:pb-8.5",
+  "32-30-36": "lg:px-7.5 lg:pt-8 lg:pb-9",
   "32-32-36": "lg:p-8 lg:pb-9",
   "34-32-38": "lg:px-8 lg:pt-8.5 lg:pb-9.5",
   "36-34-40": "lg:px-8.5 lg:pt-9 lg:pb-10",
@@ -60,6 +73,7 @@ const PADDING_LG = {
 } as const;
 
 const RADIUS = {
+  14: "rounded-14",
   16: "rounded-16",
   18: "rounded-18",
   20: "rounded-20",
@@ -70,6 +84,7 @@ const RADIUS = {
 
 /** The `lg:` half of every radius above. */
 const RADIUS_LG = {
+  14: "lg:rounded-14",
   16: "lg:rounded-16",
   18: "lg:rounded-18",
   20: "lg:rounded-20",

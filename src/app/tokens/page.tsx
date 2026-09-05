@@ -593,7 +593,7 @@ export default function TokensPage() {
       <div className="border-border-card rounded-20 mt-4 border p-6">
         <div className="bg-head-bg flex h-16 max-w-[375px] items-center justify-between px-5">
           <span className="t-wordmark text-white">MALAMERAN</span>
-          <MobileMenu active="/services" />
+          <MobileMenu />
         </div>
       </div>
 
@@ -603,7 +603,7 @@ export default function TokensPage() {
         replace the 64px hamburger bar.
       </p>
       <div className="-mx-5 mt-4 lg:-mx-10">
-        <SiteHeader active="/services" />
+        <SiteHeader />
         <div className="ground-hero h-24" />
         <AppHeader />
         <div className="bg-paper h-24" />

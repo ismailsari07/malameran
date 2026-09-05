@@ -56,7 +56,7 @@ export function HeroDiagram() {
       <Node {...diagram.from} />
       <Connector />
 
-      <div className="rounded-16 lg:rounded-18 border border-(--accent-diagram-border) bg-(--accent-diagram-fill) px-5 pt-6.5 pb-6 lg:px-6 lg:pt-7.5 lg:pb-7">
+      <div className="rounded-16 lg:rounded-18 border border-(--accent-tint-border) bg-(--accent-diagram-fill) px-5 pt-6.5 pb-6 lg:px-6 lg:pt-7.5 lg:pb-7">
         <p className="t-diagram-title text-accent">{diagram.middle.title}</p>
         <ul className="mt-3.5 flex flex-wrap gap-[7px] lg:mt-4 lg:gap-2">
           {diagram.middle.chips.map((chip) => (

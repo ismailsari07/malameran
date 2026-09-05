@@ -5,6 +5,31 @@ Format: date · decision · why · consequence.
 
 ---
 
+## 2026-09-05 · The header's active state is read on the client, by the nav alone
+
+`SiteNav` is a small client component calling `usePathname`; `SiteHeader` stays a
+server component, as do the wordmark and the CTA. `MobileMenu` was already a client
+component and now reads the route itself instead of taking an `active` prop.
+**Why:** the header lives in the root layout, which cannot know the route without a
+client hook. Marking the whole header `"use client"` would push the wordmark, the CTA
+and their imports into the bundle for one boolean per link.
+**Consequence:** no page passes an `active` prop; adding a page cannot forget to. The
+nav had rendered no active state at all since block 2, which this fixes.
+
+## 2026-09-05 · Three page structures extracted, three deliberately not
+
+Extracted: `SectionHead` (eyebrow + h2, ~10 uses), `PageHero` (eyebrow + h1 + lead,
+with an optional aside), `FinalCtaBand` (Home's 76px heading and the inner pages' 72px
+are the same composition at two sizes).
+**Why:** each is the same composition with different content. `SectionHead` in
+particular keeps the eyebrow tone paired with its ground, which is the detail that
+drifts when a two-element pattern is copied by hand.
+**Kept separate:** How It Works step rows vs Industries sector rows — they read alike
+but share no structure, only the hairlines. Services' service cards vs Home's service
+tiles — same eight client-approved headings, different composition entirely. How It
+Works commitment cards vs Home's industry cards — five lines each with different
+heading roles; a shared wrapper would be indirection, not reuse.
+
 ## 2026-09-05 · The "the problem" image slot is dropped
 
 The Home artboard marks a `210px` / `170px` texture slot under the "the problem"

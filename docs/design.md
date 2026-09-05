@@ -166,7 +166,7 @@ These are computed, not literal. Keep them as functions of the accent rather tha
 | `accent 82%, #ffffff` | Primary button hover |
 | `accent 74%, #101010` | Section eyebrow (uppercase) on paper |
 | `accent 60%, #101010` | "You" pill border on dark |
-| `accent 45%, #1A191E` | Border of the accent-tinted card |
+| `accent 45%, #1A191E` | Border of any accent-tinted card: the hero diagram's MALAMERAN card and the Services "End to end" card. Implemented as `--accent-tint-border` |
 | `accent 42%, #F4F3EF` | Disabled/submitting button fill |
 | `accent 22%, #ffffff` | Selected chip fill (light) |
 | `accent 20%, #ffffff` | Completed step-pill fill |
@@ -175,7 +175,6 @@ These are computed, not literal. Keep them as functions of the accent rather tha
 | `accent 12%, #101010` | Buyer-owned step card fill on dark |
 | `accent 75%, transparent` | Vertical connector line in the hero diagram |
 | `accent 18%, #1A191E` | Accent MALAMERAN card in the hero diagram |
-| `accent 45%, #1A191E` | Its border |
 | `accent 20% / 15% / 14% / 13% / 10% / 9%, transparent` | Radial glow intensities in the dark grounds |
 
 ---
@@ -648,7 +647,7 @@ The design system is implemented in `src/app/globals.css`. Tailwind v4 has no
 | `@theme static` | Colour, font-family, radius and breakpoint tokens | Generates utilities (`text-ink`, `rounded-12`) **and** emits every token as a CSS variable. `static` is deliberate: without it Tailwind tree-shakes tokens no utility references yet, which would empty out a design system defined ahead of the components that use it. |
 | `:root` | The seven gradient grounds and `--paper-fade` | Layered multi-stop gradients are not a scale, so they must not become utilities. Kept as variables and applied through the `.ground-*` classes. |
 | `:root`, second block | The six derived accent `color-mix()` expressions | Computed values, not a scale. Kept as expressions so changing `--color-accent` propagates. |
-| `@layer components` | `.ground-*` classes and the 59 `.t-*` typography roles | Applied wholesale to an element; each role carries size, weight, line-height, letter-spacing and family together so a heading cannot be assembled wrongly. |
+| `@layer components` | `.ground-*` classes and the 63 `.t-*` typography roles | Applied wholesale to an element; each role carries size, weight, line-height, letter-spacing and family together so a heading cannot be assembled wrongly. |
 | `@utility` | `.focus-ring`, `.focus-ring-dark`, `.focus-outline` | Declared with `@utility`, not `@layer components`, because only utilities accept variants — components need `focus:focus-ring` on the field itself and `focus-visible:focus-outline` on links and buttons. |
 | top level | `@keyframes mal-spin` | Tailwind does not manage keyframes. |
 
@@ -733,6 +732,19 @@ Eight more, added when the Home page was built:
 The last three follow the `t-body` / `t-body-lg` precedent: identical size pair,
 different line-height, kept apart.
 
+Four more, added for How It Works, Services and Industries. All flat — none of those
+three pages has a 375px artboard:
+
+| Class | Value | Used by | Nearest role, and why it is not that |
+| --- | --- | --- | --- |
+| `t-prose-step` | 17.5 / 1.6 | Step-row and sector-row body | `t-prose` is 17→18 at 1.65 |
+| `t-body-panel` | 16 / 1.6 | Engagement-model card body | `t-body` is the same size at 1.5 |
+| `t-stat-value` | 15.5 / 600 | Timeline value | `t-body-sm` is the same size at 400 |
+| `t-fineprint-sm` | 14.5 / 1.5 | Timeline footnote | `t-node-body` is the same size at 1.45 |
+
+`t-prose-step` was already in the type scale above as "Body (step / industry copy)";
+it simply had no class until the pages using it were built.
+
 ### Type roles with no mobile counterpart
 
 Mobile artboards exist for only 4 of the 12 pages, so 19 of the 36 content roles have a
@@ -787,10 +799,44 @@ state.
 - Escape closes it, Tab cycles inside it, focus returns to the hamburger, the page behind it
   does not scroll
 
+**Mobile layout for How It Works, Services and Industries.** None of the three has a
+375px artboard. Nothing new was invented; every rule below is one the Home artboards
+already set:
+
+| Desktop | Below `lg` |
+| --- | --- |
+| Any multi-column card grid | one column, gap 12 |
+| Card padding | `22px` |
+| Card radius | two steps down (22→20, 20→18) |
+| Section head bottom margin 52–56 | 28–32 |
+| Page hero `1fr 420px` gap 80 | stacked, gap 40, aside below the lead |
+| Step row `120px 1fr 1fr` gap 48, padding 44 | stacked, gap 24, padding 32; numeral above the heading, point list below the copy |
+| Sector row `1fr 1fr` gap 72, padding 48 | stacked, gap 24, padding 32; the chip grid stays two columns, because the chips are short and one column leaves the row very tall |
+| CTA heading 72px | unchanged — `t-h2-cta-page` is one of the roles with no mobile value, and stays flat until an artboard gives one |
+
 **Keyboard focus for links and buttons.** The source has a focus state for form fields only
 (`.focus-ring`, `.focus-ring-dark`). `.focus-outline` is a 2px accent outline at 2px offset,
 applied as `focus-visible:focus-outline`. An outline rather than a box-shadow so it reads on
 both the paper and the dark grounds.
+
+## How It Works, Services, Industries: notes from the build
+
+None of these three has a 375px artboard, so all of their mobile behaviour is authored —
+see "Authored, not in the source".
+
+Where the artboards did not match this document:
+
+| Element | Artboard | This document said | Resolution |
+| --- | --- | --- | --- |
+| Commitment card h3 (How It Works) | 23px at −0.02em | step card h3 is 23/−0.015; industry card h3 is 24/−0.02 | `t-h3-card` (23 at −0.015); tracking only |
+| Timeline row rules | `rgba(255,255,255,0.10)` | 0.10 is listed as a header/footer edge, not an in-card divider | `Rule tone="dark"` (0.12) |
+| Engagement card inner rule | `rgba(255,255,255,0.14)` | 0.14 is listed as a card *border*, not a divider | `Rule tone="dark"` (0.12) |
+| Timeline aside border | `rgba(255,255,255,0.14)` | undifferentiated from the hero panel's 0.13 | kept apart: `Card tone="dark-panel"` is 0.14, the hero diagram stays 0.13 |
+| "Not on the list" eyebrow | 12px | `t-eyebrow` is 11 → 12.5 | the same 0.5px fold already taken on Home's suppliers panel |
+
+First real use of two tokens declared in block 1 and unused until now:
+`--color-numeral-idle` (`#B9B7B1`) on the three steps Malameran owns, and
+`--color-text-eyebrow` (`#8A8882`) on their "Us" labels.
 
 ## Home page: where the artboards disagree
 

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -19,14 +20,8 @@ import { cn } from "@/lib/cn";
 const FOCUSABLE =
   'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
-export function MobileMenu({
-  active,
-  className,
-}: {
-  /** href of the current page, so its link matches the desktop active state. */
-  active?: string;
-  className?: string;
-}) {
+export function MobileMenu({ className }: { className?: string }) {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const panelId = useId();
   const panelRef = useRef<HTMLDivElement>(null);
@@ -125,10 +120,10 @@ export function MobileMenu({
                 <Link
                   href={item.href}
                   onClick={close}
-                  aria-current={item.href === active ? "page" : undefined}
+                  aria-current={item.href === pathname ? "page" : undefined}
                   className={cn(
                     "t-h3-card focus-visible:focus-outline block py-5",
-                    item.href === active ? "text-white" : "text-white/72",
+                    item.href === pathname ? "text-white" : "text-white/72",
                   )}
                 >
                   {item.label}

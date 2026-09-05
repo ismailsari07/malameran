@@ -18,9 +18,9 @@ team by email, and the submitter receives a confirmation.
 
 ## Pages
 - [x] Home
-- [ ] How It Works
-- [ ] Services
-- [ ] Industries
+- [x] How It Works
+- [x] Services
+- [x] Industries
 - [ ] For Suppliers
 - [ ] About
 - [ ] Contact
