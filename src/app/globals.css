@@ -127,6 +127,20 @@
     var(--color-on-accent)
   );
 
+  /* Hero diagram. These three mix into --color-ink (#1A191E), not
+     --color-on-accent (#101010) — the source uses both bases side by side. */
+  --accent-diagram-fill: color-mix(
+    in oklab,
+    var(--color-accent) 18%,
+    var(--color-ink)
+  );
+  --accent-diagram-border: color-mix(
+    in oklab,
+    var(--color-accent) 45%,
+    var(--color-ink)
+  );
+  --accent-connector: color-mix(in oklab, var(--color-accent) 75%, transparent);
+
   /* Bottom paper-fade shared by --dark-hero-home, --dark-hero and --dark-soft */
   --paper-fade: linear-gradient(
     180deg,
@@ -623,6 +637,67 @@
     text-transform: uppercase;
   }
 
+
+  /* ==========================================================================
+     Page roles. Added in block 3 for the Home page; each is separated from its
+     nearest neighbour by a line-height or a weight, never by size alone.
+     ======================================================================= */
+
+  /* Hero diagram node body. Flat — identical on both artboards. */
+  .t-node-body {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 14.5px;
+    line-height: 1.45;
+  }
+  /* The accent MALAMERAN card in the hero diagram. */
+  .t-diagram-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: 0.02em;
+  }
+  /* Capability chips inside that card. */
+  .t-chip {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 13px;
+  }
+  /* Trust-card statement. */
+  .t-statement {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 1.45;
+  }
+  /* Centred panel paragraph. t-prose is the same pair at line-height 1.65. */
+  .t-panel-body {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 1.6;
+  }
+  /* The line beside a small accent marker. t-lead is the same pair at 1.55. */
+  .t-marker-line {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 1.5;
+  }
+  /* Body inside a statement cell. t-body-sm is the same value, but flat. */
+  .t-card-note {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 15.5px;
+    line-height: 1.55;
+  }
+  /* CTA label inside a card — between t-btn and t-btn-sm, larger on mobile. */
+  .t-btn-panel {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 16px;
+  }
+
   /* ==========================================================================
      Desktop step. Only the roles with a real 375 <-> 1440 pair appear here;
      the rest have no mobile counterpart in the source and stay single-size
@@ -694,6 +769,27 @@
     }
     .t-wordmark-md {
       font-size: 19px;
+    }
+    .t-diagram-title {
+      font-size: 18px;
+    }
+    .t-chip {
+      font-size: 13.5px;
+    }
+    .t-statement {
+      font-size: 20px;
+    }
+    .t-panel-body {
+      font-size: 18px;
+    }
+    .t-marker-line {
+      font-size: 19px;
+    }
+    .t-card-note {
+      font-size: 16px;
+    }
+    .t-btn-panel {
+      font-size: 15px;
     }
   }
 }

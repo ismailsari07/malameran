@@ -12,12 +12,12 @@ team by email, and the submitter receives a confirmation.
 
 ## Design foundation
 - [ ] Design brief agreed
-- [ ] Home page design approved
+- [ ] Home page design approved — with the client as preview checkpoint 1
 - [x] Shared components: header, footer, buttons, section wrapper
       (form controls are block 7 — see the Sourcing request form section below)
 
 ## Pages
-- [ ] Home
+- [x] Home
 - [ ] How It Works
 - [ ] Services
 - [ ] Industries

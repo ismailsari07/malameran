@@ -14,8 +14,17 @@ const TONES = {
   paper: "text-(--accent-eyebrow-paper)",
   /** Muted on paper: column and group labels that are not the main opener. */
   "muted-paper": "text-text-eyebrow",
-  /** Muted on dark: footer column headings and faint labels. */
+  /**
+   * Muted on dark. The source uses five faintness levels for the same kind of
+   * label with no semantic difference between them, so they are named by value
+   * — docs/design.md, "White at opacity": 0.45 / 0.42 / 0.40 / 0.38 are
+   * "uppercase eyebrows and column headings, ascending faintness".
+   */
   "muted-dark": "text-white/38",
+  "dark-40": "text-white/40",
+  "dark-42": "text-white/42",
+  "dark-45": "text-white/45",
+  "dark-60": "text-white/60",
 } as const;
 
 const SIZES = {

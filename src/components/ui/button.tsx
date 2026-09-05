@@ -27,6 +27,10 @@ const VARIANTS = {
   /** Inline retry after a failed submit. Same box as the header CTA. */
   "primary-retry":
     "t-btn-sm bg-accent text-on-accent px-5.5 py-[13px] rounded-12",
+  /** In-card CTA. 16/700 17px 22px on mobile, 15/700 14px 22px from lg. */
+  "primary-panel":
+    "t-btn-panel bg-accent text-on-accent px-5.5 py-[17px] lg:py-3.5 rounded-12 " +
+    "hover:bg-(--accent-hover)",
   /** Ghost on dark. 16px/600, 16px 26px, radius 12. */
   ghost:
     "t-btn-ghost border border-white/45 text-white px-6.5 py-4 rounded-12 " +

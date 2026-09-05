@@ -5,9 +5,10 @@ import { Eyebrow } from "./eyebrow";
 /**
  * The four card treatments in docs/design.md "Cards".
  *
- * `pad` is required and typed to the exact set of paddings the artboards use,
- * so a page picks its own value and nothing else compiles. The source does not
- * have one card padding — it has eight.
+ * `pad` and `radius` are typed to the exact sets the artboards use, so a page
+ * picks its own value and nothing else compiles. The source does not have one
+ * card padding — it has a dozen. `padLg` and `radiusLg` carry the desktop half
+ * where it differs, which on the Home page is almost every card.
  */
 
 const TONES = {
@@ -19,10 +20,16 @@ const TONES = {
   emphasis: "border border-accent bg-(--accent-card-fill)",
   /** The closing "action" cell in a grid: no fill, a 22% white border. */
   statement: "border border-white/22",
+  /** A large centred panel: no fill, a 14% white border. */
+  panel: "border border-white/14",
 } as const;
 
 const PADDING = {
+  "18": "p-4.5",
+  "20": "p-5",
   "22": "p-5.5",
+  "26": "p-6.5",
+  "30": "p-7.5",
   "24-22-26": "px-5.5 pt-6 pb-6.5",
   "26-24-28": "px-6 pt-6.5 pb-7",
   "30-28-32": "px-7 pt-7.5 pb-8",
@@ -30,32 +37,81 @@ const PADDING = {
   "32-32-36": "p-8 pb-9",
   "34-32-38": "px-8 pt-8.5 pb-9.5",
   "36-34-40": "px-8.5 pt-9 pb-10",
+  "28-22-30": "px-5.5 pt-7 pb-7.5",
+  "52-56-56": "px-14 pt-13 pb-14",
+} as const;
+
+/** The `lg:` half of every padding above. */
+const PADDING_LG = {
+  "18": "lg:p-4.5",
+  "20": "lg:p-5",
+  "22": "lg:p-5.5",
+  "26": "lg:p-6.5",
+  "30": "lg:p-7.5",
+  "24-22-26": "lg:px-5.5 lg:pt-6 lg:pb-6.5",
+  "26-24-28": "lg:px-6 lg:pt-6.5 lg:pb-7",
+  "30-28-32": "lg:px-7 lg:pt-7.5 lg:pb-8",
+  "30-30-34": "lg:px-7.5 lg:pt-7.5 lg:pb-8.5",
+  "32-32-36": "lg:p-8 lg:pb-9",
+  "34-32-38": "lg:px-8 lg:pt-8.5 lg:pb-9.5",
+  "36-34-40": "lg:px-8.5 lg:pt-9 lg:pb-10",
+  "28-22-30": "lg:px-5.5 lg:pt-7 lg:pb-7.5",
+  "52-56-56": "lg:px-14 lg:pt-13 lg:pb-14",
 } as const;
 
 const RADIUS = {
+  16: "rounded-16",
   18: "rounded-18",
   20: "rounded-20",
   22: "rounded-22",
   24: "rounded-24",
-};
+  28: "rounded-28",
+} as const;
+
+/** The `lg:` half of every radius above. */
+const RADIUS_LG = {
+  16: "lg:rounded-16",
+  18: "lg:rounded-18",
+  20: "lg:rounded-20",
+  22: "lg:rounded-22",
+  24: "lg:rounded-24",
+  28: "lg:rounded-28",
+} as const;
 
 export function Card({
   tone = "paper",
   pad,
+  padLg,
   radius = 22,
+  radiusLg,
   children,
   className,
   as: Tag = "div",
 }: {
   tone?: keyof typeof TONES;
+  /** The 375px artboard's padding. */
   pad: keyof typeof PADDING;
+  /** The 1440px artboard's padding, when it differs. */
+  padLg?: keyof typeof PADDING;
+  /** The 375px artboard's radius. */
   radius?: keyof typeof RADIUS;
+  /** The 1440px artboard's radius, when it differs. */
+  radiusLg?: keyof typeof RADIUS;
   children: React.ReactNode;
   className?: string;
   as?: "div" | "article" | "li";
 }) {
   return (
-    <Tag className={cn(TONES[tone], PADDING[pad], RADIUS[radius], className)}>
+    <Tag
+      className={cn(
+        TONES[tone],
+        PADDING[pad],
+        padLg ? PADDING_LG[padLg] : "",
+        RADIUS[radius],
+        radiusLg ? RADIUS_LG[radiusLg] : "",
+        className,
+      )}
+    >
       {children}
     </Tag>
   );

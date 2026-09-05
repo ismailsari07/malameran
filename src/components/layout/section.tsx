@@ -60,6 +60,7 @@ export type SectionRhythm = keyof typeof RHYTHMS;
 export function Section({
   ground,
   rhythm = "standard",
+  divider = false,
   children,
   className,
   id,
@@ -67,13 +68,18 @@ export function Section({
 }: {
   ground: SectionGround;
   rhythm?: SectionRhythm;
+  /** Closes the band with the source's full-bleed 10% white hairline. */
+  divider?: boolean;
   children: React.ReactNode;
   className?: string;
   id?: string;
   as?: "section" | "div" | "header" | "footer";
 }) {
   return (
-    <Tag id={id} className={GROUNDS[ground]}>
+    <Tag
+      id={id}
+      className={cn(GROUNDS[ground], divider && "border-b border-white/10")}
+    >
       <Container className={cn(RHYTHMS[rhythm], className)}>
         {children}
       </Container>

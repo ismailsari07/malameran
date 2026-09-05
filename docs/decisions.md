@@ -5,6 +5,46 @@ Format: date · decision · why · consequence.
 
 ---
 
+## 2026-09-05 · The "the problem" image slot is dropped
+
+The Home artboard marks a `210px` / `170px` texture slot under the "the problem"
+heading as optional. It is not built; the prose column takes the space.
+**Why:** there is no corporate photography and none is planned. An empty or
+placeholder image block reads worse than the two-column prose alone.
+**Consequence:** the only other image slot in the design (About) is undecided and
+stays recorded in `docs/design.md`. If photography ever arrives, the slot is a
+`max-width: 460px` block below the heading in the left column.
+
+## 2026-09-05 · Eight page roles and three diagram colours added for Home
+
+`t-node-body`, `t-diagram-title`, `t-chip`, `t-statement`, `t-panel-body`,
+`t-marker-line`, `t-card-note`, `t-btn-panel`; plus `--accent-diagram-fill`,
+`--accent-diagram-border` and `--accent-connector`.
+**Why:** the hero diagram and the trust and panel copy use values no existing role
+is within 2px of. Three of the eight sit at the same size as an existing role but a
+different line-height, which the block 1 fold rule keeps separate.
+**Consequence:** 59 type roles. The three colours mix into `--color-ink` rather than
+`--color-on-accent`; both bases appear in the source, sometimes on adjacent elements.
+
+## 2026-09-05 · Colour and size are props on the primitives, never className
+
+`Card` gained a `panel` tone, `Eyebrow` four faintness levels, `Marker` a `sizeLg`.
+**Why:** overriding a component's own utility through `className` depends on
+Tailwind's internal sort order, not on the order the classes are written in. The
+supplier panel's `border-white/14` silently lost to the `statement` tone's
+`border-white/22` and rendered at the wrong opacity. The other four overrides
+happened to win, which is worse — they would have broken on a Tailwind upgrade.
+**Consequence:** no component's own property is overridden from a page. `className`
+carries layout only — margins, max-widths, alignment.
+
+## 2026-09-05 · `Card` takes responsive padding and radius
+
+`padLg` and `radiusLg` added; a single value still means "same at both widths".
+**Why:** block 2 built `Card` with no page to test it against. Every card on Home is
+smaller on mobile — radius 22→20, 20→18, 28→24, padding almost always `22px`.
+**Consequence:** `Section` also gained a `divider` prop for the hero's full-bleed
+hairline, since `className` reaches the container, not the ground element.
+
 ## 2026-09-05 · `agentRules: false` — the build tool does not edit `CLAUDE.md`
 
 `next dev` detects an AI coding agent from environment variables and appends a managed

@@ -174,6 +174,8 @@ These are computed, not literal. Keep them as functions of the accent rather tha
 | `accent 18%, #1A191E` | Accent-tinted "MALAMERAN" card in the hero diagram |
 | `accent 12%, #101010` | Buyer-owned step card fill on dark |
 | `accent 75%, transparent` | Vertical connector line in the hero diagram |
+| `accent 18%, #1A191E` | Accent MALAMERAN card in the hero diagram |
+| `accent 45%, #1A191E` | Its border |
 | `accent 20% / 15% / 14% / 13% / 10% / 9%, transparent` | Radial glow intensities in the dark grounds |
 
 ---
@@ -646,7 +648,7 @@ The design system is implemented in `src/app/globals.css`. Tailwind v4 has no
 | `@theme static` | Colour, font-family, radius and breakpoint tokens | Generates utilities (`text-ink`, `rounded-12`) **and** emits every token as a CSS variable. `static` is deliberate: without it Tailwind tree-shakes tokens no utility references yet, which would empty out a design system defined ahead of the components that use it. |
 | `:root` | The seven gradient grounds and `--paper-fade` | Layered multi-stop gradients are not a scale, so they must not become utilities. Kept as variables and applied through the `.ground-*` classes. |
 | `:root`, second block | The six derived accent `color-mix()` expressions | Computed values, not a scale. Kept as expressions so changing `--color-accent` propagates. |
-| `@layer components` | `.ground-*` classes and the 51 `.t-*` typography roles | Applied wholesale to an element; each role carries size, weight, line-height, letter-spacing and family together so a heading cannot be assembled wrongly. |
+| `@layer components` | `.ground-*` classes and the 59 `.t-*` typography roles | Applied wholesale to an element; each role carries size, weight, line-height, letter-spacing and family together so a heading cannot be assembled wrongly. |
 | `@utility` | `.focus-ring`, `.focus-ring-dark`, `.focus-outline` | Declared with `@utility`, not `@layer components`, because only utilities accept variants — components need `focus:focus-ring` on the field itself and `focus-visible:focus-outline` on links and buttons. |
 | top level | `@keyframes mal-spin` | Tailwind does not manage keyframes. |
 
@@ -713,6 +715,24 @@ Three are deliberately separate from a role they nearly duplicate:
 The wordmark is written as two paired roles rather than three flat ones because a
 `@layer components` class cannot take an `lg:` variant. The three sizes are unchanged.
 
+### Page roles
+
+Eight more, added when the Home page was built:
+
+| Class | Mobile | Desktop | Used by | Nearest role, and why it is not that |
+| --- | --- | --- | --- | --- |
+| `t-node-body` | 14.5 / 1.45 | flat | Hero diagram node body | `t-label` is 14.5 but weight 600 |
+| `t-diagram-title` | 17 / 700 / +.02em | 18 | The accent MALAMERAN card | nothing within 2px |
+| `t-chip` | 13 / 500 | 13.5 | Diagram capability chips | nothing within 2px |
+| `t-statement` | 18 / 500 / 1.45 | 20 | Trust card statement | nothing within 2px |
+| `t-panel-body` | 17 / 1.6 | 18 | Centred panel paragraph | `t-prose` is the same pair at 1.65 |
+| `t-marker-line` | 17 / 1.5 | 19 | Line beside an accent marker | `t-lead` is the same pair at 1.55 |
+| `t-card-note` | 15.5 / 1.55 | 16 | Statement-cell body | `t-body-sm` is the same value but flat |
+| `t-btn-panel` | 16 / 700 | 15 | CTA label inside a card | between `t-btn` and `t-btn-sm`; larger on mobile |
+
+The last three follow the `t-body` / `t-body-lg` precedent: identical size pair,
+different line-height, kept apart.
+
 ### Type roles with no mobile counterpart
 
 Mobile artboards exist for only 4 of the 12 pages, so 19 of the 36 content roles have a
@@ -771,6 +791,25 @@ state.
 (`.focus-ring`, `.focus-ring-dark`). `.focus-outline` is a 2px accent outline at 2px offset,
 applied as `focus-visible:focus-outline`. An outline rather than a box-shadow so it reads on
 both the paper and the dark grounds.
+
+## Home page: where the artboards disagree
+
+Recorded when the page was built, so the next page does not re-discover them.
+
+| Element | Desktop 1440 | Mobile 375 | Resolution |
+| --- | --- | --- | --- |
+| "You" / "Us" pill | 11px | **11.5px** | flat 11 (`t-eyebrow-xs`) — the same backwards scaling as the footer column heading |
+| Hero diagram node eyebrow | 11.5px | 11.5px | `t-eyebrow-sm` (11 → 11.5); mobile loses 0.5px |
+| For-suppliers eyebrow | 12px | 11px | `t-eyebrow` (11 → 12.5); desktop gains 0.5px |
+| Hero diagram node title | 20px, no tracking | 19px | `t-h3-card-sm`, which adds −0.012em at `lg` |
+| Dark card fill | 0.04 on step cards | 0.035 elsewhere | folded to 0.035 |
+| Statement-cell link | 15px / white 70% | same | `t-link-cta` (16 / white 72%) |
+| Statement-cell CTA | 15/700, `14px 22px` | 16/700, `17px 22px` | `primary-panel`, a real pair |
+| How-it-works band | `112px 0 120px` | `64px 20px 72px` | `standard` rhythm; mobile loses 8px of bottom padding |
+| Industry card grid | gap **16** | — | Home only. The Industries *page* uses gap 20 for the same card |
+| Hero band | closes with a 10% white hairline | none | `<Section divider>`, desktop and mobile both |
+
+Everything else matched between the two artboards.
 
 ## Open questions
 
