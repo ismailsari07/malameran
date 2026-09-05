@@ -13,7 +13,8 @@ team by email, and the submitter receives a confirmation.
 ## Design foundation
 - [ ] Design brief agreed
 - [ ] Home page design approved
-- [ ] Shared components: header, footer, buttons, form controls, section wrapper
+- [x] Shared components: header, footer, buttons, section wrapper
+      (form controls are block 7 — see the Sourcing request form section below)
 
 ## Pages
 - [ ] Home
@@ -80,3 +81,17 @@ team by email, and the submitter receives a confirmation.
 - [ ] Revisit `lg: 1024px` when Home is built: the 82px hero is authored at 1440 and
       currently applies from 1024 up
 - [ ] Confirm the Supabase key names against the real project when it is created
+
+## Open items carried from the shared-components block
+
+- [ ] Confirm the footer contact details with the client: the design shows
+      `hello@malameran.com` and a full street address, the brief specifies `info@` and
+      city/country only. Both are `TODO(copy):` in `src/content/nav.ts`
+- [ ] Review all `TODO(copy):` strings in `src/content/nav.ts` with the client — nav labels,
+      footer headings, the positioning line, the copyright and the legal link targets
+- [ ] Build the `/privacy` and `/terms` routes the footer links to
+- [ ] Put the two authored pieces — the mobile menu and the link/button focus ring — in front
+      of the client if the design is reviewed again. See "Authored, not in the source" in
+      `docs/design.md`
+- [ ] Give the twelve single-size chrome roles a mobile value if a 375px artboard ever
+      appears for a page that uses them

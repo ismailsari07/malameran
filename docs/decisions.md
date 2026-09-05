@@ -5,6 +5,57 @@ Format: date · decision · why · consequence.
 
 ---
 
+## 2026-09-05 · Chrome typography is a set of role classes, not inline sizes
+
+Fifteen `.t-*` roles added to `globals.css` for the wordmark, nav link, six button
+labels, "Back to site", the text-link CTA, the footer link, footer note, legal line
+and a flat 11px eyebrow.
+**Why:** block 1 extracted content typography only, because no component needed the
+rest yet. Every one of these values is already in the `docs/design.md` type scale —
+they were simply never turned into classes, so the first component to need one would
+have had to inline a size.
+**Consequence:** 51 type roles in total. No component file sets a font size.
+
+## 2026-09-05 · The container is `max-w-[1280px]` with the gutter inside it
+
+`mx-auto w-full max-w-[1280px] px-5 lg:px-10`.
+**Why:** the artboards put `padding: 0 40px` on a full-bleed element and
+`max-width: 1200px` on the element inside it, so the content column is 1200px and the
+page is 1280px overall. A `max-w-[1200px]` container with the same padding would give a
+1120px column — 80px narrower than every artboard.
+**Consequence:** the brief's "1200px max-width" describes the content column, not the
+container element. Every page inherits the correct measure without restating it.
+
+## 2026-09-05 · Derived accent colours live in `:root` as `color-mix()` expressions
+
+Six added: `--accent-hover`, `--accent-disabled`, `--accent-eyebrow-paper`,
+`--accent-numeral`, `--accent-pill-border`, `--accent-card-fill`.
+**Why:** same reasoning as the gradient grounds — they are computed values, not a scale,
+so they must not become utilities, and they must stay expressions so changing
+`--color-accent` propagates rather than needing six hexes updated.
+**Consequence:** Tailwind emits a static hex fallback plus an `@supports` block holding
+the real expression. Both are correct; the expression wins wherever `color-mix` is
+supported.
+
+## 2026-09-05 · The mobile menu and the keyboard focus ring are authored, not extracted
+
+The artboards give a hamburger but no open state, and no focus state for links or
+buttons anywhere.
+**Why:** the site cannot ship without either. Both stay strictly inside the existing
+tokens — no new colour, radius or type size.
+**Consequence:** recorded under "Authored, not in the source" in `docs/design.md` so it
+stays obvious later which parts of the design have no artboard behind them. If the
+client reviews the design again, these are the parts to put in front of them.
+
+## 2026-09-05 · `Card` takes its padding as a required prop
+
+`pad` is typed to the eight paddings the artboards actually use.
+**Why:** the source has no single card padding. Picking one default would silently be
+wrong on seven of eight cards, and leaving padding to a `className` override would put
+raw spacing back into page files.
+**Consequence:** each page states the artboard value it is reproducing, and TypeScript
+rejects anything not in the source.
+
 ## 2026-09-05 · Tailwind v4, with tokens in CSS and no `tailwind.config.ts`
 
 Design tokens live in `src/app/globals.css`: `@theme static` for colour, font, radius and

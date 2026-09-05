@@ -366,6 +366,10 @@ The design has **no elevation system**. Depth comes from gradient grounds and ha
   and must be authored fresh. Definition of done already names 375px and 1440px.
 - Content column: `max-width: 1200px; margin: 0 auto`
 - Outer page padding: `0 40px` desktop, `0 20px` mobile
+- Those two sit on **different elements** in the source — the padding is on a full-bleed
+  parent, the max-width on its child — so the page is 1280px overall. Collapsed into one
+  element, that is `max-width: 1280px` with the padding inside it, which is what
+  `<Container>` does. A 1200px max-width with the same padding would give a 1120px column.
 - Success pages use a narrower `1240px` frame with a `1160px` inner column.
 
 ### Vertical rhythm (desktop)
@@ -443,16 +447,43 @@ Mobile: height `64px`, `0 20px`, bottom border `rgba(255,255,255,0.10)`, wordmar
 an `11×11px` square, and a two-bar hamburger (`24×2px`, `5px` gap) in a `44×44px` tap target.
 
 App-form pages use a reduced header: height `76px` desktop / `60px` mobile, wordmark at 19px/17px,
-and a single "Back to site" link at 14.5px/500 `rgba(255,255,255,0.60)`.
+and a single "Back to site" link at `rgba(255,255,255,0.60)`, 500 weight, **13.5px mobile /
+14.5px desktop** — a real pair; an earlier revision of this document recorded only the
+desktop value.
+
+The wordmark has three sizes across the site, not two. The footer takes the app-header size,
+so it is not a special case:
+
+| Context | Square | Text | Gap |
+| --- | --- | --- | --- |
+| Site header, desktop | 13×13 | 21px | 12px |
+| App header, desktop | 12×12 | 19px | 12px |
+| Footer, desktop | 12×12 | 19px | 12px |
+| Site header, mobile | 11×11 | 17px | 9px |
+| App header, mobile | 11×11 | 17px | 10px |
+| Footer, mobile | 11×11 | 17px | 10px |
+
+The 9px site-header mobile gap is a one-pixel disagreement with the other two mobile
+artboards. **Resolved to 10px everywhere.**
 
 ### Footer
 
 `#151418`, top border `rgba(255,255,255,0.09)`, `64px 0 36px`. Four columns
 `1.4fr 1fr 1fr 1.2fr` gap `40px`: brand + one-line description, Company links, More links,
 Contact. Column headings are 11px/600 uppercase `rgba(255,255,255,0.38)` with `12px` between
-links at 15px `rgba(255,255,255,0.66)`. A bottom bar sits `56px` below, separated by a `24px`
+links at 15px `rgba(255,255,255,0.66)`. The mobile artboard puts those headings at **11.5px**,
+i.e. larger than desktop — the only role in the design that scales backwards, and almost
+certainly a slip. **Resolved to a flat 11px.** A bottom bar sits `56px` below, separated by a `24px`
 padded rule, holding the copyright at 14px `rgba(255,255,255,0.4)` and two legal links at
-14px `rgba(255,255,255,0.5)`. Mobile stacks to two columns, gap `28px`.
+14px `rgba(255,255,255,0.5)`. Mobile stacks to two columns, gap `28px`, and moves the contact
+block below a rule with the legal links above the copyright rather than beside it.
+
+**Contact column content differs from the artboard as built.** The artboard shows
+`hello@malameran.com` and a full street address (150 King Street West, Suite 200, Toronto,
+Ontario M5H 1J9). The brief specifies `info@` and city/country only, which is what ships;
+both are `TODO(copy):` in `src/content/nav.ts` pending the client's confirmation of the real
+mailbox and address. There is no phone number and no social links anywhere in the design —
+do not add placeholders for them.
 
 ### Buttons
 
@@ -614,8 +645,10 @@ The design system is implemented in `src/app/globals.css`. Tailwind v4 has no
 |---|---|---|
 | `@theme static` | Colour, font-family, radius and breakpoint tokens | Generates utilities (`text-ink`, `rounded-12`) **and** emits every token as a CSS variable. `static` is deliberate: without it Tailwind tree-shakes tokens no utility references yet, which would empty out a design system defined ahead of the components that use it. |
 | `:root` | The seven gradient grounds and `--paper-fade` | Layered multi-stop gradients are not a scale, so they must not become utilities. Kept as variables and applied through the `.ground-*` classes. |
-| `@layer components` | `.ground-*` classes and the 36 `.t-*` typography roles | Applied wholesale to an element; each role carries size, weight, line-height, letter-spacing and family together so a heading cannot be assembled wrongly. |
-| `@utility` | `.focus-ring`, `.focus-ring-dark` | Declared with `@utility`, not `@layer components`, because only utilities accept variants — components need `focus:focus-ring` on the field itself. |
+| `:root`, second block | The six derived accent `color-mix()` expressions | Computed values, not a scale. Kept as expressions so changing `--color-accent` propagates. |
+| `@layer components` | `.ground-*` classes and the 51 `.t-*` typography roles | Applied wholesale to an element; each role carries size, weight, line-height, letter-spacing and family together so a heading cannot be assembled wrongly. |
+| `@utility` | `.focus-ring`, `.focus-ring-dark`, `.focus-outline` | Declared with `@utility`, not `@layer components`, because only utilities accept variants — components need `focus:focus-ring` on the field itself and `focus-visible:focus-outline` on links and buttons. |
+| top level | `@keyframes mal-spin` | Tailwind does not manage keyframes. |
 
 Other rules that survive from the extraction:
 
@@ -645,10 +678,45 @@ under the same name. They are separate variables in the implementation:
 | `--dark-quiet-form` | 10% | no | Form-page sidebar |
 | `--dark-strong` | 20% | no | Final CTA band |
 
+### Chrome typography roles
+
+Section 2 above is content typography. The header, footer, buttons and links need fifteen
+more roles, every value already listed in the type scale but not extracted into a class
+until the components existed:
+
+| Class             | Mobile            | Desktop | Used by                                     |
+| ----------------- | ----------------- | ------- | ------------------------------------------- |
+| `t-wordmark`      | 17 / 700 / +.10em | 21      | Site header                                 |
+| `t-wordmark-md`   | 17 / 700 / +.10em | 19      | App header, footer                          |
+| `t-nav`           | 15 / 500          | —       | Header nav link                             |
+| `t-link-back`     | 13.5 / 500        | 14.5    | "Back to site"                              |
+| `t-link-cta`      | 16 / 500          | —       | Text link CTA                               |
+| `t-btn`           | 17 / 700          | —       | Hero and form submit                        |
+| `t-btn-sm`        | 15 / 700          | —       | Header CTA, inline retry                    |
+| `t-btn-step`      | 15.5 / 700        | —       | Step-nav Continue / Review                  |
+| `t-btn-ghost`     | 16 / 600          | —       | Ghost on dark                               |
+| `t-btn-secondary` | 15.5 / 600        | —       | Secondary on light                          |
+| `t-btn-xs`        | 13.5 / 600        | —       | Remove / Cancel                             |
+| `t-footer-link`   | 15 / 400          | —       | Footer link                                 |
+| `t-footer-note`   | 15 / 1.55         | —       | Footer description, address                 |
+| `t-legal`         | 14 / 400          | —       | Copyright, legal links                      |
+| `t-eyebrow-xs`    | 11 / 600 / +.06em | —       | Footer heading, "You" pill, step-row opener |
+
+Three are deliberately separate from a role they nearly duplicate:
+
+- `t-footer-link` 15/none vs `t-fineprint` 15/1.5 — same size, different line-height, which
+  changes every link's box height in a 12px-gap column.
+- `t-btn-sm` 15/700 vs `t-nav` 15/500 — different weight.
+- `t-eyebrow-xs` flat 11 vs `t-eyebrow` 11→12.5 and `t-eyebrow-sm` 11→11.5 — the footer
+  heading and the "You" pill stay at 11px on both artboards, so neither pair fits.
+
+The wordmark is written as two paired roles rather than three flat ones because a
+`@layer components` class cannot take an `lg:` variant. The three sizes are unchanged.
+
 ### Type roles with no mobile counterpart
 
-Mobile artboards exist for only 4 of the 12 pages, so 19 of the 36 roles have a single size
-read from a desktop artboard and **do not scale yet**. They carry no breakpoint override.
+Mobile artboards exist for only 4 of the 12 pages, so 19 of the 36 content roles have a
+single size read from a desktop artboard and **do not scale yet**. They carry no breakpoint override.
 When the pages using them are built and checked at 375px, these are the ones that need a
 mobile value decided:
 
@@ -661,7 +729,8 @@ mobile value decided:
 The last five are single-size because the source gives them the *same* value on both
 artboards — those are settled, not gaps. The other fourteen are genuine gaps.
 
-The remaining 17 roles have a real 375 ↔ 1440 pair and change at `lg`.
+The remaining 17 content roles have a real 375 ↔ 1440 pair and change at `lg`. Of the
+fifteen chrome roles, three are pairs and twelve are single-size.
 
 ### Folds applied
 
@@ -678,6 +747,30 @@ of weight or line-height: `t-numeral-step` (800/lh 1) vs `t-numeral-trust` (800/
 `t-numeral-row` (700/lh 0.9), all at 64px desktop; `t-numeral-tile` (26/800) vs
 `t-numeral-service` (26/700); `t-h3-card` (−.015em) vs `t-h3-industry` (−.02em), two separate
 real pairs.
+
+## Authored, not in the source
+
+Two things the site cannot ship without and the artboards do not contain. Both stay inside
+the existing tokens — no new colour, radius or type size. If the design goes back to the
+client, these are the parts with nothing behind them.
+
+**Mobile navigation panel.** The header artboard gives a two-bar hamburger and no open
+state.
+
+- Full-screen panel on `--dark-quiet`, fixed below the 64px header bar, which stays visible
+- The two hamburger bars rotate ±45° into an ✕ — CSS geometry, consistent with the design's
+  zero-icon rule
+- The six nav links at `t-h3-card` (21px on mobile), stacked, separated by
+  `rgba(255,255,255,0.09)` rules, 20px vertical padding each. Active `#fff`, rest
+  `rgba(255,255,255,0.72)` — the desktop nav's own colours
+- The primary CTA full-width, 24px below the list, per the source's mobile button rule
+- Escape closes it, Tab cycles inside it, focus returns to the hamburger, the page behind it
+  does not scroll
+
+**Keyboard focus for links and buttons.** The source has a focus state for form fields only
+(`.focus-ring`, `.focus-ring-dark`). `.focus-outline` is a 2px accent outline at 2px offset,
+applied as `focus-visible:focus-outline`. An outline rather than a box-shadow so it reads on
+both the paper and the dark grounds.
 
 ## Open questions
 

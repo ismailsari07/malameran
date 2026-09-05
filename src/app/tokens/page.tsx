@@ -1,5 +1,15 @@
 import type { Metadata } from "next";
 
+import { AppHeader } from "@/components/layout/app-header";
+import { MobileMenu } from "@/components/layout/mobile-menu";
+import { SiteFooter } from "@/components/layout/site-footer";
+import { SiteHeader } from "@/components/layout/site-header";
+import { Button, type ButtonVariant } from "@/components/ui/button";
+import { Card, YouPill } from "@/components/ui/card";
+import { Eyebrow } from "@/components/ui/eyebrow";
+import { Marker } from "@/components/ui/marker";
+import { Rule } from "@/components/ui/rule";
+
 /**
  * TEMPORARY — delete before delivery.
  *
@@ -203,6 +213,40 @@ const single = [
   ["t-label", "Form field label", "14.5 / 600"],
 ] as const;
 
+const chromePaired = [
+  ["t-wordmark", "Site-header wordmark", "17", "21"],
+  ["t-wordmark-md", "App-header and footer wordmark", "17", "19"],
+  ["t-link-back", '"Back to site"', "13.5", "14.5"],
+] as const;
+
+const chromeSingle = [
+  ["t-nav", "Header nav link", "15 / 500"],
+  ["t-btn", "Primary button label", "17 / 700"],
+  ["t-btn-sm", "Header CTA, inline retry", "15 / 700"],
+  ["t-btn-step", "Step-nav button", "15.5 / 700"],
+  ["t-btn-ghost", "Ghost button on dark", "16 / 600"],
+  ["t-btn-secondary", "Secondary button on light", "15.5 / 600"],
+  ["t-btn-xs", "Remove / Cancel", "13.5 / 600"],
+  ["t-link-cta", "Text link CTA", "16 / 500"],
+  ["t-footer-link", "Footer link", "15 / 400, no line-height"],
+  ["t-footer-note", "Footer description, address", "15 / 1.55"],
+  ["t-legal", "Copyright, legal links", "14 / 400"],
+  ["t-eyebrow-xs", "Footer heading, You pill", "11 / 600, flat"],
+] as const;
+
+const buttonVariants: ReadonlyArray<readonly [ButtonVariant, string, boolean]> =
+  [
+    ["primary", "Hero and form submit — 17/700, 19px 30px, r14", false],
+    ["primary-sm", "Site-header CTA — 15/700, 13px 22px, r12", false],
+    ["primary-step", "Step-nav Continue — 15.5/700, 15px 28px, r12", false],
+    ["primary-retry", "Inline retry — 15/700, 13px 22px, r12", false],
+    ["ghost", "Ghost on dark — 16/600, 16px 26px, r12", true],
+    ["secondary", "Secondary on light — 15.5/600, 14px 22px, r12", false],
+    ["destructive", "Remove / Cancel — 13.5/600, 7px 12px, r8", false],
+    ["disabled", "Disabled — accent 42%, label at 55%", false],
+    ["link", "Text link CTA — 16/500, underlined", true],
+  ];
+
 const radii = [
   ["pill", "999px", "Pills, chips, step numerals, spinner"],
   ["28", "28px", "Largest panels"],
@@ -323,6 +367,30 @@ export default function TokensPage() {
         ))}
       </div>
 
+      <h3 className="t-eyebrow text-text-small mt-12">
+        Chrome — header, footer, buttons and links (added in block 2)
+      </h3>
+      <div className="mt-4 flex flex-col gap-6">
+        {chromePaired.map(([cls, role, m, d]) => (
+          <div key={cls} className="border-border-card border-b pb-6">
+            <div className="t-hint text-text-small font-mono">
+              .{cls} — {role} — mobile {m} · desktop {d}
+            </div>
+            <div className={`${cls} text-ink mt-2`}>MALAMERAN</div>
+          </div>
+        ))}
+        {chromeSingle.map(([cls, role, size]) => (
+          <div key={cls} className="border-border-card border-b pb-6">
+            <div className="t-hint text-text-small font-mono">
+              .{cls} — {role} — {size}
+            </div>
+            <div className={`${cls} text-ink mt-2`}>
+              Start a sourcing request
+            </div>
+          </div>
+        ))}
+      </div>
+
       <h2 className="t-h2-section text-ink mt-16">Radius</h2>
       <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
         {radii.map(([name, px, role]) => (
@@ -366,6 +434,180 @@ export default function TokensPage() {
             accent border only — the source gives dark fields no ring
           </div>
         </div>
+      </div>
+
+      <h2 className="t-h2-section text-ink mt-16">Components</h2>
+      <p className="t-body-sm text-text-support mt-2">
+        Block 2. Headers and the footer are full-bleed and sit outside the page
+        gutter below.
+      </p>
+
+      <h3 className="t-eyebrow text-text-small mt-10">Buttons</h3>
+      <div className="mt-4 flex flex-col gap-4">
+        {buttonVariants.map(([variant, note, onDark]) => (
+          <div
+            key={variant}
+            className={
+              onDark
+                ? "ground-quiet rounded-20 flex flex-wrap items-center gap-6 p-6"
+                : "border-border-card rounded-20 flex flex-wrap items-center gap-6 border p-6"
+            }
+          >
+            <div
+              className={
+                onDark
+                  ? "t-hint w-full font-mono text-white/50"
+                  : "t-hint text-text-small w-full font-mono"
+              }
+            >
+              {variant} — {note}
+            </div>
+            <Button variant={variant}>Start a sourcing request</Button>
+            <Button variant={variant} disabled>
+              Disabled attribute
+            </Button>
+          </div>
+        ))}
+        <div className="border-border-card rounded-20 flex flex-wrap items-center gap-6 border p-6">
+          <div className="t-hint text-text-small w-full font-mono">
+            submitting — the disabled box plus the 17px mal-spin spinner
+          </div>
+          <Button submitting>Submitting your request</Button>
+          <Button variant="primary-step" submitting>
+            Continue
+          </Button>
+        </div>
+        <div className="border-border-card rounded-20 border p-6">
+          <div className="t-hint text-text-small mb-4 font-mono">
+            block — buttons go full width on mobile, primary first
+          </div>
+          <div className="max-w-[335px]">
+            <Button block>Start a sourcing request</Button>
+            <Button variant="secondary" block className="mt-3">
+              Talk to us first
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      <h3 className="t-eyebrow text-text-small mt-12">Cards</h3>
+      <div className="mt-4 grid gap-4 lg:grid-cols-2">
+        <Card tone="paper" pad="30-28-32" radius={20}>
+          <Eyebrow tone="paper" size="card">
+            paper
+          </Eyebrow>
+          <h4 className="t-h3-card-lg text-ink mt-3">
+            Verified factories only
+          </h4>
+          <p className="t-body-sm text-text-support mt-3">
+            Transparent over the paper ground, 1px #E4E3DF. Padding 30/28/32,
+            radius 20.
+          </p>
+          <Rule tone="card" className="mt-4" />
+          <p className="t-fineprint text-muted mt-4">
+            <Marker className="mr-2 -translate-y-px" />
+            Deliverable line, closed by a card rule
+          </p>
+        </Card>
+
+        <div className="ground-quiet rounded-20 grid gap-4 p-6">
+          <Card tone="dark" pad="30-30-34">
+            <div className="flex items-start justify-between">
+              <span className="t-numeral-step text-accent">02</span>
+              <Eyebrow tone="muted-dark" size="xs" as="span">
+                Us
+              </Eyebrow>
+            </div>
+            <h4 className="t-h3-card mt-5 text-white">We source and verify</h4>
+            <p className="t-body-sm mt-3 text-white/68">
+              3.5% white fill inside a 12% white border. Padding 30/30/34,
+              radius 22.
+            </p>
+          </Card>
+
+          <Card tone="emphasis" pad="30-30-34">
+            <div className="flex items-start justify-between">
+              <span className="t-numeral-step text-accent">01</span>
+              <YouPill />
+            </div>
+            <h4 className="t-h3-card mt-5 text-white">Tell us what you need</h4>
+            <p className="t-body-sm mt-3 text-white/68">
+              Buyer-owned: accent 12% over #101010, accent border, the You pill.
+            </p>
+          </Card>
+
+          <Card tone="statement" pad="30-30-34">
+            <h4 className="t-h3-card text-white">Start a sourcing request</h4>
+            <p className="t-body-sm mt-3 text-white/68">
+              No fill, 22% white border — the closing action cell in a grid.
+            </p>
+          </Card>
+        </div>
+      </div>
+
+      <h3 className="t-eyebrow text-text-small mt-12">Eyebrow, rule, marker</h3>
+      <div className="mt-4 grid gap-4 lg:grid-cols-2">
+        <div className="border-border-card rounded-20 flex flex-col gap-4 border p-6">
+          <Eyebrow tone="paper">Section eyebrow on paper — accent 74%</Eyebrow>
+          <Eyebrow tone="muted-paper" size="card">
+            Muted on paper — #8A8882
+          </Eyebrow>
+          <Eyebrow tone="paper" size="xs">
+            Flat 11px — the You pill and footer headings
+          </Eyebrow>
+          <Rule tone="paper" />
+          <div className="t-hint text-text-small font-mono">
+            .bg-rule between prose blocks
+          </div>
+          <Rule tone="card" />
+          <div className="t-hint text-text-small font-mono">
+            .bg-border-card inside a card
+          </div>
+          <div className="t-body-sm text-text-body flex items-center">
+            <Marker size={9} className="mr-2" /> 9px marker
+            <Marker className="mr-2 ml-6" /> 10px marker
+          </div>
+        </div>
+        <div className="ground-quiet rounded-20 flex flex-col gap-4 p-6">
+          <Eyebrow tone="dark">Section eyebrow on dark — accent</Eyebrow>
+          <Eyebrow tone="muted-dark" size="xs">
+            Muted on dark — white 38%
+          </Eyebrow>
+          <Rule tone="dark" />
+          <div className="t-hint font-mono text-white/50">white/12 on dark</div>
+          <Rule tone="dark-faint" />
+          <div className="t-hint font-mono text-white/50">
+            white/9 — header and footer edges
+          </div>
+        </div>
+      </div>
+
+      <h3 className="t-eyebrow text-text-small mt-12">
+        Mobile menu — authored, no artboard exists
+      </h3>
+      <p className="t-body-sm text-text-support mt-2">
+        The real component. Below 1024px the hamburger appears in the site
+        header below; clicking it opens the panel over the whole viewport.
+        Escape closes it, Tab cycles inside it, focus returns to the hamburger.
+      </p>
+      <div className="border-border-card rounded-20 mt-4 border p-6">
+        <div className="bg-head-bg flex h-16 max-w-[375px] items-center justify-between px-5">
+          <span className="t-wordmark text-white">MALAMERAN</span>
+          <MobileMenu active="/services" />
+        </div>
+      </div>
+
+      <h3 className="t-eyebrow text-text-small mt-12">Header and footer</h3>
+      <p className="t-body-sm text-text-support mt-2">
+        Full-bleed. Resize past 1024px to see the 88px header with its nav
+        replace the 64px hamburger bar.
+      </p>
+      <div className="-mx-5 mt-4 lg:-mx-10">
+        <SiteHeader active="/services" />
+        <div className="ground-hero h-24" />
+        <AppHeader />
+        <div className="bg-paper h-24" />
+        <SiteFooter />
       </div>
     </main>
   );

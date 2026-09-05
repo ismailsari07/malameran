@@ -93,6 +93,40 @@
 :root {
   color-scheme: light;
 
+  /* --------------------------------------------------------------------------
+     Derived accent colours. Kept as color-mix() expressions, never flattened to
+     a hex, so changing --color-accent propagates. They live here rather than in
+     @theme for the same reason the grounds do: they are computed values, not a
+     scale, and must not become utilities.
+     Source: docs/design.md "Derived colours (color-mix, oklab)".
+     ----------------------------------------------------------------------- */
+  --accent-hover: color-mix(in oklab, var(--color-accent) 82%, #ffffff);
+  --accent-disabled: color-mix(
+    in oklab,
+    var(--color-accent) 42%,
+    var(--color-surface-info)
+  );
+  --accent-eyebrow-paper: color-mix(
+    in oklab,
+    var(--color-accent) 74%,
+    var(--color-on-accent)
+  );
+  --accent-numeral: color-mix(
+    in oklab,
+    var(--color-accent) 88%,
+    var(--color-on-accent)
+  );
+  --accent-pill-border: color-mix(
+    in oklab,
+    var(--color-accent) 60%,
+    var(--color-on-accent)
+  );
+  --accent-card-fill: color-mix(
+    in oklab,
+    var(--color-accent) 12%,
+    var(--color-on-accent)
+  );
+
   /* Bottom paper-fade shared by --dark-hero-home, --dark-hero and --dark-soft */
   --paper-fade: linear-gradient(
     180deg,
@@ -160,6 +194,14 @@
     linear-gradient(180deg, #17171a 0%, #1e1d22 100%);
 }
 
+/* Submitting-button spinner. Top level: Tailwind does not manage keyframes.
+   Source: design/Malameran Request Form.dc.html line 28. */
+@keyframes mal-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 @layer base {
   body {
     background-color: var(--color-paper);
@@ -191,6 +233,15 @@
   border-color: var(--color-accent);
 }
 
+/* Keyboard focus for links and buttons. The source has no focus state for
+   these at all, so this is authored — see "Authored, not in the source" in
+   docs/design.md. An outline rather than a box-shadow so it stays visible on
+   both the paper and the dark grounds. */
+@utility focus-outline {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
 @layer components {
   /* --- Grounds --------------------------------------------------------- */
   .ground-hero-home {
@@ -216,8 +267,8 @@
   }
 
   /* ==========================================================================
-     Typography roles. 35 classes: 16 with a real 375 <-> 1440 pair, 19 that
-     the source gives only once and which therefore do not scale yet.
+     Content typography roles. 36 classes: 17 with a real 375 <-> 1440 pair,
+     19 that the source gives only once and which therefore do not scale yet.
      See "Type roles with no mobile counterpart" in docs/design.md.
      ======================================================================= */
 
@@ -469,8 +520,112 @@
   }
 
   /* ==========================================================================
-     Desktop step. Only the 16 roles with a real 375 <-> 1440 pair appear here;
-     the other 19 have no mobile counterpart in the source and stay single-size
+     Chrome typography. 15 roles for header, footer, buttons and links. Every
+     value is read from the artboards and listed in the docs/design.md type
+     scale; Block 1 extracted content typography only, so these were missing.
+     ======================================================================= */
+
+  /* --- Wordmark. Three sizes across two paired roles: 17 mobile everywhere,
+         21 in the site header and 19 in the app header and footer. Written as
+         pairs rather than three flat classes because a @layer components class
+         cannot take an `lg:` variant. --------------------------------------- */
+  .t-wordmark {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: 0.1em;
+  }
+  .t-wordmark-md {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: 0.1em;
+  }
+
+  /* --- Navigation and links --------------------------------------------- */
+  .t-nav {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 15px;
+  }
+  /* "Back to site" in the app header. A real pair: 13.5 mobile / 14.5 desktop */
+  .t-link-back {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 13.5px;
+  }
+  .t-link-cta {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 16px;
+  }
+
+  /* --- Button labels ----------------------------------------------------- */
+  .t-btn {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 17px;
+  }
+  .t-btn-sm {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 15px;
+  }
+  .t-btn-step {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 15.5px;
+  }
+  .t-btn-ghost {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 16px;
+  }
+  .t-btn-secondary {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 15.5px;
+  }
+  .t-btn-xs {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 13.5px;
+  }
+
+  /* --- Footer ------------------------------------------------------------ */
+  /* No line-height: the source leaves it at normal, and forcing 1.5 would
+     change every link's box height in a 12px-gap column. */
+  .t-footer-link {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 15px;
+  }
+  .t-footer-note {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  .t-legal {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 14px;
+  }
+
+  /* --- Flat 11px eyebrow. Footer column headings, the "You" pill and the
+         numbered step-row opener. Does not scale: t-eyebrow goes 11 -> 12.5
+         and t-eyebrow-sm 11 -> 11.5, both wrong here. -------------------- */
+  .t-eyebrow-xs {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* ==========================================================================
+     Desktop step. Only the roles with a real 375 <-> 1440 pair appear here;
+     the rest have no mobile counterpart in the source and stay single-size
      until the pages that use them are built and checked at 375px.
      ======================================================================= */
   @media (min-width: 1024px) {
@@ -530,6 +685,15 @@
     }
     .t-hint {
       font-size: 13.5px;
+    }
+    .t-link-back {
+      font-size: 14.5px;
+    }
+    .t-wordmark {
+      font-size: 21px;
+    }
+    .t-wordmark-md {
+      font-size: 19px;
     }
   }
 }
