@@ -5,6 +5,53 @@ Format: date · decision · why · consequence.
 
 ---
 
+## 2026-09-06 · Grounds are applied only through `.ground-*`, and a check enforces it
+
+The `sidebar` Card tone used a background utility pointed at `--dark-quiet`,
+which emits `background-color: var(--dark-quiet)`. The grounds are layered
+gradients, and a gradient is an image, not a colour.
+**Why it was silent:** `var()` is substituted at computed-value time, so the
+parser cannot reject the declaration. It is accepted, then becomes invalid at
+computed-value time, and the property falls back to its initial value —
+`transparent`. No warning, no console error, nothing in the build output. The
+card rendered with a border and no fill: white text on paper.
+**Scope:** exactly one occurrence. All 14 other variable-fed backgrounds point at
+`color-mix()` expressions, which are real colours. Every other gradient variable
+was already reached only through `.ground-*`. Only `/request` was affected;
+nothing on the nine previously reviewed pages touches that tone.
+**Consequence:** `scripts/check-css-vars.mjs` resolves every variable fed to a
+colour-only property — `color`, `background-color`, every `border-*-color`,
+`fill`, `stroke` and the rest — through any chain of indirection, and fails if
+one is an image. `pnpm check:css`, added to the definition of done. Verified with
+a negative control: reintroducing the bug fails the check.
+
+## 2026-09-06 · Asserting a declaration exists is not asserting it is valid
+
+Every verification pass so far checked that a rule was emitted with the expected
+declaration. `background-color: var(--dark-quiet)` passes that test perfectly —
+it is exactly the declaration you would assert.
+**Why it matters:** the failure is one level down, at whether the substituted
+value is legal for the property. Any future variable of this shape would have
+passed the same way. The check is written against the general class, not against
+the grounds.
+
+## 2026-09-06 · Every component variant goes on `/tokens` in its own block
+
+Six of the twelve `Card` tones had drifted off the page, including the broken
+one. Had `sidebar` been rendered there, it would have shown as an empty outline
+before `/request` existed.
+**Consequence:** written into `CLAUDE.md` as a rule rather than left as a habit,
+and into the definition of done. All twelve tones are now on the page, each on
+the ground it is used against; `sidebar` is shown on paper, which is both where
+it is used and where the bug was visible.
+
+## 2026-09-06 · Tailwind scans comments, so prose can emit classes
+
+The first version of the comment warning about this bug spelled out the offending
+utility, which regenerated it — and the new check flagged a class nothing used.
+**Consequence:** comments and doc strings do not spell out utility class names.
+Noted in `CLAUDE.md`.
+
 ## 2026-09-06 · Route groups: `(site)` and `(form)` own their chrome
 
 The root layout is `html`, `body` and fonts only. `(site)/layout.tsx` adds the

@@ -542,7 +542,84 @@ export default function TokensPage() {
               No fill, 22% white border — the closing action cell in a grid.
             </p>
           </Card>
+
+          <Card tone="panel" pad="30-30-34">
+            <h4 className="t-h3-card text-white">panel</h4>
+            <p className="t-body-sm mt-3 text-white/68">
+              No fill, 14% white border — the large centred panel.
+            </p>
+          </Card>
+
+          <Card tone="dark-panel" pad="30-30-34">
+            <h4 className="t-h3-card text-white">dark-panel</h4>
+            <p className="t-body-sm mt-3 text-white/68">
+              14% border over a 3.5% fill — the How It Works timeline aside.
+            </p>
+          </Card>
+
+          <Card tone="dark-form" pad="30-30-34">
+            <h4 className="t-h3-card text-white">dark-form</h4>
+            <p className="t-body-sm mt-3 text-white/68">
+              14% border over the faintest fill, 2% — Contact&rsquo;s form card.
+            </p>
+          </Card>
+
+          <Card tone="dark-aside" pad="30-30-34">
+            <h4 className="t-h3-card text-white">dark-aside</h4>
+            <p className="t-body-sm mt-3 text-white/68">
+              14% border over 3% — Contact&rsquo;s sidebar cards.
+            </p>
+          </Card>
+
+          <Card tone="emphasis-soft" pad="30-30-34">
+            <h4 className="t-h3-card text-white">emphasis-soft</h4>
+            <p className="t-body-sm mt-3 text-white/68">
+              Accent 12% fill, but bordered at the 45% mix rather than full
+              accent — the Services &ldquo;End to end&rdquo; card.
+            </p>
+          </Card>
         </div>
+      </div>
+
+      <p className="t-body-sm text-text-support mt-4">
+        The three light tones, and the one tone that carries its own ground.
+      </p>
+      <div className="mt-4 grid gap-4 lg:grid-cols-2">
+        <div className="border-border-card rounded-20 flex flex-col gap-4 border p-6">
+          <Card tone="surface" pad="26-24-28" radius={20}>
+            <h4 className="t-h3-card-lg text-ink">surface</h4>
+            <p className="t-body-sm text-text-support mt-3">
+              White fill inside a --line border — the form card on a paper page.
+            </p>
+          </Card>
+          <Card tone="info" pad="16-18" radius={14}>
+            <p className="t-body text-text-body-alt">
+              info — --line on --surface-info. The notice treatment on the form
+              and legal pages.
+            </p>
+          </Card>
+        </div>
+
+        {/*
+         * sidebar is the one tone that brings its own ground rather than
+         * relying on an enclosing Section, so it is shown on paper — which is
+         * where it is actually used, and where it silently rendered
+         * transparent until the ground was applied through .ground-quiet.
+         */}
+        <Card tone="sidebar" pad="32-30-34" radius={24}>
+          <Eyebrow tone="dark" size="card">
+            sidebar
+          </Eyebrow>
+          <h4 className="t-h3-card mt-3 text-white">
+            Carries --dark-quiet itself
+          </h4>
+          <p className="t-body-sm mt-3 text-white/80">
+            Applied through the .ground-quiet component class. A background
+            utility pointed at the variable would emit background-color, which
+            cannot hold a gradient, and would fall back to transparent with no
+            warning. Guarded by pnpm check:css.
+          </p>
+        </Card>
       </div>
 
       <h3 className="t-eyebrow text-text-small mt-12">Eyebrow, rule, marker</h3>

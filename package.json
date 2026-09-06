@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
+    "check:css": "node scripts/check-css-vars.mjs",
     "format": "prettier --write ."
   },
   "dependencies": {

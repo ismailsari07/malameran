@@ -11,6 +11,8 @@ not a product catalogue.
 - `pnpm build` — must pass before any commit
 - `pnpm lint`
 - `pnpm typecheck` — `tsc --noEmit`
+- `pnpm check:css` — asserts no colour property is fed a gradient variable
+  (run after `pnpm build`; it reads the built CSS)
 - `pnpm format` — Prettier
 - `pnpm dlx supabase migration new <name>` / `pnpm dlx supabase db push`
 
@@ -51,7 +53,8 @@ Naming, commits, branches and component structure: `docs/conventions.md`
 
 ## Definition of done
 
-Feature works · `pnpm build`, `pnpm lint` and `pnpm typecheck` all pass ·
+Feature works · `pnpm build`, `pnpm lint`, `pnpm typecheck` and `pnpm check:css`
+all pass · every new component variant rendered on `/tokens` ·
 RLS verified from a second account ·
 no console errors · responsive at 375px and 1440px · task checked off in
 `docs/tasks/`.
@@ -82,3 +85,15 @@ Skip doc updates for trivial changes. Never invent a decision that wasn't made.
   and family by hand.
 - Rebuild designs as proper components; do not paste export markup into the app.
 - Token table and layout rules: `docs/design.md`
+- The gradient grounds are applied **only** through the `.ground-*` component
+  classes, never through a background utility pointed at the variable. A gradient
+  is an image, not a colour: fed to `background-color` it is invalid at
+  computed-value time and falls back to transparent, silently. `pnpm check:css`
+  enforces this.
+- **Every `Card`, `Eyebrow`, `Rule`, `Button` or `Marker` variant added must be
+  rendered on `/tokens` in the same block that introduces it.** A variant that is
+  not on that page has not been looked at. Six tones drifted off it and a broken
+  one reached review.
+- Tailwind scans comments as well as code. A class name written in prose
+  generates that class — do not spell out utilities in comments or docs strings
+  unless you want them emitted.

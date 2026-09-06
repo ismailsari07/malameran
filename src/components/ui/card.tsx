@@ -18,8 +18,21 @@ const TONES = {
   info: "border border-line bg-surface-info",
   /** The white form card on a paper page. */
   surface: "border border-line bg-surface",
-  /** The dark sidebar card beside a form on a light page. */
-  sidebar: "border border-border-dark-card bg-(--dark-quiet)",
+  /**
+   * The dark sidebar card beside a form on a light page.
+   *
+   * Uses the `.ground-quiet` component class, never a background-color utility
+   * pointed at the --dark-quiet variable. The grounds are layered gradients,
+   * and a gradient is an image, not a colour: fed to background-color it is
+   * invalid at computed-value time and silently falls back to transparent.
+   * `.ground-*` uses the `background` shorthand, which accepts an image.
+   *
+   * Do not add a background utility to this tone, or to a Card using it —
+   * utilities are emitted after the components layer and would override the
+   * ground with no warning. `scripts/check-css-vars.mjs` guards the first half
+   * of this; the second half is on you.
+   */
+  sidebar: "border border-border-dark-card ground-quiet",
   /** On dark: a 3.5% white fill inside a 12% white border. */
   dark: "border border-white/12 bg-white/[3.5%]",
   /** Buyer-owned: accent-tinted fill, accent border, carries the "You" pill. */

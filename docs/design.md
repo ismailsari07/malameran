@@ -935,6 +935,13 @@ footer.
 This block is the first real use of `.focus-ring`, the light field treatment, and the
 error, dropzone, chip and step-progress tokens declared in block 1.
 
+**Grounds are applied only through `.ground-*`.** The `sidebar` Card tone first shipped
+with a background utility pointed at `--dark-quiet`, which emits `background-color` —
+a gradient is an image, not a colour, so the declaration was invalid at computed-value
+time and fell back to transparent, silently. `.ground-*` uses the `background`
+shorthand, which accepts an image. `pnpm check:css` now enforces this for every
+colour-only property, and every `Card` tone is rendered on `/tokens`.
+
 ## For Suppliers, About, Contact: notes from the build
 
 None of these three has a 375px artboard either.
