@@ -16,6 +16,10 @@ const TONES = {
   paper: "border border-border-card",
   /** Info panel: the form pages' notice treatment, --line on --surface-info. */
   info: "border border-line bg-surface-info",
+  /** The white form card on a paper page. */
+  surface: "border border-line bg-surface",
+  /** The dark sidebar card beside a form on a light page. */
+  sidebar: "border border-border-dark-card bg-(--dark-quiet)",
   /** On dark: a 3.5% white fill inside a 12% white border. */
   dark: "border border-white/12 bg-white/[3.5%]",
   /** Buyer-owned: accent-tinted fill, accent border, carries the "You" pill. */
@@ -53,6 +57,9 @@ const PADDING = {
   "34-32-38": "px-8 pt-8.5 pb-9.5",
   "36-34-40": "px-8.5 pt-9 pb-10",
   "28-22-30": "px-5.5 pt-7 pb-7.5",
+  "18-20": "px-5 py-4.5",
+  "32-30-34": "px-7.5 pt-8 pb-8.5",
+  "36-40-40": "px-10 pt-9 pb-10",
   "44-44-48": "px-11 pt-11 pb-12",
   "52-56-56": "px-14 pt-13 pb-14",
 } as const;
@@ -76,6 +83,9 @@ const PADDING_LG = {
   "34-32-38": "lg:px-8 lg:pt-8.5 lg:pb-9.5",
   "36-34-40": "lg:px-8.5 lg:pt-9 lg:pb-10",
   "28-22-30": "lg:px-5.5 lg:pt-7 lg:pb-7.5",
+  "18-20": "lg:px-5 lg:py-4.5",
+  "32-30-34": "lg:px-7.5 lg:pt-8 lg:pb-8.5",
+  "36-40-40": "lg:px-10 lg:pt-9 lg:pb-10",
   "44-44-48": "lg:px-11 lg:pt-11 lg:pb-12",
   "52-56-56": "lg:px-14 lg:pt-13 lg:pb-14",
 } as const;

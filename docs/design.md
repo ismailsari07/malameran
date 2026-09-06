@@ -167,6 +167,9 @@ These are computed, not literal. Keep them as functions of the accent rather tha
 | `accent 74%, #101010` | Section eyebrow (uppercase) on paper |
 | `accent 60%, #101010` | "You" pill border on dark |
 | `accent 45%, #1A191E` | Border of any accent-tinted card: the hero diagram's MALAMERAN card and the Services "End to end" card. Implemented as `--accent-tint-border` |
+| `accent 22%, #ffffff` | Selected chip fill — `--accent-chip-selected` |
+| `accent 20%, #ffffff` | Completed step-pill fill — `--accent-step-complete` |
+| `accent 20%, #17171A` | Active node in the form sidebar's timeline — `--accent-node-active` |
 | `accent 42%, #F4F3EF` | Disabled/submitting button fill |
 | `accent 22%, #ffffff` | Selected chip fill (light) |
 | `accent 20%, #ffffff` | Completed step-pill fill |
@@ -652,7 +655,7 @@ The design system is implemented in `src/app/globals.css`. Tailwind v4 has no
 | `@theme static` | Colour, font-family, radius and breakpoint tokens | Generates utilities (`text-ink`, `rounded-12`) **and** emits every token as a CSS variable. `static` is deliberate: without it Tailwind tree-shakes tokens no utility references yet, which would empty out a design system defined ahead of the components that use it. |
 | `:root` | The seven gradient grounds and `--paper-fade` | Layered multi-stop gradients are not a scale, so they must not become utilities. Kept as variables and applied through the `.ground-*` classes. |
 | `:root`, second block | The six derived accent `color-mix()` expressions | Computed values, not a scale. Kept as expressions so changing `--color-accent` propagates. |
-| `@layer components` | `.ground-*` classes and the 67 `.t-*` typography roles | Applied wholesale to an element; each role carries size, weight, line-height, letter-spacing and family together so a heading cannot be assembled wrongly. |
+| `@layer components` | `.ground-*` classes and the 76 `.t-*` typography roles | Applied wholesale to an element; each role carries size, weight, line-height, letter-spacing and family together so a heading cannot be assembled wrongly. |
 | `@utility` | `.focus-ring`, `.focus-ring-dark`, `.focus-outline` | Declared with `@utility`, not `@layer components`, because only utilities accept variants — components need `focus:focus-ring` on the field itself and `focus-visible:focus-outline` on links and buttons. |
 | top level | `@keyframes mal-spin` | Tailwind does not manage keyframes. |
 
@@ -761,6 +764,27 @@ Four more, added for For Suppliers, About and Contact. Also flat:
 
 `t-h2-why` and `t-stat-figure` were both already in the type scale ("Why-we-exist h2",
 "Stat figure") without a class.
+
+Nine more, added for the sourcing request form. The light treatment is the canonical
+one and the only one implemented:
+
+| Class | Mobile | Desktop | Used by |
+| --- | --- | --- | --- |
+| `t-step-pill` | 11.5 / 700 | — | Step numeral, issue pill, error badge |
+| `t-optional` | 11 / 500 / +.05em | 11.5 | The "Optional" tag |
+| `t-field-desc` | 13.5 / 1.5 | 14 | Description under a label; rejected-file body |
+| `t-field-link` | 13.5 / 600 | 14 | "browse your device", "Choose a different file" |
+| `t-error-msg` | 14 / 1.45 / 500 | — | Inline validation message |
+| `t-chip-option` | 14.5 / 500 | — | Unselected chip; selected uses `t-label` at 600 |
+| `t-dropzone-title` | 16.5 / 600 | — | "Drag files here" |
+| `t-banner-heading` | 16.5 / 700 | — | Error and rate-limit banner headings |
+| `t-step-name` | 15 / 700 | — | Mobile current-step name |
+
+Note `t-optional` uses **+0.05em** tracking where every eyebrow role uses +0.06em; the
+source really does differ. `t-chip` was already taken by the hero diagram's 13/13.5
+chips, hence `t-chip-option`. `t-field-link` was added mid-build: the "browse your
+device" action is 600 where `t-field-desc` is 400, and stacking `font-semibold` on a
+role class is the pattern CLAUDE.md forbids.
 
 ### Type roles with no mobile counterpart
 
@@ -884,6 +908,32 @@ Where the artboards did not match this document:
 First real use of two tokens declared in block 1 and unused until now:
 `--color-numeral-idle` (`#B9B7B1`) on the three steps Malameran owns, and
 `--color-text-eyebrow` (`#8A8882`) on their "Us" labels.
+
+## The sourcing request form: notes from the build
+
+**The artboard promises a file limit the database rejects.** It reads "up to 10MB per
+file". The bucket's `file_size_limit`, the `size_bytes` CHECK constraint and the
+decision on record are all **4MB**. The copy now says 4MB; the artboard is wrong, not
+the limit.
+
+Other deliberate deviations, all recorded rather than silent:
+
+| Artboard | Built | Why |
+| --- | --- | --- |
+| File row shows a progress track and "uploading 64%" | Size plus "ready to send", no track | Nothing uploads until block 7b. A progress bar with no upload behind it is a lie |
+| File row example is 6.1 MB | n/a | Over the real 4MB limit — mockup data |
+| Footer nav shows an advance button on every step | Hidden on the last step | The artboard also puts a full-width "Send request" in the card body. Two submit affordances in one view is worse than one |
+| States gallery draws the step progress at 20px pill / 13.5px label | 22px / 14.5px | The gallery is a compressed presentation of the same component, not a second size. The live form's values win |
+| Desktop sidebar is a numbered timeline | Same, but mobile collapses to the 375 artboard's single summary line | Both are in the source |
+| Sidebar divider `rgba(255,255,255,0.14)` | `Rule tone="dark"` (0.12) | The same fold taken in 4a |
+
+**Route groups.** `/request` uses the reduced app header and has no footer, so the
+chrome moved out of the root layout into `(site)` and `(form)` group layouts. No URL
+changed. `not-found.tsx` sits outside both groups and renders its own header and
+footer.
+
+This block is the first real use of `.focus-ring`, the light field treatment, and the
+error, dropzone, chip and step-progress tokens declared in block 1.
 
 ## For Suppliers, About, Contact: notes from the build
 

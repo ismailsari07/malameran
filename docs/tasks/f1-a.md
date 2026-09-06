@@ -30,8 +30,8 @@ team by email, and the submitter receives a confirmation.
 
 ## Sourcing request form
 - [x] Schema and migration for `sourcing_requests`
-- [ ] Form UI with all fields from `docs/scope.md`
-- [ ] Server-side validation
+- [x] Form UI with all fields from `docs/scope.md`
+- [ ] Server-side validation — schema exists and the client uses it; the route is 7b
 - [x] File attachment upload with type and size limits — data layer; UI is block 7
 - [x] Reference number generated on submit
 - [ ] Success and failure states

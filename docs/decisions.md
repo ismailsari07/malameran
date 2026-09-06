@@ -5,6 +5,60 @@ Format: date · decision · why · consequence.
 
 ---
 
+## 2026-09-06 · Route groups: `(site)` and `(form)` own their chrome
+
+The root layout is `html`, `body` and fonts only. `(site)/layout.tsx` adds the
+marketing header and footer; `(form)/layout.tsx` adds the reduced app header and
+no footer. `not-found.tsx` stays at the app root and renders its own.
+**Why:** `/request` uses the 76/60 app header and the artboards give the form
+pages no footer. With chrome in the root layout there was no way to express that
+without a conditional on the pathname, which would have made the layout a client
+component.
+**Consequence:** nine page files moved; no URL changed. `/suppliers/apply` will
+join `(form)` in block 8.
+
+## 2026-09-06 · The artboard's 10MB file limit is wrong; 4MB ships
+
+The dropzone copy reads "up to 10MB per file". Everything real says 4MB — the
+bucket's `file_size_limit`, the `size_bytes` CHECK constraint, and the block 6
+decision.
+**Why:** the copy has to match what the server will accept, or the first person to
+attach a 6MB drawing gets a rejection the page told them would work.
+**Consequence:** the constraints line says 4MB. If the client wants 10MB, three
+things change together — the bucket, the constraint and the copy — not just the
+copy.
+
+## 2026-09-06 · The Field API is a shell plus typed controls, not one component
+
+`FieldShell` owns the label, the "Optional" tag or required marker, the
+description, the hint, the error badge and all aria wiring. `TextField`,
+`TextareaField`, `SelectField`, `DateField`, `ChipsField` and `FileField` consume
+it and never wire aria by hand.
+**Why one shell, not a `type` prop:** a chips field and a dropzone have nothing in
+common with a text input except their chrome. A single component switching on
+`type` would be a union of six unrelated prop sets.
+**Built so the dark treatment is an addition, not a rewrite:** `tone` is threaded
+through from the start and the shell's colour map already has both entries, read
+from Contact's dark form. Control styling lives in one function,
+`controlClasses`, whose dark branch throws today — the dark artboard has no error,
+hint or locked state to copy, so guessing it would be worse than leaving it out.
+**Obligation is expressed twice on purpose:** the light artboard tags what is
+optional, the dark one marks what is required with an accent asterisk. Both are
+props, so neither treatment is baked in.
+**Locked state is a native `<fieldset disabled>`** carrying the artboard's
+opacity, rather than simulated disabling.
+
+## 2026-09-06 · Files are held in memory and uploaded only on submit
+
+`File` objects live in component state. Nothing reaches storage until the final
+submit in block 7b.
+**Why:** an upload that starts before the request row exists can orphan an object
+in the bucket. Holding the file until submit means a file can never exist without
+a request.
+**Consequence:** the client checks extension, size and count as a convenience; the
+server re-checks all three plus the actual bytes. The dropzone's rejected state is
+reachable only through the client checks in this block.
+
 ## 2026-09-05 · Deny by default: RLS on, zero policies, plus revoked grants
 
 All four tables have RLS enabled and forced, and **no policies at all**. On top of

@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Inter_Tight } from "next/font/google";
 
-import { SiteFooter } from "@/components/layout/site-footer";
-import { SiteHeader } from "@/components/layout/site-header";
-
 import "./globals.css";
 
 const inter = Inter({
@@ -44,11 +41,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${inter.variable} ${interTight.variable} h-full`}
     >
-      <body className="flex min-h-full flex-col">
-        <SiteHeader />
-        <div className="flex-1">{children}</div>
-        <SiteFooter />
-      </body>
+      {/*
+       * Chrome lives in the route-group layouts, not here: (site) pages get the
+       * marketing header and footer, (form) pages get the reduced app header and
+       * no footer. not-found.tsx sits outside both groups and renders its own.
+       */}
+      <body className="flex min-h-full flex-col">{children}</body>
     </html>
   );
 }

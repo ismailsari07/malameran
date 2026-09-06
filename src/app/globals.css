@@ -143,6 +143,20 @@
   );
   --accent-connector: color-mix(in oklab, var(--color-accent) 75%, transparent);
 
+  /* Form controls. */
+  --accent-chip-selected: color-mix(
+    in oklab,
+    var(--color-accent) 22%,
+    var(--color-surface)
+  );
+  --accent-step-complete: color-mix(
+    in oklab,
+    var(--color-accent) 20%,
+    var(--color-surface)
+  );
+  /* Active node in the form sidebar's timeline; mixes into the quiet ground. */
+  --accent-node-active: color-mix(in oklab, var(--color-accent) 20%, #17171a);
+
   /* Bottom paper-fade shared by --dark-hero-home, --dark-hero and --dark-soft */
   --paper-fade: linear-gradient(
     180deg,
@@ -639,7 +653,6 @@
     text-transform: uppercase;
   }
 
-
   /* ==========================================================================
      Page roles. Added in block 3 for the Home page; each is separated from its
      nearest neighbour by a line-height or a weight, never by size alone.
@@ -700,7 +713,6 @@
     font-size: 16px;
   }
 
-
   /* ==========================================================================
      Added in block 4a for How It Works, Services and Industries. All flat —
      none of those three pages has a 375px artboard.
@@ -733,7 +745,6 @@
     font-size: 14.5px;
     line-height: 1.5;
   }
-
 
   /* ==========================================================================
      Added in block 4b for For Suppliers, About and Contact. All flat — none of
@@ -769,6 +780,73 @@
     font-size: 44px;
     line-height: 1;
     letter-spacing: -0.035em;
+  }
+
+  /* ==========================================================================
+     Form roles, added in block 7a for the sourcing request form. The light
+     treatment is the canonical one and is the only one implemented.
+     ======================================================================= */
+
+  /* Step numeral pill, the issue pill, and the inline error badge. */
+  .t-step-pill {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 11.5px;
+  }
+  /* The "Optional" tag beside a label. Note the tighter +.05em tracking: the
+     eyebrow roles all use +.06em. */
+  .t-optional {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  /* Description between a label and its control; also "or browse your device"
+     and the rejected-file body. */
+  .t-field-desc {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 13.5px;
+    line-height: 1.5;
+  }
+  /* An inline action inside field text: "browse your device", "Choose a
+     different file". Same pair as t-field-desc at weight 600. */
+  .t-field-link {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 13.5px;
+  }
+  /* Inline validation message beside the error badge. */
+  .t-error-msg {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 1.45;
+  }
+  /* Unselected multi-select chip. Selected chips use t-label, at weight 600. */
+  .t-chip-option {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 14.5px;
+  }
+  .t-dropzone-title {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 16.5px;
+  }
+  /* Heading of an error or rate-limit banner. t-dropzone-title is the same
+     size at weight 600. */
+  .t-banner-heading {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 16.5px;
+  }
+  /* The current step's name, shown only on the mobile progress row. */
+  .t-step-name {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 15px;
   }
 
   /* ==========================================================================
@@ -842,6 +920,15 @@
     }
     .t-wordmark-md {
       font-size: 19px;
+    }
+    .t-optional {
+      font-size: 11.5px;
+    }
+    .t-field-desc {
+      font-size: 14px;
+    }
+    .t-field-link {
+      font-size: 14px;
     }
     .t-diagram-title {
       font-size: 18px;
