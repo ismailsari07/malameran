@@ -11,6 +11,20 @@
  */
 
 export const MAX_FILE_BYTES = 4 * 1024 * 1024;
+
+/**
+ * Every signature this module recognises lives in the first 16 bytes. 64 is
+ * read to leave room without a second round trip.
+ */
+export const HEAD_BYTES = 64;
+
+/**
+ * How much of a ZIP's tail to read when looking for the End of Central
+ * Directory. The EOCD is within the last 64KB by spec, and the central
+ * directory sits immediately before it, so this covers any realistic
+ * spreadsheet in one read.
+ */
+export const ZIP_TAIL_BYTES = 256 * 1024;
 export const MAX_FILES_PER_REQUEST = 5;
 
 /** The whitelist. Nothing outside this is accepted. */
@@ -118,6 +132,133 @@ function zipEntryNames(bytes: Uint8Array): string[] | null {
  * `declaredMime` is not consulted. The caller compares the detected type with
  * the declared one and rejects a mismatch rather than correcting it.
  */
+/**
+ * Walks a ZIP central directory inside a window taken from the end of the file.
+ *
+ * `windowStart` is the window's absolute offset, so the End of Central
+ * Directory's pointer — which is absolute — can be resolved against it. If the
+ * central directory begins before the window, the caller is told where to read
+ * from rather than being handed a wrong answer.
+ */
+export type ZipWalk =
+  | { kind: "names"; names: string[] }
+  | { kind: "needFrom"; offset: number }
+  | { kind: "unreadable" };
+
+export function zipEntryNamesFromWindow(
+  window: Uint8Array,
+  windowStart: number,
+  totalSize: number,
+): ZipWalk {
+  const view = new DataView(
+    window.buffer,
+    window.byteOffset,
+    window.byteLength,
+  );
+
+  let eocd = -1;
+  for (let i = window.length - 22; i >= 0; i--) {
+    if (startsWith(window, [0x50, 0x4b, 0x05, 0x06], i)) {
+      eocd = i;
+      break;
+    }
+  }
+  if (eocd === -1) return { kind: "unreadable" };
+
+  const entryCount = view.getUint16(eocd + 10, true);
+  const cdOffset = view.getUint32(eocd + 16, true);
+  if (entryCount === 0 || entryCount > ZIP_MAX_ENTRIES)
+    return { kind: "unreadable" };
+  if (cdOffset >= totalSize) return { kind: "unreadable" };
+
+  if (cdOffset < windowStart) return { kind: "needFrom", offset: cdOffset };
+
+  const names: string[] = [];
+  let p = cdOffset - windowStart;
+  let totalUncompressed = 0;
+
+  for (let i = 0; i < entryCount; i++) {
+    if (!startsWith(window, [0x50, 0x4b, 0x01, 0x02], p))
+      return { kind: "unreadable" };
+    if (p + 46 > window.length) return { kind: "unreadable" };
+
+    const uncompressed = view.getUint32(p + 24, true);
+    const nameLen = view.getUint16(p + 28, true);
+    const extraLen = view.getUint16(p + 30, true);
+    const commentLen = view.getUint16(p + 32, true);
+    const flags = view.getUint16(p + 8, true);
+
+    if ((flags & 0x0001) !== 0) return { kind: "unreadable" };
+
+    totalUncompressed += uncompressed;
+    if (totalUncompressed > ZIP_MAX_UNCOMPRESSED) return { kind: "unreadable" };
+
+    if (p + 46 + nameLen > window.length) return { kind: "unreadable" };
+    names.push(ascii(window, p + 46, nameLen));
+
+    p += 46 + nameLen + extraLen + commentLen;
+  }
+
+  return { kind: "names", names };
+}
+
+/**
+ * What the first bytes say, without reading the rest of the file.
+ *
+ * A ZIP cannot be identified from its signature alone — docx, pptx, jar and apk
+ * all start `PK\x03\x04` — so it is reported as `zip` and the caller reads the
+ * central directory to decide.
+ */
+export type Signature =
+  | { kind: "mime"; mime: AllowedMime }
+  | { kind: "zip" }
+  | { kind: "unknown"; reason: string };
+
+export function detectSignature(head: Uint8Array): Signature {
+  if (head.length === 0) return { kind: "unknown", reason: "empty file" };
+
+  // %PDF-
+  if (startsWith(head, [0x25, 0x50, 0x44, 0x46, 0x2d])) {
+    return { kind: "mime", mime: "application/pdf" };
+  }
+  if (startsWith(head, [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])) {
+    return { kind: "mime", mime: "image/png" };
+  }
+  if (startsWith(head, [0xff, 0xd8, 0xff])) {
+    return { kind: "mime", mime: "image/jpeg" };
+  }
+  if (
+    startsWith(head, [0x52, 0x49, 0x46, 0x46]) &&
+    startsWith(head, [0x57, 0x45, 0x42, 0x50], 8)
+  ) {
+    return { kind: "mime", mime: "image/webp" };
+  }
+  if (head.length >= 6 && DWG_VERSIONS.has(ascii(head, 0, 6))) {
+    return { kind: "mime", mime: "image/vnd.dwg" };
+  }
+  if (startsWith(head, [0x50, 0x4b, 0x03, 0x04])) {
+    return { kind: "zip" };
+  }
+  return { kind: "unknown", reason: "file type not recognised" };
+}
+
+/** Turns a ZIP's entry names into a verdict. Only xlsx is on the whitelist. */
+export function classifyZipEntries(names: string[]): VerifyResult {
+  if (names.some((n) => n === "xl/workbook.xml" || n.startsWith("xl/"))) {
+    return {
+      ok: true,
+      mime: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    };
+  }
+  if (names.some((n) => n.startsWith("word/"))) {
+    return { ok: false, reason: "Word documents are not accepted" };
+  }
+  if (names.some((n) => n.startsWith("ppt/"))) {
+    return { ok: false, reason: "PowerPoint files are not accepted" };
+  }
+  return { ok: false, reason: "archives are not accepted" };
+}
+
 export function detectFileType(bytes: Uint8Array): VerifyResult {
   if (bytes.length === 0) return { ok: false, reason: "empty file" };
   if (bytes.length > MAX_FILE_BYTES) {
@@ -188,7 +329,7 @@ const MIME_ALIASES: Record<string, AllowedMime> = {
   "application/x-pdf": "application/pdf",
 };
 
-function normaliseDeclared(mime: string): string {
+export function normaliseDeclaredMime(mime: string): string {
   const bare = mime.split(";")[0]?.trim().toLowerCase() ?? "";
   return MIME_ALIASES[bare] ?? bare;
 }
@@ -208,7 +349,7 @@ export function verifyUpload(
   const detected = detectFileType(bytes);
   if (!detected.ok) return detected;
 
-  const declared = normaliseDeclared(declaredMime);
+  const declared = normaliseDeclaredMime(declaredMime);
   if (declared && declared !== detected.mime) {
     return {
       ok: false,

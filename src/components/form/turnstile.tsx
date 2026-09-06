@@ -1,7 +1,13 @@
 "use client";
 
 import Script from "next/script";
-import { useCallback, useImperativeHandle, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 
 import { REQUEST_FORM } from "@/content/request-form";
 
@@ -9,8 +15,19 @@ import { REQUEST_FORM } from "@/content/request-form";
  * Cloudflare Turnstile, invisible mode.
  *
  * The token is fetched at submit rather than at page load, so its short
- * lifetime effectively never elapses while the user is filling the form. The
- * widget renders into the reserved slot the artboard already draws.
+ * lifetime never elapses while the form is being filled.
+ *
+ * Lifecycle, learned the hard way:
+ *
+ * - `execute()` must never be called while a previous call is in flight, or
+ *   Cloudflare warns "already executing" and the second call is dropped. A
+ *   single in-flight guard makes a second request return the first one's
+ *   promise instead of starting another.
+ * - The widget must be `remove()`d on unmount. The success screen swaps this
+ *   component out; without removal Cloudflare later warns "Cannot find Widget"
+ *   and leaks the container.
+ * - A widget that never calls back must not hang the submission, so every
+ *   request has a timeout.
  */
 
 type TurnstileApi = {
@@ -22,10 +39,12 @@ type TurnstileApi = {
       callback: (token: string) => void;
       "error-callback": () => void;
       "expired-callback": () => void;
+      "timeout-callback"?: () => void;
     },
   ) => string;
   execute: (widgetId: string) => void;
   reset: (widgetId: string) => void;
+  remove: (widgetId: string) => void;
 };
 
 declare global {
@@ -34,10 +53,12 @@ declare global {
   }
 }
 
+/** A challenge that never resolves must not hold the submission open. */
+const EXECUTE_TIMEOUT_MS = 20_000;
+
 export type TurnstileHandle = {
   /** Resolves with a fresh token, or null if the widget could not produce one. */
   getToken: () => Promise<string | null>;
-  reset: () => void;
 };
 
 export function Turnstile({
@@ -49,14 +70,22 @@ export function Turnstile({
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | null>(null);
-  const pendingRef = useRef<((token: string | null) => void) | null>(null);
+  const settleRef = useRef<((token: string | null) => void) | null>(null);
+  const inFlightRef = useRef<Promise<string | null> | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [ready, setReady] = useState(false);
 
-  const settle = (token: string | null) => {
-    const resolve = pendingRef.current;
-    pendingRef.current = null;
+  /** Ends the current request exactly once, whatever caused it to end. */
+  const settle = useCallback((token: string | null) => {
+    if (timeoutRef.current !== null) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+    const resolve = settleRef.current;
+    settleRef.current = null;
+    inFlightRef.current = null;
     resolve?.(token);
-  };
+  }, []);
 
   const mount = useCallback(() => {
     if (widgetIdRef.current !== null) return;
@@ -70,34 +99,60 @@ export function Turnstile({
       callback: (token) => settle(token),
       "error-callback": () => settle(null),
       "expired-callback": () => settle(null),
+      "timeout-callback": () => settle(null),
     });
     setReady(true);
-  }, [siteKey]);
+  }, [siteKey, settle]);
+
+  // Remove the widget on unmount. The success screen unmounts this component.
+  useEffect(
+    () => () => {
+      if (timeoutRef.current !== null) clearTimeout(timeoutRef.current);
+      const widgetId = widgetIdRef.current;
+      widgetIdRef.current = null;
+      if (widgetId !== null) {
+        try {
+          window.turnstile?.remove(widgetId);
+        } catch {
+          // Already gone; nothing to clean up.
+        }
+      }
+    },
+    [],
+  );
 
   useImperativeHandle(
     ref,
     () => ({
-      getToken: () =>
-        new Promise((resolve) => {
-          const api = window.turnstile;
-          const widgetId = widgetIdRef.current;
-          if (!api || widgetId === null) {
-            resolve(null);
-            return;
-          }
-          pendingRef.current = resolve;
-          // A widget that has already produced a token must be reset before it
-          // will produce another.
-          api.reset(widgetId);
-          api.execute(widgetId);
-        }),
-      reset: () => {
+      getToken: () => {
+        // Never start a second challenge while one is running: Cloudflare drops
+        // it and warns. The retry path hits this.
+        if (inFlightRef.current) return inFlightRef.current;
+
         const api = window.turnstile;
         const widgetId = widgetIdRef.current;
-        if (api && widgetId !== null) api.reset(widgetId);
+        if (!api || widgetId === null) return Promise.resolve(null);
+
+        const promise = new Promise<string | null>((resolve) => {
+          settleRef.current = resolve;
+          timeoutRef.current = setTimeout(
+            () => settle(null),
+            EXECUTE_TIMEOUT_MS,
+          );
+          // A widget that has already produced a token will not produce another
+          // until it is reset.
+          try {
+            api.reset(widgetId);
+            api.execute(widgetId);
+          } catch {
+            settle(null);
+          }
+        });
+        inFlightRef.current = promise;
+        return promise;
       },
     }),
-    [],
+    [settle],
   );
 
   return (

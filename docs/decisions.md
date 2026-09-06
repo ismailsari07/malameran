@@ -5,6 +5,67 @@ Format: date · decision · why · consequence.
 
 ---
 
+## 2026-09-06 · File verification reads ranges, not whole files, and runs concurrently
+
+Measured before changing anything. Verifying two files took 29s in the browser;
+instrumenting the route gave, for a 2MB PDF and a 69-byte PNG:
+
+| phase | production | dev |
+| --- | --- | --- |
+| download the 2MB PDF | 1044ms | **37219ms** |
+| download the 69-byte PNG | 694ms | 499ms |
+| magic-byte detection | **0.3ms** | 0.3ms |
+
+**It was never the ZIP walk and never the detection** — those are sub-millisecond.
+It was downloading whole files, sequentially. Two things compounded: a 69-byte
+file still costs ~0.5s because the cost is a round trip, not bytes; and in dev,
+buffering a large body through Next's patched `fetch` runs at roughly 18ms per KB,
+which is where 37 of the 38 seconds went.
+
+**Supabase Storage honours HTTP Range** — verified: 206 with a correct
+`Content-Range`, for both prefix (`bytes=0-63`) and suffix (`bytes=-64`) forms.
+
+So verification now reads a 64-byte head, and for a ZIP a 256KB tail — never the
+middle, never the whole file. Size comes from `Content-Range`'s total, which is
+Storage's own number rather than the client's claim. Files are inspected
+concurrently, because the cost is latency.
+
+Fair comparison, same 5 files (2MB PDF, two 1MB ZIPs, a PNG, and a mislabelled
+file), same machine, same server lifetime:
+
+| | run 1 | run 2 | run 3 |
+| --- | --- | --- | --- |
+| whole-file, sequential | 24.1s | 5.1s | 7.0s |
+| ranged, concurrent | 1.79s | 2.16s | 1.88s |
+
+Both detection paths were re-tested against real fixtures and agree on all eight,
+including a `.docx` renamed `.xlsx` and a PNG declared as a PDF.
+
+## 2026-09-06 · Turnstile needs an in-flight guard and removal on unmount
+
+Two console warnings from a real submission: "Call to execute() on a widget that
+is already executing" and "Cannot find Widget … consider using
+turnstile.remove()".
+**Why it mattered:** it happened to work on a first successful submission and
+would have failed on the retry path — the one that only runs when something has
+already gone wrong.
+**Fixed:** a single in-flight promise, so a second `getToken()` returns the first
+one's promise instead of starting a second challenge; `remove()` in an unmount
+effect, because the success screen swaps the component out; and a 20-second
+timeout so a challenge that never calls back cannot hold the submission open.
+The automatic retry no longer resets the widget itself — `getToken()` owns that,
+which is what made the two collide.
+
+## 2026-09-06 · The last step has no advance button, and that guard regressed once
+
+The footer nav's Continue button must not render on step 3, which submits from
+the card body. The guard was written in 7a and lost when that block was rewritten
+in 7b, so step 3 showed both "Sending request…" and "Continue".
+**Consequence:** the guard now carries a comment saying it has regressed before.
+The banner's "Try again" and the card's submit button can both be visible after a
+failure; that is the artboard's own state 4 and is two entry points to one action,
+not two competing actions.
+
 ## 2026-09-06 · The submission order is fixed, and nothing is written before the gates
 
 Turnstile, then the rate limiter, then validation, then the row. A rejected

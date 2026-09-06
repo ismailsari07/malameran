@@ -197,7 +197,9 @@ export function RequestForm({
       return;
     }
 
-    if (lastStep) return; // Submitting is block 7b.
+    // Unreachable: the nav's advance button is hidden on the last step, which
+    // submits from the card body instead.
+    if (lastStep) return;
 
     const next = step + 1;
     setStep(next);
@@ -265,10 +267,10 @@ export function RequestForm({
           fieldErrors?: Errors;
         };
 
-        // The token was spent or expired between issue and use: get a new one
-        // and retry once, silently.
+        // The token was spent or expired between issue and use. getToken()
+        // resets the widget itself, and its in-flight guard means this cannot
+        // collide with the execute() that produced the first token.
         if (body.error === "turnstile-expired" && !isRetryAfterExpiry) {
-          turnstileRef.current?.reset();
           setSubmitting(false);
           void submit(true);
           return;
@@ -638,9 +640,14 @@ export function RequestForm({
           onBack={goBack}
           onNext={goNext}
           nextLabel={
-            step === total - 2
-              ? REQUEST_FORM.nav.review
-              : REQUEST_FORM.nav.continue
+            // The last step submits from the card body; a second advance
+            // button here would be a competing affordance. Regressed once
+            // already when this block was rewritten — keep the guard explicit.
+            lastStep
+              ? null
+              : step === total - 2
+                ? REQUEST_FORM.nav.review
+                : REQUEST_FORM.nav.continue
           }
         />
       </div>
