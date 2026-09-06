@@ -5,6 +5,93 @@ Format: date · decision · why · consequence.
 
 ---
 
+## 2026-09-05 · Deny by default: RLS on, zero policies, plus revoked grants
+
+All four tables have RLS enabled and forced, and **no policies at all**. On top of
+that, `anon` and `authenticated` have every privilege revoked.
+**Why:** there are no accounts in stage A, so the publishable key must be able to
+read and write nothing. RLS is the control; the revoked grants are an independent
+second layer, so a policy added by mistake still has no privilege to exercise.
+**Verified 2026-09-05** against the dev project: reads and writes with the
+publishable key return `42501 permission denied` on all four tables.
+**Consequence:** every write goes through a server route holding the secret key.
+Real policies arrive with accounts in stage B, and the revokes must be revisited
+then rather than left to silently block the new roles.
+
+## 2026-09-05 · Supplier file upload is out of stage A
+
+The Supplier Application artboard's "Company profile or catalogue" field is not
+built, and no polymorphic `submission_files` table exists.
+**Why:** a supplier application is a lead, not a project. What the decision to
+contact a supplier needs is capability, capacity and certifications — a catalogue
+does not change that decision. Suppliers get real accounts and document upload in
+phase 2, where the table design can follow the actual requirement instead of a
+guess at it.
+**Consequence:** `request_files` is scoped to sourcing requests by a real foreign
+key rather than a nullable polymorphic pair. Block 8's form drops that field.
+
+## 2026-09-05 · IP addresses are salted-hashed and never stored on submissions
+
+`ip_hash` and `user_agent` are not columns on either submission table. The rate
+limiter stores `sha256(RATE_LIMIT_IP_SALT + ip)`, truncated, and nothing else.
+**Why:** the limiter already holds what abuse control needs, and the privacy
+policy we shipped says IP is used for exactly that. An unsalted hash of an IPv4
+address is reversible by exhausting four billion possibilities, so the salt is
+what makes it a hash rather than an encoding.
+**Consequence:** `RATE_LIMIT_IP_SALT` is a required env var of at least 32
+characters. **Rotating it resets every active rate-limit window** — acceptable,
+because windows are ten minutes. It must be set, to the same value, in all three
+Vercel environments before block 11. If investigation data is ever needed, that
+is a decision with its own privacy consequences and should be made deliberately.
+
+## 2026-09-05 · File type is decided by the bytes, never the extension or MIME
+
+`src/lib/files/verify.ts` reads magic bytes for all six accepted types. No
+dependency was added.
+**Why:** both the extension and the browser-declared MIME type are
+attacker-controlled. The two awkward formats: **DWG** carries a six-byte version
+code at offset 0 (`AC1014`–`AC1032`), and **XLSX** is a ZIP — `PK\x03\x04` proves
+only "this is a zip", which docx, pptx, jar and apk all satisfy — so the central
+directory is walked and an `xl/` entry required. The walk also rejects encrypted
+archives and caps entry count and declared uncompressed size against zip bombs.
+**Declared vs detected:** a mismatch is a rejection, not a correction. Known
+aliases are normalised first, because an alias is not a lie — `application/acad`
+is a real DWG type and is in the dev bucket's own whitelist.
+**Verified 2026-09-05** against real fixture bytes: all six types accepted, a
+`.docx` rejected where a naive zip check would pass it, a PNG renamed `.pdf`
+rejected, plus the size and empty-file cases.
+
+## 2026-09-05 · The rate limiter fails closed
+
+`check_rate_limit()` increments and tests in one statement, so two concurrent
+requests cannot both read the same count and both proceed. The TypeScript caller
+treats **any** error — a bad key, an unreachable database, a missing function, a
+timeout — as "limit exceeded".
+**Why:** a limiter that admits everyone when it breaks is not a limiter. A request
+with no determinable client address is also refused rather than given a free pass.
+**Shape:** five submissions per IP per endpoint per ten minutes; rows older than
+an hour are deleted opportunistically on roughly one call in twenty, which avoids
+a `pg_cron` dependency. A scheduled job is the stage B refinement.
+**Verified 2026-09-05:** five allowed and the sixth refused; refusal on a wrong
+secret key and on an unreachable host; the publishable key cannot call the
+function at all.
+
+## 2026-09-05 · Storage paths carry neither the filename nor an extension
+
+`requests/{requestId}/{uuid}`. The original filename lives in
+`request_files.original_filename` and is reattached at download time through the
+signed URL's `Content-Disposition`.
+**Why:** a user-supplied filename in a storage path is a path-traversal and
+content-sniffing problem for no benefit.
+**Expiries:** downloads are signed for **300 seconds** — short enough that a URL
+leaked in a log or a forwarded email is worthless within minutes, long enough to
+actually pull 4MB on a bad connection; 60 seconds fails real downloads. Upload
+URLs are fixed by Supabase at **two hours** and the client library exposes no way
+to shorten them.
+**Verified 2026-09-05:** the bucket is `public: false`, its public URL returns
+400, the publishable key cannot read an object, and a URL signed for 5 seconds
+returned 200 immediately and 400 after 9.
+
 ## 2026-09-05 · Template legal text ships, disclosed on the page
 
 `/privacy` and `/terms` carry generic template copy for a Canadian company running

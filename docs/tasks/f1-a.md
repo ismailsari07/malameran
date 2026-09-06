@@ -29,17 +29,17 @@ team by email, and the submitter receives a confirmation.
 - [x] 404 and error pages
 
 ## Sourcing request form
-- [ ] Schema and migration for `sourcing_requests`
+- [x] Schema and migration for `sourcing_requests`
 - [ ] Form UI with all fields from `docs/scope.md`
 - [ ] Server-side validation
-- [ ] File attachment upload with type and size limits
-- [ ] Reference number generated on submit
+- [x] File attachment upload with type and size limits — data layer; UI is block 7
+- [x] Reference number generated on submit
 - [ ] Success and failure states
-- [ ] Bot / spam protection
-- [ ] Rate limiting
+- [x] Bot / spam protection — Turnstile verifier; wired to a route in block 7
+- [x] Rate limiting — Postgres limiter; wired to a route in block 7
 
 ## Supplier application form
-- [ ] Schema and migration for `supplier_applications`
+- [x] Schema and migration for `supplier_applications`
 - [ ] Form UI, validation, success state
 
 ## Email
@@ -93,6 +93,18 @@ team by email, and the submitter receives a confirmation.
       window, privacy-officer requirement, jurisdiction and liability-cap detail
 - [ ] Confirm PIPEDA is the right regime — a BC, Alberta or Quebec footprint changes it
 - [ ] Tell the client at delivery that this text is a template
+
+## Open items carried from the data layer
+
+- [ ] Set `RATE_LIMIT_IP_SALT` in all three Vercel environments before block 11.
+      At least 32 characters; the same value in each. Rotating it resets every
+      active rate-limit window
+- [ ] Revisit the `revoke all ... from anon, authenticated` on all four tables when
+      accounts land in stage B — the new roles will need grants alongside policies
+- [ ] The dev `request-files` bucket allows `application/acad` as a seventh MIME
+      type. Harmless — the verifier normalises it to `image/vnd.dwg` — but the
+      production bucket should be created with the same list, deliberately
+- [ ] Replace the limiter's opportunistic cleanup with a scheduled job in stage B
 
 ## Open items carried from the shared-components block
 

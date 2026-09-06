@@ -23,6 +23,16 @@ const serverSchema = z.object({
   EMAIL_FROM: z.email(),
   TEAM_NOTIFICATION_EMAIL: z.email(),
   TURNSTILE_SECRET_KEY: z.string().min(1),
+  /**
+   * Salt for the rate limiter's IP hash. An unsalted SHA-256 of an IPv4
+   * address is reversible by brute force in seconds, so the salt is what makes
+   * it a hash rather than an encoding.
+   *
+   * Rotating it resets every active rate-limit window. Windows are minutes
+   * long, so that is acceptable — but it must be set, and set identically, in
+   * all three Vercel environments.
+   */
+  RATE_LIMIT_IP_SALT: z.string().min(32),
 });
 
 function parse<T extends z.ZodType>(schema: T, source: unknown, label: string) {
@@ -62,6 +72,7 @@ export const serverEnv = parse(
     EMAIL_FROM: process.env.EMAIL_FROM,
     TEAM_NOTIFICATION_EMAIL: process.env.TEAM_NOTIFICATION_EMAIL,
     TURNSTILE_SECRET_KEY: process.env.TURNSTILE_SECRET_KEY,
+    RATE_LIMIT_IP_SALT: process.env.RATE_LIMIT_IP_SALT,
   },
   "server",
 );
