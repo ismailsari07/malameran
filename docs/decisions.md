@@ -5,6 +5,60 @@ Format: date · decision · why · consequence.
 
 ---
 
+## 2026-09-06 · The submission order is fixed, and nothing is written before the gates
+
+Turnstile, then the rate limiter, then validation, then the row. A rejected
+submission leaves no trace at all.
+**Why the order matters:** writing first and validating after would let an
+unverified or rate-limited caller fill the table with rows that then have to be
+cleaned up. Verified end to end: a submission with no token, an invalid token, a
+tampered payload, six file intents and an oversize intent each leave the row
+count unchanged.
+**Consequence:** once the row exists every later failure surfaces the reference.
+A user is never told their request failed when it is in the database — the
+"after-write" banner says it was received and names the reference.
+
+## 2026-09-06 · `SUBMISSION_TOKEN_SECRET` is its own secret
+
+An HMAC over `requestId + expiry`, ten-minute lifetime, gating the
+file-verification endpoint.
+**Why not the request id alone:** a v4 UUID is unguessable, but "unguessable
+identifier as bearer token" ages badly — ids leak into logs, referrers and
+support tickets in ways secrets do not.
+**Why its own secret rather than derived from `SUPABASE_SECRET_KEY`:** the
+Supabase key is rotated for reasons unrelated to this token. Coupling the two
+schedules means an unrelated rotation silently invalidates in-flight
+submissions, and someone spends an hour working out why.
+**Rotating it invalidates tokens issued in the last ten minutes.** Bounded blast
+radius, but do it deliberately. Must be set in all three Vercel environments,
+alongside `RATE_LIMIT_IP_SALT`.
+
+## 2026-09-06 · Turnstile's token is fetched at submit, not at page load
+
+`turnstile.execute()` runs when the user clicks. If the server still reports
+`timeout-or-duplicate`, the widget resets and the submission retries once,
+silently, before anything surfaces.
+**Why:** the token lives about five minutes and this form takes longer than that
+to fill. Fetching at page load would fail for any user who reads the questions.
+
+## 2026-09-06 · The success screen renders in place, not at its own route
+
+**Why:** the reference would have to travel in the URL, where it lands in server
+logs and referrer headers, and a `/request/success` reached without one is a
+worse failure than losing it on refresh.
+**Consequence:** a refresh loses the screen. Consistent with there being no
+partial save and no resume in stage A.
+
+## 2026-09-06 · The success screen does not claim an email was sent
+
+The artboard reads "A confirmation email is on its way to {email}". Nothing
+sends until block 9.
+**Why:** telling someone to expect an email that never arrives is worse than
+saying nothing — they wait, then assume the request was lost. The copy says what
+is true: nothing more is needed, and the reference identifies the request.
+**Consequence:** marked `TODO(copy) — BLOCK 9` in `src/content/request-success.ts`
+to restore the email wording once Resend is wired.
+
 ## 2026-09-06 · Grounds are applied only through `.ground-*`, and a check enforces it
 
 The `sidebar` Card tone used a background utility pointed at `--dark-quiet`,

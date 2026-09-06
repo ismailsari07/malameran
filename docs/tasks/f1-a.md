@@ -31,12 +31,12 @@ team by email, and the submitter receives a confirmation.
 ## Sourcing request form
 - [x] Schema and migration for `sourcing_requests`
 - [x] Form UI with all fields from `docs/scope.md`
-- [ ] Server-side validation — schema exists and the client uses it; the route is 7b
-- [x] File attachment upload with type and size limits — data layer; UI is block 7
+- [x] Server-side validation
+- [x] File attachment upload with type and size limits
 - [x] Reference number generated on submit
-- [ ] Success and failure states
-- [x] Bot / spam protection — Turnstile verifier; wired to a route in block 7
-- [x] Rate limiting — Postgres limiter; wired to a route in block 7
+- [x] Success and failure states
+- [x] Bot / spam protection
+- [x] Rate limiting
 
 ## Supplier application form
 - [x] Schema and migration for `supplier_applications`
@@ -80,6 +80,17 @@ team by email, and the submitter receives a confirmation.
 - [ ] Revisit `lg: 1024px` when Home is built: the 82px hero is authored at 1440 and
       currently applies from 1024 up
 - [ ] Confirm the Supabase key names against the real project when it is created
+
+## Open items carried from the submission block
+
+- [ ] Set `SUBMISSION_TOKEN_SECRET` in all three Vercel environments before block 11,
+      alongside `RATE_LIMIT_IP_SALT`. At least 32 characters. Rotating it invalidates
+      submission tokens issued in the last ten minutes
+- [ ] Restore the confirmation-email sentence on the success screen once Resend sends
+      — `TODO(copy) — BLOCK 9` in `src/content/request-success.ts`
+- [ ] A file that fails verification is deleted and its row marked rejected, but the
+      buyer only learns which files were refused on the success screen. Once email
+      exists, say it in the confirmation too
 
 ## Legal copy — must be replaced
 

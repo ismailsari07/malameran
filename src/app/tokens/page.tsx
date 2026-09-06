@@ -592,6 +592,14 @@ export default function TokensPage() {
               White fill inside a --line border — the form card on a paper page.
             </p>
           </Card>
+          <Card tone="error" pad="18-20" radius={14}>
+            <p className="t-banner-heading text-err-heading">
+              error — the failed-submission banner
+            </p>
+            <p className="t-fineprint text-err-body mt-2">
+              --err-border on --err-bg. Used with primary-retry.
+            </p>
+          </Card>
           <Card tone="info" pad="16-18" radius={14}>
             <p className="t-body text-text-body-alt">
               info — --line on --surface-info. The notice treatment on the form

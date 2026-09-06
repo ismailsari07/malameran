@@ -96,10 +96,12 @@ export function Button({
   href,
   type = "button",
   disabled,
+  onClick,
   ...props
 }: CommonProps & {
   href?: string;
   type?: "button" | "submit" | "reset";
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
   disabled?: boolean;
 }) {
   const { children, submitting = false } = props;
@@ -121,6 +123,7 @@ export function Button({
   return (
     <button
       type={type}
+      onClick={onClick}
       disabled={disabled ?? submitting}
       aria-busy={submitting || undefined}
       className={classes(props)}

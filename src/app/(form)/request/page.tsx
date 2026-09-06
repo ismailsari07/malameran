@@ -4,6 +4,7 @@ import { Container } from "@/components/layout/container";
 import { RequestForm } from "@/components/sections/request-form";
 import { RequestSidebar } from "@/components/sections/request-sidebar";
 import { REQUEST_FORM, REQUEST_META } from "@/content/request-form";
+import { publicEnv } from "@/lib/env";
 
 export const metadata: Metadata = {
   title: REQUEST_META.title,
@@ -39,7 +40,9 @@ export default function RequestPage() {
             <RequestSidebar />
           </div>
           <div className="lg:order-1">
-            <RequestForm />
+            <RequestForm
+              turnstileSiteKey={publicEnv.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+            />
           </div>
         </div>
       </Container>

@@ -14,6 +14,11 @@ export type FieldTone = "light" | "dark";
 export type ControlState = {
   tone?: FieldTone;
   invalid?: boolean;
+  /**
+   * A control inside a locked form. The wrapping <fieldset disabled> already
+   * removes interaction; this is the artboard's readonly fill on top of it.
+   */
+  locked?: boolean;
 };
 
 const BASE = "rounded-12 w-full border outline-none transition-colors t-body";
@@ -28,15 +33,20 @@ const LIGHT_REST =
 const LIGHT_INVALID =
   "border-err bg-err-field-bg text-ink placeholder:text-placeholder focus:focus-ring";
 
+/** Submitting: the field keeps its border but takes the info surface. */
+const LIGHT_LOCKED = "border-border-field bg-surface-info text-ink";
+
 export function controlClasses({
   tone = "light",
   invalid = false,
+  locked = false,
 }: ControlState = {}) {
   if (tone === "dark") {
     // Not implemented in block 7a. Contact's dark form styles its own fields
     // inline; unifying them is block 8's call.
     throw new Error("the dark field tone is not implemented yet");
   }
+  if (locked) return cn(BASE, LIGHT_LOCKED);
   return cn(BASE, invalid ? LIGHT_INVALID : LIGHT_REST);
 }
 

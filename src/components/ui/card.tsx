@@ -18,6 +18,8 @@ const TONES = {
   info: "border border-line bg-surface-info",
   /** The white form card on a paper page. */
   surface: "border border-line bg-surface",
+  /** A failed-submission or validation banner. */
+  error: "border border-err-border bg-err-bg",
   /**
    * The dark sidebar card beside a form on a light page.
    *
@@ -71,6 +73,7 @@ const PADDING = {
   "36-34-40": "px-8.5 pt-9 pb-10",
   "28-22-30": "px-5.5 pt-7 pb-7.5",
   "18-20": "px-5 py-4.5",
+  "28-30": "px-7.5 py-7",
   "32-30-34": "px-7.5 pt-8 pb-8.5",
   "36-40-40": "px-10 pt-9 pb-10",
   "44-44-48": "px-11 pt-11 pb-12",
@@ -97,6 +100,7 @@ const PADDING_LG = {
   "36-34-40": "lg:px-8.5 lg:pt-9 lg:pb-10",
   "28-22-30": "lg:px-5.5 lg:pt-7 lg:pb-7.5",
   "18-20": "lg:px-5 lg:py-4.5",
+  "28-30": "lg:px-7.5 lg:py-7",
   "32-30-34": "lg:px-7.5 lg:pt-8 lg:pb-8.5",
   "36-40-40": "lg:px-10 lg:pt-9 lg:pb-10",
   "44-44-48": "lg:px-11 lg:pt-11 lg:pb-12",

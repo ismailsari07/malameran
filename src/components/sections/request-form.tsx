@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 
 import { ChipsField } from "@/components/form/chips-field";
-import { FileField } from "@/components/form/file-field";
+import { FileField, type UploadState } from "@/components/form/file-field";
 import { FormNav } from "@/components/form/form-nav";
 import { StepProgress } from "@/components/form/step-progress";
 import {
@@ -12,10 +12,15 @@ import {
   TextField,
   TextareaField,
 } from "@/components/form/text-fields";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Rule } from "@/components/ui/rule";
+import { Turnstile, type TurnstileHandle } from "@/components/form/turnstile";
+import { uploadToSignedUrl } from "@/components/form/upload";
 import { REQUEST_FORM } from "@/content/request-form";
 import { sourcingRequestSchema } from "@/lib/schemas/sourcing-request";
+
+import { RequestSuccess } from "./request-success";
 
 /**
  * The sourcing request form.
@@ -23,8 +28,11 @@ import { sourcingRequestSchema } from "@/lib/schemas/sourcing-request";
  * The only client component on /request — the page, its heading and the
  * sidebar stay on the server.
  *
- * BLOCK 7A: collects, validates and holds state. There is no submit handler,
- * no upload, no Turnstile and no database. The submit control is inert.
+ * Submission order is fixed and must not be rearranged: the server verifies
+ * Turnstile and the rate limiter BEFORE writing anything, so a rejected
+ * submission leaves no trace. Once the row exists, every failure path still
+ * surfaces the reference — nobody is told their request failed when it is in
+ * the database.
  *
  * There is no partial save and no resume: leaving the page loses the draft.
  * That is deliberate for stage A.
@@ -117,7 +125,15 @@ function validateStep(step: number, values: Values): Errors {
   return errors;
 }
 
-export function RequestForm() {
+type Banner =
+  | { kind: "rate-limited" | "turnstile" | "server" | "validation" }
+  | { kind: "after-write"; reference: string };
+
+export function RequestForm({
+  turnstileSiteKey,
+}: {
+  turnstileSiteKey: string;
+}) {
   const [step, setStep] = useState(0);
   const [values, setValues] = useState<Values>(EMPTY);
   const [files, setFiles] = useState<File[]>([]);
@@ -125,7 +141,16 @@ export function RequestForm() {
   const [issueCounts, setIssueCounts] = useState<number[]>([0, 0, 0]);
   const [announcement, setAnnouncement] = useState("");
 
+  const [submitting, setSubmitting] = useState(false);
+  const [banner, setBanner] = useState<Banner | null>(null);
+  const [uploads, setUploads] = useState<Record<number, UploadState>>({});
+  const [success, setSuccess] = useState<{
+    reference: string;
+    rejectedFiles: { filename: string; reason: string }[];
+  } | null>(null);
+
   const cardRef = useRef<HTMLDivElement>(null);
+  const turnstileRef = useRef<TurnstileHandle>(null);
   const total = REQUEST_FORM.steps.length;
   const lastStep = step === total - 1;
 
@@ -182,6 +207,159 @@ export function RequestForm() {
     );
   };
 
+  /**
+   * The submission, in the fixed order. Each numbered comment is a step from
+   * the flow in docs/decisions.md.
+   */
+  const submit = async (isRetryAfterExpiry = false) => {
+    // Client validation first: it costs nothing and spares a round trip. The
+    // server runs the same schema again as the actual control.
+    const stepErrors = validateStep(step, values);
+    if (Object.keys(stepErrors).length > 0) {
+      setErrors(stepErrors);
+      setIssueCounts((prev) =>
+        prev.map((c, i) => (i === step ? Object.keys(stepErrors).length : c)),
+      );
+      focusFirstError(stepErrors);
+      return;
+    }
+
+    setSubmitting(true);
+    setBanner(null);
+
+    // 1. A fresh token at submit time, so its short lifetime never elapses
+    //    while the form is being filled.
+    const token = await turnstileRef.current?.getToken();
+    if (!token) {
+      setSubmitting(false);
+      setBanner({ kind: "turnstile" });
+      return;
+    }
+
+    let created: {
+      requestId: string;
+      reference: string;
+      submissionToken: string;
+      uploads: { index: number; signedUrl: string }[];
+    };
+
+    try {
+      // 2-6. Verify, limit, validate, insert, sign uploads.
+      const response = await fetch("/api/request", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          turnstileToken: token,
+          values: toSchemaInput(values),
+          files: files.map((file) => ({
+            filename: file.name,
+            mimeType: file.type || undefined,
+            sizeBytes: file.size,
+          })),
+        }),
+      });
+
+      if (!response.ok) {
+        const body = (await response.json().catch(() => ({}))) as {
+          error?: string;
+          fieldErrors?: Errors;
+        };
+
+        // The token was spent or expired between issue and use: get a new one
+        // and retry once, silently.
+        if (body.error === "turnstile-expired" && !isRetryAfterExpiry) {
+          turnstileRef.current?.reset();
+          setSubmitting(false);
+          void submit(true);
+          return;
+        }
+
+        setSubmitting(false);
+        if (body.error === "validation" && body.fieldErrors) {
+          setErrors(body.fieldErrors);
+          setIssueCounts((prev) =>
+            prev.map((c, i) =>
+              i === step ? Object.keys(body.fieldErrors ?? {}).length : c,
+            ),
+          );
+          setBanner({ kind: "validation" });
+          focusFirstError(body.fieldErrors);
+          return;
+        }
+        setBanner({
+          kind:
+            body.error === "rate-limited"
+              ? "rate-limited"
+              : body.error === "turnstile" || body.error === "turnstile-expired"
+                ? "turnstile"
+                : "server",
+        });
+        return;
+      }
+
+      created = await response.json();
+    } catch {
+      setSubmitting(false);
+      setBanner({ kind: "server" });
+      return;
+    }
+
+    // From here the row EXISTS. Every remaining failure path must surface the
+    // reference rather than telling the user their request failed.
+    let rejectedFiles: { filename: string; reason: string }[] = [];
+
+    try {
+      // 7. Direct to Storage, one signed URL per file.
+      await Promise.all(
+        created.uploads.map(async (upload) => {
+          const file = files[upload.index];
+          if (!file) return;
+          const handle = uploadToSignedUrl({
+            signedUrl: upload.signedUrl,
+            file,
+            onProgress: (percent) =>
+              setUploads((prev) => ({
+                ...prev,
+                [upload.index]: { percent, cancel: handle.cancel },
+              })),
+          });
+          setUploads((prev) => ({
+            ...prev,
+            [upload.index]: { percent: 0, cancel: handle.cancel },
+          }));
+          await handle.done.catch(() => undefined);
+        }),
+      );
+
+      // 8-9. Tell the server the uploads finished; it verifies the bytes and
+      //      deletes anything that fails.
+      const verified = await fetch("/api/request/files", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          requestId: created.requestId,
+          submissionToken: created.submissionToken,
+        }),
+      });
+      if (verified.ok) {
+        const body = (await verified.json()) as {
+          rejected?: { filename: string; reason: string }[];
+        };
+        rejectedFiles = body.rejected ?? [];
+      }
+    } catch {
+      // The request is saved. Say so, with its reference.
+      setSubmitting(false);
+      setBanner({ kind: "after-write", reference: created.reference });
+      return;
+    }
+
+    // 10. Success.
+    setSubmitting(false);
+    setSuccess({ reference: created.reference, rejectedFiles });
+    setAnnouncement(`Request received. Reference ${created.reference}.`);
+  };
+
   const goBack = () => {
     if (step === 0) return;
     const previous = step - 1;
@@ -195,6 +373,31 @@ export function RequestForm() {
   const need = REQUEST_FORM.need;
   const requirements = REQUEST_FORM.requirements;
   const contact = REQUEST_FORM.contact;
+
+  if (success) {
+    return (
+      <RequestSuccess
+        reference={success.reference}
+        rejectedFiles={success.rejectedFiles}
+      />
+    );
+  }
+
+  const bannerCopy =
+    banner === null
+      ? null
+      : banner.kind === "rate-limited"
+        ? REQUEST_FORM.errors.rateLimited
+        : banner.kind === "turnstile"
+          ? REQUEST_FORM.errors.turnstile
+          : banner.kind === "validation"
+            ? REQUEST_FORM.errors.validation
+            : banner.kind === "after-write"
+              ? {
+                  heading: REQUEST_FORM.errors.afterWrite.heading,
+                  body: REQUEST_FORM.errors.afterWrite.body(banner.reference),
+                }
+              : REQUEST_FORM.errors.server;
 
   return (
     <Card
@@ -214,8 +417,48 @@ export function RequestForm() {
           {announcement}
         </p>
 
-        {/* Nothing submits in this block; the fieldset is where 7b will lock. */}
-        <fieldset className="min-w-0 border-0 p-0">
+        {bannerCopy ? (
+          <Card
+            tone={banner?.kind === "rate-limited" ? "info" : "error"}
+            pad="18-20"
+            radius={14}
+            className="mb-6"
+          >
+            <p
+              className={
+                banner?.kind === "rate-limited"
+                  ? "t-banner-heading text-ink"
+                  : "t-banner-heading text-err-heading"
+              }
+            >
+              {bannerCopy.heading}
+            </p>
+            <p
+              className={
+                banner?.kind === "rate-limited"
+                  ? "t-fineprint text-text-body-alt mt-2"
+                  : "t-fineprint text-err-body mt-2"
+              }
+            >
+              {bannerCopy.body}
+            </p>
+            {banner?.kind === "server" || banner?.kind === "turnstile" ? (
+              <Button
+                variant="primary-retry"
+                className="mt-4"
+                onClick={() => void submit()}
+              >
+                {REQUEST_FORM.errors.retry}
+              </Button>
+            ) : null}
+          </Card>
+        ) : null}
+
+        {/* The whole form locks while submitting: native disabled semantics. */}
+        <fieldset
+          disabled={submitting}
+          className="min-w-0 border-0 p-0 disabled:pointer-events-none disabled:opacity-50"
+        >
           {step === 0 ? (
             <div className="flex flex-col gap-5.5 lg:gap-6.5">
               <TextareaField
@@ -314,6 +557,8 @@ export function RequestForm() {
                 label={requirements.files.label}
                 value={files}
                 onChange={setFiles}
+                uploads={uploads}
+                locked={submitting}
               />
             </div>
           ) : null}
@@ -370,21 +615,16 @@ export function RequestForm() {
               />
 
               <div>
-                {/* Inert until block 7b wires the route, upload and Turnstile. */}
-                <button
-                  type="button"
-                  disabled
-                  className="t-btn text-on-accent/55 rounded-14 w-full cursor-not-allowed bg-(--accent-disabled) px-7.5 py-[19px]"
+                <Button
+                  block
+                  submitting={submitting}
+                  onClick={() => void submit()}
                 >
-                  {contact.submitLabel}
-                </button>
-                <div className="rounded-12 border-border-reserved mt-3.5 flex min-h-[78px] items-center justify-center border border-dashed px-4 text-center">
-                  <p className="t-hint text-disabled">
-                    {contact.challengeSlot}
-                  </p>
-                </div>
+                  {submitting ? contact.submittingLabel : contact.submitLabel}
+                </Button>
+                <Turnstile ref={turnstileRef} siteKey={turnstileSiteKey} />
                 <p className="t-node-body text-muted mt-3.5 text-center">
-                  {contact.reassurance}
+                  {submitting ? contact.submittingNote : contact.reassurance}
                 </p>
               </div>
             </div>
@@ -394,6 +634,7 @@ export function RequestForm() {
         <FormNav
           current={step}
           total={total}
+          disabled={submitting}
           onBack={goBack}
           onNext={goNext}
           nextLabel={

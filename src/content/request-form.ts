@@ -79,8 +79,10 @@ export const REQUEST_FORM = {
       constraints:
         "PDF, images, DWG or spreadsheets · up to 4MB per file · 5 files maximum",
       removeLabel: "Remove",
-      /** Nothing uploads until block 7b, so the row cannot claim progress. */
       readyLabel: "ready to send",
+      uploadingLabel: (percent: number) => `uploading ${percent}%`,
+      uploadedLabel: "uploaded",
+      cancelLabel: "Cancel",
       rejectedTitle: (name: string) => `${name} could not be added`,
       rejectedBody:
         "Accepted: PDF, images, DWG or spreadsheets, up to 4MB per file, 5 files maximum.",
@@ -99,6 +101,8 @@ export const REQUEST_FORM = {
         "Timelines, packaging, existing supplier history — anything that gives us context.",
     },
     submitLabel: "Send request",
+    submittingLabel: "Sending request…",
+    submittingNote: "Do not close this page — this takes a few seconds.",
     /** Turnstile mounts here in block 7b. */
     challengeSlot:
       "Reserved for a verification challenge — appears only if triggered",
@@ -115,6 +119,33 @@ export const REQUEST_FORM = {
   },
 
   optionalTag: "Optional",
+
+  /** Failure banners. Each cause reads differently on purpose. */
+  errors: {
+    validation: {
+      heading: "Some details need checking.",
+      body: "Go back and fix the highlighted fields, then send again.",
+    },
+    rateLimited: {
+      heading: "We have already received a few requests from this connection.",
+      body: "Please wait about 15 minutes before sending another, or write to info@malameran.com and we will pick it up from there.",
+    },
+    turnstile: {
+      heading: "We could not verify that you are human.",
+      body: "This is usually a browser extension or a network filter. Try again, or write to info@malameran.com.",
+    },
+    server: {
+      heading: "We could not send your request.",
+      body: "Nothing you typed has been lost. Try again, or email it to info@malameran.com.",
+    },
+    /** The row exists; only a later step failed. Never say it failed. */
+    afterWrite: {
+      heading: "Your request was received.",
+      body: (reference: string) =>
+        `It is saved under ${reference}. Something went wrong afterwards, so if you attached files it is worth sending them by reply.`,
+    },
+    retry: "Try again",
+  },
 
   sidebar: {
     eyebrow: "What happens next",

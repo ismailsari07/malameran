@@ -33,6 +33,19 @@ const serverSchema = z.object({
    * all three Vercel environments.
    */
   RATE_LIMIT_IP_SALT: z.string().min(32),
+  /**
+   * HMAC key for the submission token that ties the file-verification call to
+   * the request row it belongs to.
+   *
+   * Deliberately its own secret rather than something derived from
+   * SUPABASE_SECRET_KEY: the Supabase key gets rotated for reasons that have
+   * nothing to do with this token, and coupling the two schedules means an
+   * unrelated rotation silently invalidates in-flight submissions.
+   *
+   * Rotating this invalidates tokens issued in the last ten minutes — bounded
+   * blast radius, but do it deliberately.
+   */
+  SUBMISSION_TOKEN_SECRET: z.string().min(32),
 });
 
 function parse<T extends z.ZodType>(schema: T, source: unknown, label: string) {
@@ -73,6 +86,7 @@ export const serverEnv = parse(
     TEAM_NOTIFICATION_EMAIL: process.env.TEAM_NOTIFICATION_EMAIL,
     TURNSTILE_SECRET_KEY: process.env.TURNSTILE_SECRET_KEY,
     RATE_LIMIT_IP_SALT: process.env.RATE_LIMIT_IP_SALT,
+    SUBMISSION_TOKEN_SECRET: process.env.SUBMISSION_TOKEN_SECRET,
   },
   "server",
 );

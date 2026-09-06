@@ -12,8 +12,8 @@ import { FieldShell, type FieldShellProps } from "./field-shell";
  * The dropzone and its file list.
  *
  * Files are held as File objects in memory and uploaded only on final submit,
- * so no orphaned object can exist in storage. In this block nothing uploads at
- * all — block 7b adds the upload and the progress track.
+ * so no orphaned object can exist in storage. Once submission starts each row
+ * shows the artboard's 3px track, its percentage and a Cancel affordance.
  *
  * These checks are a convenience. The server re-checks the count, the size and
  * the actual bytes of every file; see src/lib/files/verify.ts.
@@ -38,13 +38,25 @@ function rejectionFor(file: File, existing: number): string | null {
   return null;
 }
 
+export type UploadState = {
+  /** 0-100 while uploading; absent before an upload starts. */
+  percent?: number;
+  cancel?: () => void;
+};
+
 export function FileField({
   value,
   onChange,
+  uploads = {},
+  locked = false,
   ...shell
 }: Omit<FieldShellProps, "children"> & {
   value: readonly File[];
   onChange: (files: File[]) => void;
+  /** Per-file upload progress, keyed by index. */
+  uploads?: Record<number, UploadState>;
+  /** During submission the list is read-only apart from Cancel. */
+  locked?: boolean;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [rejected, setRejected] = useState<{
@@ -157,29 +169,59 @@ export function FileField({
 
           {value.length > 0 ? (
             <ul className="mt-3 flex flex-col gap-2.5">
-              {value.map((file, index) => (
-                <li
-                  key={`${file.name}-${file.size}`}
-                  className="rounded-12 border-line bg-surface flex items-center justify-between gap-4 border px-4 py-3.5"
-                >
-                  <div className="min-w-0">
-                    <p className="t-label text-text-label truncate">
-                      {file.name}
-                    </p>
-                    <p className="t-hint text-text-small mt-1">
-                      {formatSize(file.size)} · {copy.readyLabel}
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => remove(index)}
-                    className="t-btn-xs border-line text-muted rounded-8 hover:text-err hover:border-err-border-hover focus-visible:focus-outline shrink-0 border px-3 py-[7px] transition-colors"
+              {value.map((file, index) => {
+                const upload = uploads[index];
+                const uploading =
+                  upload?.percent !== undefined && upload.percent < 100;
+                const meta = uploading
+                  ? copy.uploadingLabel(upload?.percent ?? 0)
+                  : upload?.percent === 100
+                    ? copy.uploadedLabel
+                    : copy.readyLabel;
+                return (
+                  <li
+                    key={`${file.name}-${file.size}`}
+                    className="rounded-12 border-line bg-surface border px-4 py-3.5"
                   >
-                    {copy.removeLabel}
-                    <span className="sr-only"> {file.name}</span>
-                  </button>
-                </li>
-              ))}
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="min-w-0">
+                        <p className="t-label text-text-label truncate">
+                          {file.name}
+                        </p>
+                        <p className="t-hint text-text-small mt-1">
+                          {formatSize(file.size)} · {meta}
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          uploading ? upload?.cancel?.() : remove(index)
+                        }
+                        disabled={locked && !uploading}
+                        className="t-btn-xs border-line text-muted rounded-8 hover:text-err hover:border-err-border-hover focus-visible:focus-outline shrink-0 border px-3 py-[7px] transition-colors disabled:cursor-not-allowed"
+                      >
+                        {uploading ? copy.cancelLabel : copy.removeLabel}
+                        <span className="sr-only"> {file.name}</span>
+                      </button>
+                    </div>
+                    {upload?.percent === undefined ? null : (
+                      <div
+                        className="bg-track rounded-2 mt-3 h-[3px]"
+                        role="progressbar"
+                        aria-valuenow={upload.percent}
+                        aria-valuemin={0}
+                        aria-valuemax={100}
+                        aria-label={`Uploading ${file.name}`}
+                      >
+                        <div
+                          className="bg-accent rounded-2 h-[3px] transition-[width]"
+                          style={{ width: `${upload.percent}%` }}
+                        />
+                      </div>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
           ) : null}
         </>
