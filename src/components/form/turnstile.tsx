@@ -15,10 +15,18 @@ import { REQUEST_FORM } from "@/content/request-form";
  * Cloudflare Turnstile, invisible mode.
  *
  * The token is fetched at submit rather than at page load, so its short
- * lifetime never elapses while the form is being filled.
+ * lifetime never elapses while the form is being filled. That is what
+ * `execution: "execute"` buys, and it is not optional here — see below.
  *
  * Lifecycle, learned the hard way:
  *
+ * - `execution` must be set to "execute". It defaults to "render", and on that
+ *   default Cloudflare arms the challenge itself: once when `render()` builds
+ *   the widget, and again inside `reset()`. Our own `execute()` then arrives at
+ *   a widget that is already executing, so it logs "already executing" and
+ *   returns without doing anything — the token that comes back is the one
+ *   `reset()` asked for. On "execute" neither of those happens and our call is
+ *   the only one.
  * - `execute()` must never be called while a previous call is in flight, or
  *   Cloudflare warns "already executing" and the second call is dropped. A
  *   single in-flight guard makes a second request return the first one's
@@ -36,6 +44,7 @@ type TurnstileApi = {
     options: {
       sitekey: string;
       size?: "invisible" | "normal" | "flexible";
+      execution?: "render" | "execute";
       callback: (token: string) => void;
       "error-callback": () => void;
       "expired-callback": () => void;
@@ -96,6 +105,9 @@ export function Turnstile({
     widgetIdRef.current = api.render(container, {
       sitekey: siteKey,
       size: "invisible",
+      // Do not start a challenge here. The default, "render", would run one at
+      // page load and collide with the one we ask for at submit.
+      execution: "execute",
       callback: (token) => settle(token),
       "error-callback": () => settle(null),
       "expired-callback": () => settle(null),
@@ -140,7 +152,11 @@ export function Turnstile({
             EXECUTE_TIMEOUT_MS,
           );
           // A widget that has already produced a token will not produce another
-          // until it is reset.
+          // until it is reset, so the second submit needs this. `reset()`
+          // clears the stored response and swaps in a fresh challenge iframe
+          // whatever the execution mode; only the self-arming half of it is
+          // conditional on "render". Our `execute()` then queues while the new
+          // iframe is initialising and is flushed when it reports ready.
           try {
             api.reset(widgetId);
             api.execute(widgetId);

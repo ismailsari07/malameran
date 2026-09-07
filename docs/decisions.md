@@ -5,6 +5,26 @@ Format: date · decision · why · consequence.
 
 ---
 
+## 2026-09-07 · Turnstile is rendered with `execution: "execute"`
+
+The `render()` options set `execution: "execute"`. Cloudflare's default is
+`"render"`, and on that default the widget arms its own challenge twice: once
+when `render()` builds it (`isExecuted: pe, isExecuting: pe`, where
+`pe = params.execution === "render"`) and again inside `reset()`, whose predicate
+returns true unconditionally in that mode. Our own `execute()` then arrived at a
+widget that was already executing, logged "Call to execute() on a widget that is
+already executing", and returned without doing anything.
+**Why it mattered:** it worked, but not for the reason the code claimed. The
+token that came back was the one `reset()` had asked for; our `execute()` had
+been a no-op since it was written. A challenge also ran at page load and its
+token was discarded, which is exactly what the component's comment said we were
+avoiding.
+**Consequence:** `reset()` before `execute()` stays — it clears the stored
+response and swaps in a fresh challenge iframe regardless of execution mode, and
+the second submit needs that. Only its self-arming half was conditional. The
+in-flight promise guard also stays: it never had anything to do with this
+warning, but it is the right guard for the retry path.
+
 ## 2026-09-06 · File verification reads ranges, not whole files, and runs concurrently
 
 Measured before changing anything. Verifying two files took 29s in the browser;
@@ -55,6 +75,10 @@ effect, because the success screen swaps the component out; and a 20-second
 timeout so a challenge that never calls back cannot hold the submission open.
 The automatic retry no longer resets the widget itself — `getToken()` owns that,
 which is what made the two collide.
+
+**Superseded in part on 2026-09-07:** the in-flight guard did not cause the
+"already executing" warning to stop, because it was never the cause. See the
+`execution: "execute"` entry above.
 
 ## 2026-09-06 · The last step has no advance button, and that guard regressed once
 
