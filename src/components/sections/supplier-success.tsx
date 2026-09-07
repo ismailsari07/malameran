@@ -18,7 +18,14 @@ import { SUPPLIER_SUCCESS } from "@/content/supplier-success";
  * and a component parameterised across all of that is harder to read than two
  * that each say what they render.
  */
-export function SupplierSuccess({ reference }: { reference: string }) {
+export function SupplierSuccess({
+  reference,
+  email,
+}: {
+  reference: string;
+  /** The address the confirmation went to — named on screen, per the artboard. */
+  email: string;
+}) {
   return (
     <div className="mx-auto max-w-[760px]">
       <Eyebrow tone="paper">{SUPPLIER_SUCCESS.eyebrow}</Eyebrow>
@@ -51,7 +58,7 @@ export function SupplierSuccess({ reference }: { reference: string }) {
       </Card>
 
       <p className="t-body text-muted mt-7">
-        {SUPPLIER_SUCCESS.keepReference(reference)}
+        {SUPPLIER_SUCCESS.confirmationEmail(email)}
       </p>
 
       <p className="mt-8.5">

@@ -5,6 +5,66 @@ Format: date · decision · why · consequence.
 
 ---
 
+## 2026-09-07 · Email sends from `after()`, never from the request path
+
+Both submission routes schedule their sends with `after()` from `next/server`,
+once the response has been flushed and its shape decided.
+**Why:** a submission that reached the database succeeded. Resend being down,
+rate-limiting us or rejecting an address must never turn a written row into an
+error the user sees. Awaiting the send before responding couples the two; a bare
+un-awaited promise is worse, because the invocation freezes after the response
+and the send disappears with no error at all.
+**Consequence:** no retry and no durable queue — a failed send is logged and
+gone. The work still runs inside the same billed invocation, so a slow Resend
+call extends function duration rather than user-visible latency. A queue is
+stage B infrastructure and should arrive as infrastructure, not as a patch.
+
+## 2026-09-07 · The sourcing team email goes out at write time, not after verification
+
+`/api/request` sends the team notification immediately, listing files as
+declared with verification pending. `/api/request/files` follows up **only** when
+verification actually refused something.
+**Why:** file verification is a second round trip the browser triggers. Sending
+the team email from there would produce one tidy, complete message — and lose it
+entirely whenever a tab closes mid-upload, which is the one failure that must
+never happen. Guaranteeing it with a `team_notified_at` column and an
+opportunistic sweep makes the guarantee weakest exactly when traffic is thinnest,
+which is now.
+**Consequence:** a request with attachments produces one email normally and two
+when a file is refused. The first says so, so the second is never a surprise.
+
+## 2026-09-07 · No Resend SDK, and no React email framework
+
+Sends go over plain `fetch` in `src/lib/email/send.ts`.
+**Why:** the send endpoint is one authenticated POST with a JSON body, and
+`src/lib/turnstile.ts` already establishes exactly this pattern for Cloudflare.
+Forty lines beats a dependency and one fewer supply-chain edge.
+**Consequence:** none felt so far. Templates are string functions; if they ever
+need composition beyond that, revisit rather than accreting a template engine.
+
+## 2026-09-07 · Email templates hardcode hex, and that is correct
+
+`src/lib/email/layout.ts` contains literal `#1A191E`, `#E2751B`, `#6C6A66` and
+`#DCDBD6`, plus a system font stack.
+**Why:** CLAUDE.md forbids hardcoded hex, and is right to for the app, which
+reads its tokens from `globals.css`. An email client cannot read a CSS variable
+or a Tailwind token — no external stylesheet, no web font, no `@theme`. The four
+brand values are literals in that one file and nowhere else.
+**Consequence:** a token change does not propagate to email. The file says so at
+the top. Do not "fix" it.
+
+## 2026-09-07 · `EMAIL_FROM` accepts a display name, and must be on `send.`
+
+`env.ts` parses the address out of `Name <address>` as well as a bare address,
+then requires its domain to start with `send.`.
+**Why:** the bare `z.email()` it had before rejected the display-name form, and
+setting `EMAIL_FROM=Malameran <noreply@send.malameran.com>` took both submission
+routes down with a 500 — `serverEnv` is evaluated at module load, so every route
+importing it threw. The subdomain check turns a CLAUDE.md hard rule into
+something that fails at boot rather than in a deliverability report months later.
+**Consequence:** a root-domain sender cannot be configured by accident. The
+format is documented in `.env.example`.
+
 ## 2026-09-07 · The gates before a write live in one shared module
 
 `guardSubmission(request, endpoint)` parses the envelope, verifies Turnstile and

@@ -1,5 +1,10 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 
+import { sendAll } from "@/lib/email/send";
+import {
+  supplierConfirmation,
+  supplierTeamNotification,
+} from "@/lib/email/templates";
 import { supplierApplicationSchema } from "@/lib/schemas/supplier-application";
 import { guardSubmission } from "@/lib/submission-guard";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
@@ -15,6 +20,10 @@ import { createSupabaseAdminClient } from "@/lib/supabase/admin";
  * /api/request. Its endpoint argument is the rate-limit bucket, and a different
  * string means a genuinely separate limit — one person exhausting the sourcing
  * form cannot lock another visitor out of this one.
+ *
+ * Email is sent from `after()`, once the response has been flushed. An
+ * application that reached the database succeeded, whether or not Resend was
+ * reachable, so no send outcome can reach the applicant.
  */
 
 export const runtime = "nodejs";
@@ -73,6 +82,15 @@ export async function POST(request: Request) {
       message: "We could not save your application.",
     });
   }
+
+  // The row exists and the response is decided. Only now is anything sent, and
+  // a failure in here is logged rather than thrown — see src/lib/email/send.ts.
+  after(async () => {
+    await sendAll([
+      supplierConfirmation(values, row.reference ?? ""),
+      supplierTeamNotification(values, row.reference ?? ""),
+    ]);
+  });
 
   return NextResponse.json({ reference: row.reference });
 }

@@ -17,10 +17,49 @@ const publicSchema = z.object({
   NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string().min(1),
 });
 
+/**
+ * The address inside `EMAIL_FROM`, which may be either a bare address or the
+ * `Display Name <address>` form. Resend accepts both, and the display name is
+ * what a recipient actually sees, so both have to validate.
+ */
+function addressPart(value: string): string {
+  const angled = /<([^<>]+)>\s*$/.exec(value);
+  return (angled?.[1] ?? value).trim();
+}
+
+/**
+ * `EMAIL_FROM` must be on the `send.` subdomain.
+ *
+ * CLAUDE.md makes this a hard rule: bounces and spam complaints from automated
+ * mail damage sender reputation, and the client's own outreach runs on the root
+ * domain. Checking it here means a misconfiguration fails at boot rather than
+ * showing up in a deliverability report months later.
+ */
+const emailFrom = z
+  .string()
+  .min(1)
+  .superRefine((value, ctx) => {
+    const address = addressPart(value);
+    if (!z.email().safeParse(address).success) {
+      ctx.addIssue({
+        code: "custom",
+        message: `not an email address: expected "name@send.example.com" or "Name <name@send.example.com>", got ${JSON.stringify(value)}`,
+      });
+      return;
+    }
+    const domain = address.slice(address.lastIndexOf("@") + 1);
+    if (!domain.startsWith("send.")) {
+      ctx.addIssue({
+        code: "custom",
+        message: `must send from the "send." subdomain, not ${domain} — see CLAUDE.md`,
+      });
+    }
+  });
+
 const serverSchema = z.object({
   SUPABASE_SECRET_KEY: z.string().min(1),
   RESEND_API_KEY: z.string().min(1),
-  EMAIL_FROM: z.email(),
+  EMAIL_FROM: emailFrom,
   TEAM_NOTIFICATION_EMAIL: z.email(),
   TURNSTILE_SECRET_KEY: z.string().min(1),
   /**

@@ -11,9 +11,12 @@ ve süreli, hız sınırlayıcı Postgres içinde ve hata durumunda kapanıyor. 
 form da çalışıyor: sourcing talebi (`/request`, üç adım, dosya ekli) ve tedarikçi
 başvurusu (`/suppliers/apply`, tek adım, dosyasız).
 
-Sıradaki adım: e-posta. Resend'in `send.` alt alan adında kurulması, SPF/DKIM/
-DMARC kayıtları, alıcıya onay ve ekibe bildirim e-postaları. Ondan sonra alan adı,
-SEO, analitik ve yayına alma.
+Bildirim e-postaları çalışıyor: her iki form da gönderene onay, ekibe de tüm
+alanları içeren bildirim yolluyor. Gönderim `after()` içinde, yanıt gönderildikten
+sonra çalışıyor — veritabanına yazılmış bir kayıt, e-posta gitmese bile başarılıdır.
+
+Sıradaki adım: alan adı ve DNS (Cloudflare), SPF/DKIM/DMARC doğrulaması ve
+teslimat testi, ardından SEO, analitik ve yayına alma.
 
 Yayından önce kapatılması gerekenler `docs/tasks/f1-a.md` içinde: şablon yasal
 metinlerin gerçek metinle değiştirilmesi, `robots.txt` açılması, `/tokens`

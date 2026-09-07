@@ -14,9 +14,12 @@ import { REQUEST_SUCCESS } from "@/content/request-success";
  */
 export function RequestSuccess({
   reference,
+  email,
   rejectedFiles = [],
 }: {
   reference: string;
+  /** The address the confirmation went to — named on screen, per the artboard. */
+  email: string;
   rejectedFiles?: readonly { filename: string; reason: string }[];
 }) {
   return (
@@ -69,7 +72,7 @@ export function RequestSuccess({
       ) : null}
 
       <p className="t-body text-muted mt-7">
-        {REQUEST_SUCCESS.keepReference(reference)}
+        {REQUEST_SUCCESS.confirmationEmail(email)}
       </p>
 
       <p className="mt-8.5">

@@ -1,6 +1,11 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { z } from "zod";
 
+import { sendEmail } from "@/lib/email/send";
+import {
+  sourcingFilesNotification,
+  type FileLine,
+} from "@/lib/email/templates";
 import { deleteObject, readRange } from "@/lib/files/storage";
 import {
   classifyZipEntries,
@@ -30,6 +35,10 @@ import { createSupabaseAdminClient } from "@/lib/supabase/admin";
  * Access is gated by the HMAC submission token from step 1, not by the request
  * id alone. Only rows still `pending` are touched, so a replayed call cannot
  * undo a completed verification.
+ *
+ * The team was already notified when the row was written, so this sends a
+ * follow-up ONLY when verification refused something. A request whose files all
+ * pass produces no second email. Sent from `after()`, like every other send.
  */
 
 export const runtime = "nodejs";
@@ -44,6 +53,7 @@ type FileRow = {
   storage_path: string;
   original_filename: string;
   declared_mime: string | null;
+  size_bytes: number;
 };
 
 type Outcome = {
@@ -155,7 +165,7 @@ export async function POST(request: Request) {
   const supabase = createSupabaseAdminClient();
   const { data: files, error } = await supabase
     .from("request_files")
-    .select("id, storage_path, original_filename, declared_mime")
+    .select("id, storage_path, original_filename, declared_mime, size_bytes")
     .eq("request_id", requestId)
     .eq("status", "pending")
     .limit(MAX_FILES_PER_REQUEST);
@@ -200,10 +210,40 @@ export async function POST(request: Request) {
     }),
   );
 
+  const rejected = outcomes.filter((o) => o.reason !== null);
+
+  // Only when something was actually refused. The reference is read here rather
+  // than passed in: nothing the client sends is trusted, and the token proves
+  // only which request this is.
+  if (rejected.length > 0) {
+    const { data: request } = await supabase
+      .from("sourcing_requests")
+      .select("reference")
+      .eq("id", requestId)
+      .single();
+
+    const line = (o: (typeof outcomes)[number]): FileLine => ({
+      filename: o.row.original_filename,
+      sizeBytes: o.sizeBytes ?? o.row.size_bytes,
+      status: o.reason ? "rejected" : "verified",
+      detectedMime: o.detectedMime,
+      rejectionReason: o.reason,
+    });
+
+    const reference = request?.reference ?? "";
+    const kept = outcomes.filter((o) => o.reason === null).map(line);
+    after(async () => {
+      await sendEmail(
+        sourcingFilesNotification(reference, rejected.map(line), kept),
+      );
+    });
+  }
+
   return NextResponse.json({
     checked: outcomes.length,
-    rejected: outcomes
-      .filter((o) => o.reason !== null)
-      .map((o) => ({ filename: o.row.original_filename, reason: o.reason })),
+    rejected: rejected.map((o) => ({
+      filename: o.row.original_filename,
+      reason: o.reason,
+    })),
   });
 }

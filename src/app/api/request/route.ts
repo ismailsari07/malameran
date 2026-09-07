@@ -1,6 +1,12 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { z } from "zod";
 
+import { sendAll } from "@/lib/email/send";
+import {
+  sourcingConfirmation,
+  sourcingTeamNotification,
+  type FileLine,
+} from "@/lib/email/templates";
 import { MAX_FILES_PER_REQUEST, MAX_FILE_BYTES } from "@/lib/files/verify";
 import { buildStoragePath, createUploadUrl } from "@/lib/files/storage";
 import { sourcingRequestSchema } from "@/lib/schemas/sourcing-request";
@@ -18,6 +24,13 @@ import { createSupabaseAdminClient } from "@/lib/supabase/admin";
  * — Turnstile and the rate limiter run BEFORE anything is written, so a
  * rejected submission leaves no trace. Validation below is the control, not a
  * repeat of the client's: nothing the client sent is trusted.
+ *
+ * Email is sent from `after()`, once the response has been flushed, so no send
+ * outcome can reach the buyer. The team notification goes out HERE rather than
+ * after file verification, which happens in a second round trip the browser
+ * triggers: a tab closed mid-upload would otherwise mean the team never learns
+ * a real request came in. Files are listed as declared, and /api/request/files
+ * follows up only if one is refused. See docs/decisions.md.
  */
 
 export const runtime = "nodejs";
@@ -146,6 +159,23 @@ export async function POST(request: Request) {
       continue;
     }
   }
+
+  // The row exists and the response is decided. Files are listed as the client
+  // declared them — the bytes have not been read yet, and the sizes here are
+  // the only ones available at this point. Verification corrects them in the
+  // follow-up when it refuses something.
+  const declaredFiles: FileLine[] = intents.map((intent) => ({
+    filename: sanitiseFilename(intent.filename),
+    sizeBytes: intent.sizeBytes,
+    status: "pending",
+  }));
+
+  after(async () => {
+    await sendAll([
+      sourcingConfirmation(values, row.reference ?? ""),
+      sourcingTeamNotification(values, row.reference ?? "", declaredFiles),
+    ]);
+  });
 
   return NextResponse.json({
     requestId: row.id,

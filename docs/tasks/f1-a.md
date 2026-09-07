@@ -43,11 +43,11 @@ team by email, and the submitter receives a confirmation.
 - [x] Form UI, validation, success state
 
 ## Email
-- [ ] Resend configured on the `send.` subdomain
+- [x] Resend configured on the `send.` subdomain
 - [ ] SPF, DKIM, DMARC records verified
-- [ ] Buyer confirmation email
-- [ ] Internal new-request notification
-- [ ] Internal new-supplier-application notification
+- [x] Buyer confirmation email
+- [x] Internal new-request notification
+- [x] Internal new-supplier-application notification
 - [ ] Deliverability test (score checked before launch)
 
 ## Infrastructure
@@ -81,21 +81,31 @@ team by email, and the submitter receives a confirmation.
       currently applies from 1024 up
 - [ ] Confirm the Supabase key names against the real project when it is created
 
+## Open items carried from the email block
+
+- [ ] There is no durable record of a send. A failure leaves a `[email] FAILED`
+      line with the reference in it and nothing else — no retry, no queue, no
+      column. F1-B should add a send log the admin panel can query, deliberately
+      and designed against that panel, rather than a `notified_at` column bolted
+      on now
+- [ ] The team email carries no link to the attachments, because a signed URL is
+      a bearer token that would sit in an inbox backup and expire long before the
+      mail is read. Retrieval is a dashboard lookup by reference today; F1-B
+      should replace it with a deep link into the admin panel
+- [ ] `after()` gives no retry. A Resend outage loses those notifications
+      permanently. Acceptable at this volume; revisit when a queue exists
+
 ## Open items carried from the supplier application block
 
 - [ ] `ChipsField`'s label uses `htmlFor` against a `<div>`, which is inert. The
       group is reachable and announced (`role="group"`, `aria-label`), but making
       the label itself work means `aria-labelledby` and a label id in `FieldShell`
-- [ ] Restore the confirmation-email sentence on the supplier success screen once
-      Resend sends — `TODO(copy) — BLOCK 9` in `src/content/supplier-success.ts`
 
 ## Open items carried from the submission block
 
 - [ ] Set `SUBMISSION_TOKEN_SECRET` in all three Vercel environments before block 11,
       alongside `RATE_LIMIT_IP_SALT`. At least 32 characters. Rotating it invalidates
       submission tokens issued in the last ten minutes
-- [ ] Restore the confirmation-email sentence on the success screen once Resend sends
-      — `TODO(copy) — BLOCK 9` in `src/content/request-success.ts`
 - [ ] A file that fails verification is deleted and its row marked rejected, but the
       buyer only learns which files were refused on the success screen. Once email
       exists, say it in the confirmation too

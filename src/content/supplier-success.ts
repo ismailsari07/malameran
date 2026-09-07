@@ -26,14 +26,12 @@ export const SUPPLIER_SUCCESS = {
   },
 
   /**
-   * TODO(copy) — BLOCK 9: the artboard reads "A confirmation email is on its
-   * way to the address you gave us." Nothing sends yet, and telling someone to
-   * expect an email that never arrives is worse than saying nothing: they wait,
-   * then assume the application was lost. This says what is actually true.
-   * Restore the email wording when Resend is wired.
+   * Restored in block 9, now that mail actually sends. The artboard's own
+   * wording, with one correction: it reads suppliers@malameran.com, which is
+   * not a mailbox anyone has confirmed exists.
    */
-  keepReference: (reference: string) =>
-    `Nothing else is needed from you right now. Quote ${reference} if you write to us about this application.`,
+  confirmationEmail: (email: string) =>
+    `A confirmation email is on its way to ${email}. If it does not arrive within the hour, check your spam folder or write to info@malameran.com.`,
 
   returnLink: { label: "Return to the home page", href: "/" },
 } as const;

@@ -269,7 +269,7 @@ export function SupplierForm({
   if (reference !== null) {
     return (
       <div className="pt-9 pb-14 lg:pt-24 lg:pb-26">
-        <SupplierSuccess reference={reference} />
+        <SupplierSuccess reference={reference} email={values.email} />
       </div>
     );
   }

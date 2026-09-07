@@ -394,6 +394,7 @@ export function RequestForm({
       <div className="pt-9 pb-14 lg:pt-24 lg:pb-26">
         <RequestSuccess
           reference={success.reference}
+          email={values.email}
           rejectedFiles={success.rejectedFiles}
         />
       </div>
