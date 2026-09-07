@@ -58,8 +58,18 @@ type CommonProps = {
   variant?: ButtonVariant;
   /** Renders the disabled box with a spinner and locks the control. */
   submitting?: boolean;
-  /** Buttons stack full-width on mobile — the source's mobile rule. */
-  block?: boolean;
+  /**
+   * Full-width. `true` at every width, `"below-lg"` on mobile only.
+   *
+   * `"below-lg"` exists because the call site used to write the desktop half
+   * itself, as `block className="lg:inline-flex lg:w-auto"`. Two unprefixed
+   * display utilities in one class attribute are settled by whichever Tailwind
+   * happens to emit later, not by their order in the string — the same trap
+   * that left the site header's CTA visible on mobile. Inside this one string
+   * it is well defined: Tailwind always emits responsive variants after the
+   * unprefixed utilities they override.
+   */
+  block?: boolean | "below-lg";
   children: React.ReactNode;
   className?: string;
 };
@@ -73,7 +83,11 @@ function classes({
   return cn(
     BASE,
     VARIANTS[submitting ? "disabled" : variant],
-    block ? "flex w-full" : "",
+    block === "below-lg"
+      ? "flex w-full lg:inline-flex lg:w-auto"
+      : block
+        ? "flex w-full"
+        : "",
     submitting ? "cursor-not-allowed" : "",
     className,
   );

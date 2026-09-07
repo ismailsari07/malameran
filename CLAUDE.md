@@ -13,6 +13,10 @@ not a product catalogue.
 - `pnpm typecheck` — `tsc --noEmit`
 - `pnpm check:css` — asserts no colour property is fed a gradient variable
   (run after `pnpm build`; it reads the built CSS)
+- `pnpm check:routes` — asserts every page has a ROUTES entry in `src/lib/seo.ts`,
+  which is what gives it a canonical, a sitemap entry and its noindex
+- `pnpm check:classnames` — asserts no `className` passed into a component fights
+  a layout utility that component already sets
 - `pnpm format` — Prettier
 - `pnpm dlx supabase migration new <name>` / `pnpm dlx supabase db push`
 
@@ -53,8 +57,9 @@ Naming, commits, branches and component structure: `docs/conventions.md`
 
 ## Definition of done
 
-Feature works · `pnpm build`, `pnpm lint`, `pnpm typecheck`, `pnpm check:css`
-and `pnpm check:routes` all pass · every new component variant rendered on `/tokens` ·
+Feature works · `pnpm build`, `pnpm lint`, `pnpm typecheck`, `pnpm check:css`,
+`pnpm check:routes` and `pnpm check:classnames` all pass ·
+every new component variant rendered on `/tokens` ·
 RLS verified from a second account ·
 no console errors · responsive at 375px and 1440px · task checked off in
 `docs/tasks/`.
@@ -83,6 +88,11 @@ Skip doc updates for trivial changes. Never invent a decision that wasn't made.
   Never hardcode a hex value. A new token goes in `docs/design.md` first.
 - Use the `.t-*` typography role classes rather than assembling size, weight, line-height
   and family by hand.
+- **Display, position, width and flex-direction are props, never `className`
+  overrides.** `cn()` is a plain join, so two unprefixed utilities in one class
+  attribute are settled by whichever Tailwind emits later, not by the order you
+  wrote them. This has cost the project three bugs. `pnpm check:classnames`
+  enforces it.
 - Rebuild designs as proper components; do not paste export markup into the app.
 - Token table and layout rules: `docs/design.md`
 - The gradient grounds are applied **only** through the `.ground-*` component

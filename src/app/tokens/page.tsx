@@ -4,6 +4,8 @@ import { AppHeader } from "@/components/layout/app-header";
 import { MobileMenu } from "@/components/layout/mobile-menu";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
+import { Wordmark } from "@/components/layout/wordmark";
+import { BrandMark } from "@/components/ui/brand-mark";
 import { Button, type ButtonVariant } from "@/components/ui/button";
 import { Card, YouPill } from "@/components/ui/card";
 import { Eyebrow } from "@/components/ui/eyebrow";
@@ -491,6 +493,46 @@ export default function TokensPage() {
               Talk to us first
             </Button>
           </div>
+        </div>
+        <div className="border-border-card rounded-20 border p-6">
+          <div className="t-hint text-text-small mb-4 font-mono">
+            block=&quot;below-lg&quot; — full width on mobile, intrinsic from
+            lg. Replaced a call site that wrote the desktop half as a className
+            override, where the cascade decided the winner rather than the class
+            order
+          </div>
+          <Button href="/request" block="below-lg">
+            Start a sourcing request
+          </Button>
+        </div>
+      </div>
+
+      <h3 className="t-eyebrow text-text-small mt-12">Brand mark</h3>
+      <div className="ground-quiet rounded-20 mt-4 p-6">
+        <div className="t-hint mb-4 font-mono text-white/50">
+          public/malameran-mark.png at the sizes the wordmark uses. Stage A
+          placeholder, accepted over the objection recorded in
+          docs/decisions.md: an opaque cold-navy tile, a crop of the emblem
+          rather than a mark, and a smudge rather than an M at 1x
+        </div>
+        <div className="flex flex-wrap items-end gap-8">
+          {(
+            [
+              ["site, mobile", "size-[11px]"],
+              ["site, lg", "size-[13px]"],
+              ["app + footer, lg", "size-3"],
+              ["legible reference, 20px", "size-5"],
+            ] as const
+          ).map(([label, cls]) => (
+            <div key={label} className="flex flex-col items-center gap-3">
+              <BrandMark className={cls} />
+              <span className="t-hint font-mono text-white/50">{label}</span>
+            </div>
+          ))}
+        </div>
+        <div className="mt-6 flex items-center gap-6">
+          <Wordmark size="site" href={null} />
+          <Wordmark size="app" href={null} />
         </div>
       </div>
 

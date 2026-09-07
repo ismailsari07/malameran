@@ -39,7 +39,7 @@ export function FinalCtaBand({
         </p>
       ) : null}
       <div className="mt-7.5 lg:mt-10">
-        <Button href={cta.href} block className="lg:inline-flex lg:w-auto">
+        <Button href={cta.href} block="below-lg">
           {cta.label}
         </Button>
       </div>

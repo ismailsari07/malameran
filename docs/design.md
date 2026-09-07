@@ -1015,6 +1015,39 @@ moved the grid and the heading into the client islands, with the sidebar passed
 down as a prop so it stays a server component. `/request` had been rendering its
 sidebar beside the confirmation since 7a; fixed in the same change.
 
+## The header on mobile: notes from the build
+
+The 375px header was broken in production and the cause was not the layout — the
+desktop CTA was never hidden. `<Button className="hidden lg:inline-flex">` loses
+to `Button`'s own `inline-flex` base in the cascade, so the button rendered at
+every width. Measured with the real Inter metrics:
+
+| Width | Before | After |
+| --- | --- | --- |
+| 320 | — | row needs 183px of 280px · 97px spare |
+| 375 | row needs **519px of 335px** · overflows by 184px | row needs 183px of 335px · 152px spare |
+| 1440 | 1127px of 1360px | unchanged |
+
+What changed below `lg`, and nothing above it:
+
+| Element | Before | After |
+| --- | --- | --- |
+| Wordmark text | 17px MALAMERAN, 124px wide | `sr-only`, mark alone. The link keeps its accessible name |
+| CTA label | "Start a sourcing request" (176px) | "Request" (60px), a second real label in `nav.ts`, not a truncation |
+| CTA box | `primary-sm`, wrapped to three lines | `primary-sm` unchanged — it fits at 104px, so no compact variant was added |
+| Row gap | `gap-10` (40px) | `gap-3` below `lg`, `lg:gap-10` unchanged |
+| Hamburger | appeared to overflow | **unchanged.** `size-11` with `items-end` already puts the 44px box's right edge on the container's inner edge, 20px from the viewport. The overflow was entirely the button pushing it |
+
+**The accent square is now the logo mark**, everywhere the `Wordmark` appears —
+site header, app header, footer. `src/app/opengraph-image.tsx` keeps the square:
+it is generated from the tokens rather than the brand assets. The mark's own
+problems, and the decision to ship it anyway, are in `docs/decisions.md`.
+
+**No new Button variant.** The plan reserved `primary-xs` for a compact CTA;
+the arithmetic said the design's own header-CTA box fits at 320px with 97px to
+spare, so adding one would have been a variant invented to satisfy a plan bullet.
+`block="below-lg"` was added instead, to replace a `className` override.
+
 ## Open questions
 
 - ~~**Two supplier application surfaces.**~~ **Resolved 2026-09-05:** the embedded dark form

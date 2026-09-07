@@ -1,16 +1,25 @@
 import Link from "next/link";
 
+import { BrandMark } from "@/components/ui/brand-mark";
 import { cn } from "@/lib/cn";
 
 /**
- * The brand mark: an accent square beside MALAMERAN.
+ * The brand lockup: the logo mark beside MALAMERAN.
  *
  * Two sizes, each a responsive pair read from the artboards —
- * `site` is an 11px square with 17px text on mobile and 13px/21px from `lg`;
+ * `site` is an 11px mark with 17px text on mobile and 13px/21px from `lg`;
  * `app` is 11px/17px and 12px/19px, used by the app header and the footer.
+ *
+ * The mark replaced the design's accent square in the header fix. The square
+ * survives in `src/app/opengraph-image.tsx`, which is generated from the design
+ * system rather than the brand assets and is correct as it stands.
+ *
+ * Below `lg` the site header hides the text and shows the mark alone, so the
+ * text is `sr-only` rather than removed — a link whose only content is a
+ * decorative image has no accessible name at all.
  */
 
-const SQUARE = {
+const MARK = {
   site: "size-[11px] lg:size-[13px]",
   app: "size-[11px] lg:size-3",
 } as const;
@@ -23,21 +32,34 @@ const TYPE = {
 export function Wordmark({
   size = "site",
   href = "/",
+  hideTextBelowLg = false,
   className,
 }: {
-  size?: keyof typeof SQUARE;
+  size?: keyof typeof MARK;
   /** `null` renders static text rather than a link. */
   href?: string | null;
+  /**
+   * Mark only below `lg`, full lockup from `lg`. A prop rather than a
+   * `className` override: the text's display is this component's business, and
+   * a utility passed from outside would be fighting the one set here with only
+   * the cascade to settle it.
+   */
+  hideTextBelowLg?: boolean;
   className?: string;
 }) {
   const layout = cn("flex items-center gap-2.5 lg:gap-3", className);
   const inner = (
     <>
+      <BrandMark className={MARK[size]} />
       <span
-        className={cn("bg-accent shrink-0", SQUARE[size])}
-        aria-hidden="true"
-      />
-      <span className={cn(TYPE[size], "text-white")}>MALAMERAN</span>
+        className={cn(
+          TYPE[size],
+          "text-white",
+          hideTextBelowLg && "sr-only lg:not-sr-only",
+        )}
+      >
+        MALAMERAN
+      </span>
     </>
   );
 

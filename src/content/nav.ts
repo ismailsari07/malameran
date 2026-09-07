@@ -22,10 +22,17 @@ export const NAV_ITEMS: readonly NavItem[] = [
 ];
 
 /** TODO(copy): header CTA label and destination. */
-export const HEADER_CTA: NavItem = {
+/**
+ * Two real labels, not one truncated. The header has room for seven characters
+ * at 375px and for the full sentence from `lg`, and a CSS truncation would give
+ * a screen reader the long string while showing the short one.
+ * TODO(copy): both.
+ */
+export const HEADER_CTA = {
   label: "Start a sourcing request",
+  labelShort: "Request",
   href: "/request",
-};
+} as const;
 
 /** TODO(copy): app-header back link. */
 export const BACK_TO_SITE: NavItem = { label: "Back to site", href: "/" };

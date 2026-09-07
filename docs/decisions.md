@@ -5,6 +5,65 @@ Format: date · decision · why · consequence.
 
 ---
 
+## 2026-09-07 · The prototype mark ships for stage A, over my objection
+
+`public/malameran-mark.png` replaces the design's accent square in the wordmark.
+**The objection, which stands:** the file contradicts the palette it is
+advertising. Recorded in full so the reasoning survives the decision, and so the
+vector request to the client can be specific rather than "send us a logo":
+
+1. **It is opaque.** No `tRNS` chunk, PNG colour-type 3 — a solid `#020917`
+   tile, a cold near-black, sitting on the header's warm `#1F1E23` and the
+   footer's `#151418`. It reads as a bluer square patch, not a mark on the bar.
+   The replacement needs a transparent background.
+2. **It is a crop, not a mark.** The globe circle is clipped at the left, right
+   and top edges, with a band of cut-off lettering along the bottom. It is
+   `malameran-emblem.png` with the edges cut off.
+3. **It is illegible at the size it is used.** Its strokes are about 3% of the
+   image width, so at the wordmark's 11-13px they land on well under a pixel and
+   average into a muddy brown. Measured at 11, 13, 16, 20, 24 and 32px:
+   acceptable at 2x, a smudge at 1x, properly legible only around 20px.
+
+None of that is a reason not to ship it — the decision is the client's, and a
+placeholder mark beats no mark for stage A.
+**Explicitly not done:** the mark was NOT sized up to 18-20px to make it legible
+at 1x. A 20px logo beside 13px type would look like a mistake in a design whose
+mark is a 13px square, and distorting an approved header to accommodate a file
+being replaced anyway is the wrong trade.
+**Consequence:** `src/components/ui/brand-mark.tsx` is the only place the path
+appears. The vector swap is one file. `src/app/opengraph-image.tsx` keeps the
+design system's own square — it is generated from the tokens, not from the brand
+assets, and is correct as it stands.
+
+## 2026-09-07 · A className must not fight a component's own layout utilities
+
+`cn()` is a plain join, and its comment says "every component variant in this
+codebase is a closed map of complete class strings, so there is never a
+conflicting pair of utilities to resolve." That is true of the maps and false at
+any call site that adds one.
+**What it cost:** `<Button className="hidden lg:inline-flex">` in the site
+header did not hide anything. `Button`'s base begins with `inline-flex`, and the
+built CSS emits `.hidden` at 33159 and `.inline-flex` at 33238 — later wins,
+regardless of the order in the class attribute. The CTA rendered at 375px, took
+the space the hamburger needed, and wrapped its label to three lines. Measured
+with real font metrics: the row needed 519px in a 335px column, overflowing by
+184px.
+**The rule:** display, position, width and flex-direction are props, never
+`className` overrides. `Button` gained `block="below-lg"` so the one other
+instance — `final-cta-band.tsx`, which worked only because `.inline-flex`
+happens to sort after `.flex` — stopped relying on cascade luck.
+**The nuance worth keeping:** unprefixed-versus-unprefixed is decided by
+Tailwind's emission order and is luck. Unprefixed-versus-variant (`flex` and
+`lg:inline-flex` in one string) is well defined, because Tailwind always emits
+responsive variants after the utilities they override. The first is a bug; the
+second is how the new prop is implemented.
+**Enforced:** `pnpm check:classnames`. It reads each component's own class
+literals and flags a call site passing an unprefixed utility from the same
+property group. Scope is deliberately narrow — four groups, unprefixed only —
+because margins and colours do not fail silently. Negative-controlled against
+both real instances. Third occurrence of this class of bug: see also the block 3
+colour override and the sidebar gradient.
+
 ## 2026-09-07 · One ROUTES table drives the sitemap, robots and every noindex
 
 `src/lib/seo.ts` holds the list; `sitemap.ts`, `robots.ts` and `pageMetadata()`

@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "check:css": "node scripts/check-css-vars.mjs",
     "format": "prettier --write .",
-    "check:routes": "node scripts/check-routes.mjs"
+    "check:routes": "node scripts/check-routes.mjs",
+    "check:classnames": "node scripts/check-classnames.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.6",
