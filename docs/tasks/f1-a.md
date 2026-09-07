@@ -58,9 +58,9 @@ team by email, and the submitter receives a confirmation.
 - [ ] Automated database backups confirmed
 
 ## Launch
-- [ ] SEO: titles, meta descriptions, Open Graph, sitemap, robots.txt
-      (robots.txt currently `Disallow: /` — must be opened up before launch)
-- [ ] Analytics installed and receiving events
+- [x] SEO: titles, meta descriptions, Open Graph, sitemap, robots.txt
+- [ ] Analytics installed and receiving events — the code is in place and inert;
+      this is done when `NEXT_PUBLIC_GA_MEASUREMENT_ID` is set (see below)
 - [ ] Responsive check at 375px and 1440px
 - [ ] Lighthouse pass on performance and accessibility
 - [ ] All `TODO(copy):` placeholders reviewed and flagged to the client
@@ -70,7 +70,6 @@ team by email, and the submitter receives a confirmation.
 
 ## Open items carried from the setup block
 
-- [ ] Open up `src/app/robots.ts` — it is `Disallow: /` for every crawler right now
 - [ ] Delete `src/app/tokens/` — temporary internal token verification page
 - [ ] Write a README with setup instructions before delivery
 - [x] Decide which supplier application surface wins — the embedded dark form is
@@ -80,6 +79,32 @@ team by email, and the submitter receives a confirmation.
 - [ ] Revisit `lg: 1024px` when Home is built: the 82px hero is authored at 1440 and
       currently applies from 1024 up
 - [ ] Confirm the Supabase key names against the real project when it is created
+
+## Open items carried from the SEO and analytics block
+
+- [ ] **Setting `NEXT_PUBLIC_GA_MEASUREMENT_ID` and updating the privacy policy is
+      ONE change, not two.** `src/content/privacy.ts` currently states that no
+      analytics provider has been selected, in four places. The moment that
+      variable is set in production, a published legal document is false. Fill in
+      the provider, whether it sets cookies (it does not, in this configuration),
+      and the consent position, in the same commit that sets the variable
+- [ ] Tell the client at delivery, in these words: cookieless analytics means
+      **no returning visitors, no sessions, no funnels and no attribution.** It
+      answers "how much traffic, to which pages, from where". It cannot answer
+      "who came back" or "what path led to a request". Wanting the second kind of
+      answer is a consent-banner conversation, not a settings change. This belongs
+      in the delivery note as its own line, not buried in a settings list
+- [ ] Set `NEXT_PUBLIC_SITE_URL` in all three Vercel environments, alongside
+      `RATE_LIMIT_IP_SALT` and `SUBMISSION_TOKEN_SECRET`. The canonicals, the
+      sitemap and the social image URL are all built from it, so a wrong value
+      breaks three things together and silently
+- [ ] The 404 renders its `noindex` meta tag twice — React 19 hoists the tag and
+      the resolved head keeps both copies. Harmless (identical directives, and the
+      page already answers HTTP 404, which is the stronger signal) but untidy.
+      Drop the tag and rely on the status code if it ever matters
+- [ ] `public/malameran-emblem.png` and `malameran-mark.png` are prototype art in
+      a palette that contradicts the design system, referenced nowhere in `src/`.
+      Decide with the client whether to delete them or commission a real mark
 
 ## Open items carried from the email block
 

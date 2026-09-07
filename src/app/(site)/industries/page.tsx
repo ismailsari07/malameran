@@ -5,18 +5,13 @@ import { NotListed } from "@/components/sections/not-listed";
 import { PageHero } from "@/components/sections/page-hero";
 import { SectorRows } from "@/components/sections/sector-rows";
 import { INDUSTRIES, INDUSTRIES_META } from "@/content/industries";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: INDUSTRIES_META.title,
   description: INDUSTRIES_META.description,
-  openGraph: {
-    type: "website",
-    siteName: "Malameran",
-    title: `${INDUSTRIES_META.title} · Malameran`,
-    description: INDUSTRIES_META.description,
-    locale: "en_CA",
-  },
-};
+  path: "/industries",
+});
 
 export default function IndustriesPage() {
   return (

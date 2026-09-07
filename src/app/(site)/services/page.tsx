@@ -5,18 +5,13 @@ import { FinalCtaBand } from "@/components/sections/final-cta-band";
 import { PageHero } from "@/components/sections/page-hero";
 import { ServiceCards } from "@/components/sections/service-cards";
 import { SERVICES, SERVICES_META } from "@/content/services";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: SERVICES_META.title,
   description: SERVICES_META.description,
-  openGraph: {
-    type: "website",
-    siteName: "Malameran",
-    title: `${SERVICES_META.title} · Malameran`,
-    description: SERVICES_META.description,
-    locale: "en_CA",
-  },
-};
+  path: "/services",
+});
 
 export default function ServicesPage() {
   return (

@@ -15,8 +15,13 @@ Bildirim e-postaları çalışıyor: her iki form da gönderene onay, ekibe de t
 alanları içeren bildirim yolluyor. Gönderim `after()` içinde, yanıt gönderildikten
 sonra çalışıyor — veritabanına yazılmış bir kayıt, e-posta gitmese bile başarılıdır.
 
+SEO tamam: her sayfada canonical, Open Graph ve Twitter kartı var, sitemap ve
+robots.txt tek bir rota tablosundan üretiliyor, sosyal kart tasarım sisteminden
+1200x630 olarak oluşturuluyor. Analitik kodu yerinde ama ölçüm kimliği
+girilene kadar hiçbir şey yüklemiyor.
+
 Sıradaki adım: alan adı ve DNS (Cloudflare), SPF/DKIM/DMARC doğrulaması ve
-teslimat testi, ardından SEO, analitik ve yayına alma.
+teslimat testi, ardından yayına alma.
 
 Yayından önce kapatılması gerekenler `docs/tasks/f1-a.md` içinde: şablon yasal
 metinlerin gerçek metinle değiştirilmesi, `robots.txt` açılması, `/tokens`

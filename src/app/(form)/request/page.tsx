@@ -5,18 +5,13 @@ import { RequestForm } from "@/components/sections/request-form";
 import { RequestSidebar } from "@/components/sections/request-sidebar";
 import { REQUEST_META } from "@/content/request-form";
 import { publicEnv } from "@/lib/env";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: REQUEST_META.title,
   description: REQUEST_META.description,
-  openGraph: {
-    type: "website",
-    siteName: "Malameran",
-    title: `${REQUEST_META.title} · Malameran`,
-    description: REQUEST_META.description,
-    locale: "en_CA",
-  },
-};
+  path: "/request",
+});
 
 /**
  * The sourcing request page.

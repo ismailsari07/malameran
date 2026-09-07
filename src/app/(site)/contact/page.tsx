@@ -3,18 +3,13 @@ import type { Metadata } from "next";
 import { ContactForm } from "@/components/sections/contact-form";
 import { PageHero } from "@/components/sections/page-hero";
 import { CONTACT, CONTACT_META } from "@/content/contact";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: CONTACT_META.title,
   description: CONTACT_META.description,
-  openGraph: {
-    type: "website",
-    siteName: "Malameran",
-    title: `${CONTACT_META.title} · Malameran`,
-    description: CONTACT_META.description,
-    locale: "en_CA",
-  },
-};
+  path: "/contact",
+});
 
 /**
  * The one marketing page that does not close on --dark-strong. The visitor is

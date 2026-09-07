@@ -15,10 +15,16 @@ import { NOT_FOUND } from "@/content/not-found";
  * and a `cta` prop used by exactly one page is worse than four lines here.
  * Next does not support a metadata export from the root not-found, so the
  * title falls back to the layout default.
+ *
+ * The noindex is rendered as a bare <meta>, which React 19 hoists into <head>,
+ * because the metadata export is unavailable here. Belt and braces: the page
+ * already answers with HTTP 404, which is a stronger de-indexing signal than
+ * any tag.
  */
 export default function NotFound() {
   return (
     <>
+      <meta name="robots" content="noindex" />
       <SiteHeader />
       <main className="flex-1">
         <Section ground="hero" rhythm="page-hero">

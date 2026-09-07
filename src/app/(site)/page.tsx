@@ -9,25 +9,25 @@ import { SuppliersPanel } from "@/components/sections/suppliers-panel";
 import { Trust } from "@/components/sections/trust";
 import { WhatWeHandle } from "@/components/sections/what-we-handle";
 import { HOME_META } from "@/content/home";
+import { organizationJsonLd, pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  // The root layout's template would render this as "… · Malameran", so the
-  // home page opts out with an absolute title.
-  title: { absolute: HOME_META.title },
+export const metadata: Metadata = pageMetadata({
+  title: HOME_META.title,
   description: HOME_META.description,
-  openGraph: {
-    type: "website",
-    siteName: "Malameran",
-    title: HOME_META.title,
-    description: HOME_META.description,
-    locale: "en_CA",
-  },
-};
+  path: "/",
+});
 
 /** Sections in artboard order. */
 export default function HomePage() {
   return (
     <main>
+      {/* Organization data, home page only — repeating it site-wide adds nothing. */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(organizationJsonLd()),
+        }}
+      />
       <Hero />
       <Problem />
       <HowItWorks />

@@ -5,6 +5,62 @@ Format: date · decision · why · consequence.
 
 ---
 
+## 2026-09-07 · One ROUTES table drives the sitemap, robots and every noindex
+
+`src/lib/seo.ts` holds the list; `sitemap.ts`, `robots.ts` and `pageMetadata()`
+all read it, and `pnpm check:routes` fails if a page exists with no entry.
+**Why:** three hand-maintained lists that agree today drift apart the first time
+someone adds a page in a hurry, and the failure is silent — a page with no
+canonical and no sitemap presence looks fine in a browser.
+**Consequence:** adding a route means adding a line here. The checker says so by
+name when you forget.
+
+## 2026-09-07 · Disallow is not how a linked page gets de-indexed
+
+`robots.txt` disallows only `/api/` and `/tokens`. `/request` and
+`/suppliers/apply` are noindex but stay crawlable.
+**Why:** the original instruction was to disallow every noindex route. Disallow
+stops the fetch, so the crawler never reads the noindex — and a disallowed URL
+that is linked from elsewhere still gets listed, as a bare result with no
+description. Both form pages are linked from four calls to action, so that is
+exactly the case where it misfires. What is disallowed is what cannot carry a
+meta tag (`/api` serves JSON) or what nothing links to.
+**Consequence:** crawlers fetch two pages we do not want ranked, and obey the tag
+that actually de-indexes them.
+
+## 2026-09-07 · The social card is generated, and the prototype emblem is not used
+
+`src/app/opengraph-image.tsx` renders 1200x630 from the design system via
+`next/og`. `public/malameran-emblem.png` is left in place and unused.
+**Why:** the emblem is prototype art — a `#010A19` navy ground and a yellow-gold
+monogram, against a palette whose ink is the warm `#1A191E` and whose accent is
+`#E2751B`, plus a globe motif that appears in no artboard. `docs/design.md`
+records that the design ships no icons. Advertising the site with a picture that
+contradicts its own palette is worse than having no picture.
+**Consequence:** the card carries the same hardcoded hex exception as the email
+templates — Satori reads neither CSS variables nor layered background shorthand.
+Inter Tight is fetched from Google at build in two weights, falling back to the
+bundled default rather than failing the build; registering one weight made every
+string render at 800, which is how that was caught.
+
+## 2026-09-07 · Cookieless analytics, and what it cannot answer
+
+GA4 configured with `client_storage: 'none'`, `allow_google_signals: false` and
+`allow_ad_personalization_signals: false`. No `anonymize_ip` — GA4 anonymises
+unconditionally and ignores the parameter, so passing it would look like a
+control we have and do not.
+**Why:** no cookie and no localStorage entry means nothing identifying is stored
+in the browser, and nothing to ask consent to store.
+**What it costs, and the client must hear this in these words:** without a stored
+client id GA4 mints a new one per page view. There are **no returning visitors,
+no sessions, no funnels and no attribution.** It answers "how much traffic, to
+which pages, from where". It cannot answer "who came back" or "what path led to
+a submission".
+**Consequence:** the code is inert until `NEXT_PUBLIC_GA_MEASUREMENT_ID` is set,
+and off in development regardless. Setting it also makes the published privacy
+policy false — the policy copy and the variable move in the same change. Both
+are open items in `docs/tasks/f1-a.md`.
+
 ## 2026-09-07 · Email sends from `after()`, never from the request path
 
 Both submission routes schedule their sends with `after()` from `next/server`,

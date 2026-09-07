@@ -5,18 +5,13 @@ import { SupplierApplicationCta } from "@/components/sections/supplier-applicati
 import { SupplierContactBand } from "@/components/sections/supplier-contact-band";
 import { SupplierCriteria } from "@/components/sections/supplier-criteria";
 import { FOR_SUPPLIERS, FOR_SUPPLIERS_META } from "@/content/for-suppliers";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: FOR_SUPPLIERS_META.title,
   description: FOR_SUPPLIERS_META.description,
-  openGraph: {
-    type: "website",
-    siteName: "Malameran",
-    title: `${FOR_SUPPLIERS_META.title} · Malameran`,
-    description: FOR_SUPPLIERS_META.description,
-    locale: "en_CA",
-  },
-};
+  path: "/for-suppliers",
+});
 
 export default function ForSuppliersPage() {
   return (

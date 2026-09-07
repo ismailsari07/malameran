@@ -9,6 +9,7 @@ import { Card, YouPill } from "@/components/ui/card";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { Marker } from "@/components/ui/marker";
 import { Rule } from "@/components/ui/rule";
+import { pageMetadata } from "@/lib/seo";
 
 /**
  * TEMPORARY — delete before delivery.
@@ -18,10 +19,12 @@ import { Rule } from "@/components/ui/rule";
  * Tracked as an open item in docs/tasks/f1-a.md.
  */
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Design tokens (internal)",
-  robots: { index: false, follow: false },
-};
+  description:
+    "Internal verification page for the design tokens. Deleted before launch.",
+  path: "/tokens",
+});
 
 type Swatch = { name: string; hex: string; role: string };
 

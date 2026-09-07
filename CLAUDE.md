@@ -53,8 +53,8 @@ Naming, commits, branches and component structure: `docs/conventions.md`
 
 ## Definition of done
 
-Feature works · `pnpm build`, `pnpm lint`, `pnpm typecheck` and `pnpm check:css`
-all pass · every new component variant rendered on `/tokens` ·
+Feature works · `pnpm build`, `pnpm lint`, `pnpm typecheck`, `pnpm check:css`
+and `pnpm check:routes` all pass · every new component variant rendered on `/tokens` ·
 RLS verified from a second account ·
 no console errors · responsive at 375px and 1440px · task checked off in
 `docs/tasks/`.

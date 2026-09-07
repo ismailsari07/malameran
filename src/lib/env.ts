@@ -15,6 +15,18 @@ const publicSchema = z.object({
   NEXT_PUBLIC_SUPABASE_URL: z.url(),
   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: z.string().min(1),
   NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string().min(1),
+  /**
+   * Google Analytics 4 measurement ID. OPTIONAL, and absent until delivery.
+   *
+   * With it unset nothing loads and no request reaches Google — see
+   * src/components/analytics.tsx. Setting it also makes the analytics section
+   * of the published privacy policy false, so the policy copy and this variable
+   * have to move in the same change. See docs/tasks/f1-a.md.
+   */
+  NEXT_PUBLIC_GA_MEASUREMENT_ID: z
+    .string()
+    .regex(/^G-[A-Z0-9]+$/, 'must look like "G-XXXXXXXXXX"')
+    .optional(),
 });
 
 /**
@@ -112,9 +124,16 @@ export const publicEnv = parse(
     NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
     NEXT_PUBLIC_TURNSTILE_SITE_KEY: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
+    NEXT_PUBLIC_GA_MEASUREMENT_ID: process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID,
   },
   "public",
 );
+
+/**
+ * Kept here so `src/lib/env.ts` stays the only module reading `process.env`.
+ * Next inlines NODE_ENV the same way it inlines the public variables.
+ */
+export const isProduction = process.env.NODE_ENV === "production";
 
 export const serverEnv = parse(
   serverSchema,

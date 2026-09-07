@@ -5,18 +5,13 @@ import { SupplierForm } from "@/components/sections/supplier-form";
 import { SupplierSidebar } from "@/components/sections/supplier-sidebar";
 import { SUPPLIER_META } from "@/content/supplier-form";
 import { publicEnv } from "@/lib/env";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: SUPPLIER_META.title,
   description: SUPPLIER_META.description,
-  openGraph: {
-    type: "website",
-    siteName: "Malameran",
-    title: `${SUPPLIER_META.title} · Malameran`,
-    description: SUPPLIER_META.description,
-    locale: "en_CA",
-  },
-};
+  path: "/suppliers/apply",
+});
 
 /**
  * The supplier application page — the destination of every "Apply as a

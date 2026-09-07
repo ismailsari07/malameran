@@ -3,18 +3,13 @@ import type { Metadata } from "next";
 import { LegalBody } from "@/components/sections/legal-body";
 import { PageHero } from "@/components/sections/page-hero";
 import { TERMS, TERMS_META } from "@/content/terms";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: TERMS_META.title,
   description: TERMS_META.description,
-  openGraph: {
-    type: "website",
-    siteName: "Malameran",
-    title: `${TERMS_META.title} · Malameran`,
-    description: TERMS_META.description,
-    locale: "en_CA",
-  },
-};
+  path: "/terms",
+});
 
 /**
  * Template text pending legal review — see the TODO(legal) at the top of

@@ -6,18 +6,13 @@ import { OperatingRules } from "@/components/sections/operating-rules";
 import { PageHero } from "@/components/sections/page-hero";
 import { WhyWeExist } from "@/components/sections/why-we-exist";
 import { ABOUT, ABOUT_META } from "@/content/about";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: ABOUT_META.title,
   description: ABOUT_META.description,
-  openGraph: {
-    type: "website",
-    siteName: "Malameran",
-    title: `${ABOUT_META.title} · Malameran`,
-    description: ABOUT_META.description,
-    locale: "en_CA",
-  },
-};
+  path: "/about",
+});
 
 export default function AboutPage() {
   return (

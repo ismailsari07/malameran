@@ -6,18 +6,13 @@ import { PageHero } from "@/components/sections/page-hero";
 import { StepRows } from "@/components/sections/step-rows";
 import { TimelineAside } from "@/components/sections/timeline-aside";
 import { HOW_IT_WORKS, HOW_IT_WORKS_META } from "@/content/how-it-works";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: HOW_IT_WORKS_META.title,
   description: HOW_IT_WORKS_META.description,
-  openGraph: {
-    type: "website",
-    siteName: "Malameran",
-    title: `${HOW_IT_WORKS_META.title} · Malameran`,
-    description: HOW_IT_WORKS_META.description,
-    locale: "en_CA",
-  },
-};
+  path: "/how-it-works",
+});
 
 export default function HowItWorksPage() {
   return (
