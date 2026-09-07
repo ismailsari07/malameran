@@ -5,6 +5,69 @@ Format: date · decision · why · consequence.
 
 ---
 
+## 2026-09-07 · The gates before a write live in one shared module
+
+`guardSubmission(request, endpoint)` parses the envelope, verifies Turnstile and
+checks the rate limiter, in that order, for both public forms. Neither route can
+write before it holds an `{ ok: true }` from it.
+**Why:** "Turnstile and the limiter run before anything is written" was a comment
+plus a statement ordering, duplicated in two files. That is precisely the shape
+of invariant an unrelated edit breaks in one place and not the other, silently
+and without a failing test. It is now structural.
+**Consequence:** validation stays in the routes — it is per-form and belongs with
+the schema. The `endpoint` argument is the rate-limit bucket, so a new form gets
+an independent limit by passing a new string, with no migration.
+
+## 2026-09-07 · The website field accepts http and https only
+
+`supplierApplicationSchema.website` is `z.url({ protocol: /^https?$/ })`.
+**Why:** found in block 8 verification — `z.url()` alone accepted
+`javascript:alert(1)` and the row was written. Supplier-supplied, and the admin
+panel will render it as a link in phase 1-B, so it is a stored-XSS vector waiting
+for a render site. Constrained once at the schema rather than at every future
+place it is displayed.
+**Consequence:** a supplier whose site is reachable only over some other scheme
+cannot enter it. Nobody has one.
+
+## 2026-09-07 · The form islands own the grid; the sidebar is a prop
+
+`RequestForm` and `SupplierForm` render the heading, the sidebar and the form
+card. The pages pass the sidebar down as a prop, so it stays a server component
+and so do the pages.
+**Why:** both artboards draw the success state as a full-width page with no
+heading, no form and no sidebar. With the page owning the grid, `/request` had
+been showing its dark "What happens next" panel next to the confirmation since
+block 7a — a parent that does not know the state cannot remove what the state
+removes.
+**Consequence:** the success band is 96px at the top against the form's 72px,
+per both artboards, and each island carries about fifteen lines of layout. A
+shared shell was considered and rejected: six props to save that is not
+abstraction.
+
+## 2026-09-07 · Required fields follow the schema, not the artboard
+
+The Supplier Application artboard tags Country and Manufacturing categories
+"Optional". Both are `not null` in the migration, and categories carries a
+`>= 1` check. Built as required.
+**Why:** not a judgement call. An artboard that marks a NOT NULL column optional
+describes a form that fails at the database.
+**Consequence:** two fewer "Optional" tags than the artboard shows; five remain.
+
+## 2026-09-07 · `t-h3-aside`, and the supplier form keeps its own components
+
+A new type role at 26 / 1.15 / −0.025em / 700 for the heading in a dark aside.
+**Why:** `t-h3-card-lg` is the same 26px but declares no line-height and is
+already carried by five components, so it cannot absorb a declared 1.15 without
+changing all of them — and the fold rule forbids folding across a line-height
+difference in any case. The heading wraps to two lines in a 312px column, where
+the difference shows.
+**Consequence:** `SupplierSidebar` and `SupplierSuccess` are their own
+components rather than variants of the request ones. The sidebars are a timeline
+and a checklist; the success screens differ in heading role, rows and whether a
+rejected-files block exists. What genuinely repeated was extracted instead —
+`SubmissionBanner`, `guardSubmission`, `FORM_COMMON`, and `max`/`maxLength` on
+`ChipsField`.
+
 ## 2026-09-07 · Turnstile is rendered with `execution: "execute"`
 
 The `render()` options set `execution: "execute"`. Cloudflare's default is

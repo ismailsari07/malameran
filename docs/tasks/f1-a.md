@@ -40,7 +40,7 @@ team by email, and the submitter receives a confirmation.
 
 ## Supplier application form
 - [x] Schema and migration for `supplier_applications`
-- [ ] Form UI, validation, success state
+- [x] Form UI, validation, success state
 
 ## Email
 - [ ] Resend configured on the `send.` subdomain
@@ -80,6 +80,14 @@ team by email, and the submitter receives a confirmation.
 - [ ] Revisit `lg: 1024px` when Home is built: the 82px hero is authored at 1440 and
       currently applies from 1024 up
 - [ ] Confirm the Supabase key names against the real project when it is created
+
+## Open items carried from the supplier application block
+
+- [ ] `ChipsField`'s label uses `htmlFor` against a `<div>`, which is inert. The
+      group is reachable and announced (`role="group"`, `aria-label`), but making
+      the label itself work means `aria-labelledby` and a label id in `FieldShell`
+- [ ] Restore the confirmation-email sentence on the supplier success screen once
+      Resend sends — `TODO(copy) — BLOCK 9` in `src/content/supplier-success.ts`
 
 ## Open items carried from the submission block
 

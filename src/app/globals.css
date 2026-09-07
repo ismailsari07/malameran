@@ -417,6 +417,17 @@
     font-size: 26px;
     letter-spacing: -0.02em;
   }
+  /* The heading inside a dark aside beside a form. Cannot fold into
+     t-h3-card-lg: same 26px, but that role declares no line-height and is
+     already carried by five components, and this one wraps to two lines in a
+     312px column where 1.15 is visible. */
+  .t-h3-aside {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+  }
   .t-h3-card {
     font-family: var(--font-display);
     font-weight: 700;

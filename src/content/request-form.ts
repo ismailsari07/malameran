@@ -118,8 +118,6 @@ export const REQUEST_FORM = {
     issue: (count: number) => `${count} ${count === 1 ? "issue" : "issues"}`,
   },
 
-  optionalTag: "Optional",
-
   /** Failure banners. Each cause reads differently on purpose. */
   errors: {
     validation: {
@@ -144,7 +142,6 @@ export const REQUEST_FORM = {
       body: (reference: string) =>
         `It is saved under ${reference}. Something went wrong afterwards, so if you attached files it is worth sending them by reply.`,
     },
-    retry: "Try again",
   },
 
   sidebar: {

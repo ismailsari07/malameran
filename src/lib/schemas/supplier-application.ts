@@ -32,7 +32,16 @@ export const supplierApplicationSchema = z.object({
 
   // Optional
   monthlyCapacity: optionalText(200),
-  website: z.union([z.url().max(300), z.literal("")]).optional(),
+  /**
+   * http(s) only. `z.url()` alone accepts any well-formed URL, including
+   * `javascript:` and `data:` — a supplier-supplied string that the admin panel
+   * will render as a link in phase 1-B, so the scheme is constrained here
+   * rather than at every future render site. Caught in block 8 verification,
+   * where `javascript:alert(1)` was accepted and written.
+   */
+  website: z
+    .union([z.url({ protocol: /^https?$/ }).max(300), z.literal("")])
+    .optional(),
   certifications: z.array(z.string().trim().min(1).max(80)).max(20).optional(),
   phone: optionalText(40),
   note: optionalText(5000),

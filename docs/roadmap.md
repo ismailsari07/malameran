@@ -4,12 +4,21 @@
 
 **Faz 1 · Aşama A — Tanıtım sitesi ve talep toplama.** Devam ediyor.
 
-Tasarım yönü belirlendi: `design/*.html` referans dosyaları çıkarıldı, token
-tablosu `docs/design.md` içine yazıldı. Proje kurulumu tamamlandı — Next.js,
-TypeScript, Tailwind v4, tasarım tokenları ve Supabase istemcileri hazır.
+Tanıtım sitesinin on iki sayfası da yayında: Home, How It Works, Services,
+Industries, For Suppliers, About, Contact, gizlilik, şartlar ve 404. Veri katmanı
+kuruldu — dört tablo, hepsinde RLS açık ve hiç politika yok, dosya erişimi imzalı
+ve süreli, hız sınırlayıcı Postgres içinde ve hata durumunda kapanıyor. Her iki
+form da çalışıyor: sourcing talebi (`/request`, üç adım, dosya ekli) ve tedarikçi
+başvurusu (`/suppliers/apply`, tek adım, dosyasız).
 
-Sıradaki adım: paylaşılan bileşenler (header, footer, buton, form kontrolleri,
-bölüm sarmalayıcı), ardından Home sayfası.
+Sıradaki adım: e-posta. Resend'in `send.` alt alan adında kurulması, SPF/DKIM/
+DMARC kayıtları, alıcıya onay ve ekibe bildirim e-postaları. Ondan sonra alan adı,
+SEO, analitik ve yayına alma.
+
+Yayından önce kapatılması gerekenler `docs/tasks/f1-a.md` içinde: şablon yasal
+metinlerin gerçek metinle değiştirilmesi, `robots.txt` açılması, `/tokens`
+sayfasının silinmesi ve üç Vercel ortamında `RATE_LIMIT_IP_SALT` ile
+`SUBMISSION_TOKEN_SECRET` değerlerinin ayarlanması.
 
 ## Faz 1 aşamaları
 

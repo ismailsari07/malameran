@@ -5,6 +5,10 @@ import { useRef, useState } from "react";
 import { ChipsField } from "@/components/form/chips-field";
 import { FileField, type UploadState } from "@/components/form/file-field";
 import { FormNav } from "@/components/form/form-nav";
+import {
+  SubmissionBanner,
+  type BannerKind,
+} from "@/components/form/submission-banner";
 import { StepProgress } from "@/components/form/step-progress";
 import {
   DateField,
@@ -25,8 +29,10 @@ import { RequestSuccess } from "./request-success";
 /**
  * The sourcing request form.
  *
- * The only client component on /request — the page, its heading and the
- * sidebar stay on the server.
+ * The only client component on /request. The page stays a server component and
+ * so does the sidebar, which arrives here as a prop: this component owns the
+ * grid and the heading because the success state replaces all three, and a
+ * parent that does not know the state cannot render them.
  *
  * Submission order is fixed and must not be rearranged: the server verifies
  * Turnstile and the rate limiter BEFORE writing anything, so a rejected
@@ -126,13 +132,16 @@ function validateStep(step: number, values: Values): Errors {
 }
 
 type Banner =
-  | { kind: "rate-limited" | "turnstile" | "server" | "validation" }
+  | { kind: Exclude<BannerKind, "after-write"> }
   | { kind: "after-write"; reference: string };
 
 export function RequestForm({
   turnstileSiteKey,
+  sidebar,
 }: {
   turnstileSiteKey: string;
+  /** Rendered as given — a server component passed down through this island. */
+  sidebar: React.ReactNode;
 }) {
   const [step, setStep] = useState(0);
   const [values, setValues] = useState<Values>(EMPTY);
@@ -176,9 +185,11 @@ export function RequestForm({
     const fields = STEP_FIELDS[step] ?? [];
     const firstKey = fields.find((f) => stepErrors[f]);
     if (!firstKey) return;
-    const control = cardRef.current?.querySelector<HTMLElement>(
-      `[name="${firstKey}"]`,
-    );
+    // Chips groups carry no `name`, so fall back to the data attribute they do
+    // carry. Both are scoped to this card.
+    const control =
+      cardRef.current?.querySelector<HTMLElement>(`[name="${firstKey}"]`) ??
+      cardRef.current?.querySelector<HTMLElement>(`[data-field="${firstKey}"]`);
     control?.focus();
   };
 
@@ -376,12 +387,16 @@ export function RequestForm({
   const requirements = REQUEST_FORM.requirements;
   const contact = REQUEST_FORM.contact;
 
+  // The artboard's success state is the whole page: no heading, no sidebar, no
+  // form. Its band is 96px rather than the form's 72px at the top.
   if (success) {
     return (
-      <RequestSuccess
-        reference={success.reference}
-        rejectedFiles={success.rejectedFiles}
-      />
+      <div className="pt-9 pb-14 lg:pt-24 lg:pb-26">
+        <RequestSuccess
+          reference={success.reference}
+          rejectedFiles={success.rejectedFiles}
+        />
+      </div>
     );
   }
 
@@ -402,255 +417,250 @@ export function RequestForm({
               : REQUEST_FORM.errors.server;
 
   return (
-    <Card
-      tone="surface"
-      pad="22"
-      padLg="36-40-40"
-      radius={18}
-      radiusLg={24}
-      className="min-w-0"
-    >
-      <div ref={cardRef}>
-        <StepProgress current={step} issueCounts={issueCounts} />
-        <Rule tone="form" className="mt-7 mb-8 lg:mt-7.5" />
+    <div className="pt-9 pb-14 lg:pt-18 lg:pb-26">
+      <h1 className="t-h1-request text-ink">{REQUEST_FORM.page.heading}</h1>
+      <p className="t-lead text-muted mt-3.5 lg:mt-4.5">
+        {REQUEST_FORM.page.lead}
+      </p>
 
-        {/* Announces step changes and blocked advances to screen readers. */}
-        <p aria-live="polite" className="sr-only">
-          {announcement}
-        </p>
+      <div className="mt-6 grid gap-6 lg:mt-13 lg:grid-cols-[minmax(0,1fr)_372px] lg:items-start lg:gap-12">
+        {/* Mobile puts the sidebar above the form, per the 375 artboard. */}
+        <div className="lg:order-2">{sidebar}</div>
 
-        {bannerCopy ? (
+        <div className="lg:order-1">
           <Card
-            tone={banner?.kind === "rate-limited" ? "info" : "error"}
-            pad="18-20"
-            radius={14}
-            className="mb-6"
+            tone="surface"
+            pad="22"
+            padLg="36-40-40"
+            radius={18}
+            radiusLg={24}
+            className="min-w-0"
           >
-            <p
-              className={
-                banner?.kind === "rate-limited"
-                  ? "t-banner-heading text-ink"
-                  : "t-banner-heading text-err-heading"
-              }
-            >
-              {bannerCopy.heading}
-            </p>
-            <p
-              className={
-                banner?.kind === "rate-limited"
-                  ? "t-fineprint text-text-body-alt mt-2"
-                  : "t-fineprint text-err-body mt-2"
-              }
-            >
-              {bannerCopy.body}
-            </p>
-            {banner?.kind === "server" || banner?.kind === "turnstile" ? (
-              <Button
-                variant="primary-retry"
-                className="mt-4"
-                onClick={() => void submit()}
+            <div ref={cardRef}>
+              <StepProgress current={step} issueCounts={issueCounts} />
+              <Rule tone="form" className="mt-7 mb-8 lg:mt-7.5" />
+
+              {/* Announces step changes and blocked advances to screen readers. */}
+              <p aria-live="polite" className="sr-only">
+                {announcement}
+              </p>
+
+              {bannerCopy && banner ? (
+                <SubmissionBanner
+                  kind={banner.kind}
+                  heading={bannerCopy.heading}
+                  body={bannerCopy.body}
+                  onRetry={() => void submit()}
+                />
+              ) : null}
+
+              {/* The whole form locks while submitting: native disabled semantics. */}
+              <fieldset
+                disabled={submitting}
+                className="min-w-0 border-0 p-0 disabled:pointer-events-none disabled:opacity-50"
               >
-                {REQUEST_FORM.errors.retry}
-              </Button>
-            ) : null}
+                {step === 0 ? (
+                  <div className="flex flex-col gap-5.5 lg:gap-6.5">
+                    <TextareaField
+                      name="productDescription"
+                      label={need.productDescription.label}
+                      description={need.productDescription.description}
+                      placeholder={need.productDescription.placeholder}
+                      rows={6}
+                      value={values.productDescription}
+                      error={errors.productDescription}
+                      onChange={(v) => setField("productDescription", v)}
+                    />
+                    <div className="grid gap-5.5 lg:grid-cols-2 lg:gap-x-6">
+                      <SelectField
+                        name="industry"
+                        label={need.industry.label}
+                        optional
+                        placeholder={need.industry.placeholder}
+                        options={need.industry.options}
+                        value={values.industry}
+                        error={errors.industry}
+                        onChange={(v) => setField("industry", v)}
+                      />
+                      <SelectField
+                        name="requestType"
+                        label={need.requestType.label}
+                        optional
+                        placeholder={need.requestType.placeholder}
+                        options={need.requestType.options}
+                        value={values.requestType}
+                        error={errors.requestType}
+                        onChange={(v) => setField("requestType", v)}
+                      />
+                    </div>
+                    <div className="lg:max-w-[400px]">
+                      <TextField
+                        name="quantity"
+                        label={need.quantity.label}
+                        optional
+                        placeholder={need.quantity.placeholder}
+                        hint={need.quantity.hint}
+                        value={values.quantity}
+                        error={errors.quantity}
+                        onChange={(v) => setField("quantity", v)}
+                      />
+                    </div>
+                  </div>
+                ) : null}
+
+                {step === 1 ? (
+                  <div className="flex flex-col gap-5.5 lg:gap-6.5">
+                    <Card tone="info" pad="16-18" radius={14}>
+                      <p className="t-body text-text-body-alt">
+                        {requirements.notice}
+                      </p>
+                    </Card>
+                    <div className="grid gap-5.5 lg:grid-cols-2 lg:gap-x-6">
+                      <TextField
+                        name="targetPrice"
+                        label={requirements.targetPrice.label}
+                        placeholder={requirements.targetPrice.placeholder}
+                        value={values.targetPrice}
+                        error={errors.targetPrice}
+                        onChange={(v) => setField("targetPrice", v)}
+                      />
+                      <DateField
+                        name="targetDeliveryDate"
+                        label={requirements.targetDeliveryDate.label}
+                        value={values.targetDeliveryDate}
+                        error={errors.targetDeliveryDate}
+                        onChange={(v) => setField("targetDeliveryDate", v)}
+                      />
+                    </div>
+                    <div className="lg:max-w-[480px]">
+                      <SelectField
+                        name="preferredCountry"
+                        label={requirements.preferredCountry.label}
+                        placeholder={requirements.preferredCountry.placeholder}
+                        options={requirements.preferredCountry.options}
+                        value={values.preferredCountry}
+                        error={errors.preferredCountry}
+                        onChange={(v) => setField("preferredCountry", v)}
+                      />
+                    </div>
+                    <ChipsField
+                      name="certifications"
+                      label={requirements.certifications.label}
+                      suggestions={requirements.certifications.suggestions}
+                      addPlaceholder={
+                        requirements.certifications.addPlaceholder
+                      }
+                      value={values.certifications}
+                      error={errors.certifications}
+                      onChange={(v) => setField("certifications", v)}
+                    />
+                    <FileField
+                      name="files"
+                      label={requirements.files.label}
+                      value={files}
+                      onChange={setFiles}
+                      uploads={uploads}
+                      locked={submitting}
+                    />
+                  </div>
+                ) : null}
+
+                {step === 2 ? (
+                  <div className="flex flex-col gap-5.5 lg:gap-6.5">
+                    <div className="grid gap-5.5 lg:grid-cols-2 lg:gap-x-6">
+                      <TextField
+                        name="contactName"
+                        label={contact.contactName.label}
+                        placeholder={contact.contactName.placeholder}
+                        value={values.contactName}
+                        error={errors.contactName}
+                        onChange={(v) => setField("contactName", v)}
+                      />
+                      <TextField
+                        name="company"
+                        label={contact.company.label}
+                        optional
+                        placeholder={contact.company.placeholder}
+                        value={values.company}
+                        error={errors.company}
+                        onChange={(v) => setField("company", v)}
+                      />
+                      <TextField
+                        name="email"
+                        type="email"
+                        label={contact.email.label}
+                        placeholder={contact.email.placeholder}
+                        value={values.email}
+                        error={errors.email}
+                        onChange={(v) => setField("email", v)}
+                      />
+                      <TextField
+                        name="phone"
+                        type="tel"
+                        label={contact.phone.label}
+                        optional
+                        placeholder={contact.phone.placeholder}
+                        value={values.phone}
+                        error={errors.phone}
+                        onChange={(v) => setField("phone", v)}
+                      />
+                    </div>
+                    <TextareaField
+                      name="note"
+                      label={contact.note.label}
+                      optional
+                      placeholder={contact.note.placeholder}
+                      rows={4}
+                      value={values.note}
+                      error={errors.note}
+                      onChange={(v) => setField("note", v)}
+                    />
+
+                    <div>
+                      <Button
+                        block
+                        submitting={submitting}
+                        onClick={() => void submit()}
+                      >
+                        {submitting
+                          ? contact.submittingLabel
+                          : contact.submitLabel}
+                      </Button>
+                      <Turnstile
+                        ref={turnstileRef}
+                        siteKey={turnstileSiteKey}
+                      />
+                      <p className="t-node-body text-muted mt-3.5 text-center">
+                        {submitting
+                          ? contact.submittingNote
+                          : contact.reassurance}
+                      </p>
+                    </div>
+                  </div>
+                ) : null}
+              </fieldset>
+
+              <FormNav
+                current={step}
+                total={total}
+                disabled={submitting}
+                onBack={goBack}
+                onNext={goNext}
+                nextLabel={
+                  // The last step submits from the card body; a second advance
+                  // button here would be a competing affordance. Regressed once
+                  // already when this block was rewritten — keep the guard explicit.
+                  lastStep
+                    ? null
+                    : step === total - 2
+                      ? REQUEST_FORM.nav.review
+                      : REQUEST_FORM.nav.continue
+                }
+              />
+            </div>
           </Card>
-        ) : null}
-
-        {/* The whole form locks while submitting: native disabled semantics. */}
-        <fieldset
-          disabled={submitting}
-          className="min-w-0 border-0 p-0 disabled:pointer-events-none disabled:opacity-50"
-        >
-          {step === 0 ? (
-            <div className="flex flex-col gap-5.5 lg:gap-6.5">
-              <TextareaField
-                name="productDescription"
-                label={need.productDescription.label}
-                description={need.productDescription.description}
-                placeholder={need.productDescription.placeholder}
-                rows={6}
-                value={values.productDescription}
-                error={errors.productDescription}
-                onChange={(v) => setField("productDescription", v)}
-              />
-              <div className="grid gap-5.5 lg:grid-cols-2 lg:gap-x-6">
-                <SelectField
-                  name="industry"
-                  label={need.industry.label}
-                  optional
-                  placeholder={need.industry.placeholder}
-                  options={need.industry.options}
-                  value={values.industry}
-                  error={errors.industry}
-                  onChange={(v) => setField("industry", v)}
-                />
-                <SelectField
-                  name="requestType"
-                  label={need.requestType.label}
-                  optional
-                  placeholder={need.requestType.placeholder}
-                  options={need.requestType.options}
-                  value={values.requestType}
-                  error={errors.requestType}
-                  onChange={(v) => setField("requestType", v)}
-                />
-              </div>
-              <div className="lg:max-w-[400px]">
-                <TextField
-                  name="quantity"
-                  label={need.quantity.label}
-                  optional
-                  placeholder={need.quantity.placeholder}
-                  hint={need.quantity.hint}
-                  value={values.quantity}
-                  error={errors.quantity}
-                  onChange={(v) => setField("quantity", v)}
-                />
-              </div>
-            </div>
-          ) : null}
-
-          {step === 1 ? (
-            <div className="flex flex-col gap-5.5 lg:gap-6.5">
-              <Card tone="info" pad="16-18" radius={14}>
-                <p className="t-body text-text-body-alt">
-                  {requirements.notice}
-                </p>
-              </Card>
-              <div className="grid gap-5.5 lg:grid-cols-2 lg:gap-x-6">
-                <TextField
-                  name="targetPrice"
-                  label={requirements.targetPrice.label}
-                  placeholder={requirements.targetPrice.placeholder}
-                  value={values.targetPrice}
-                  error={errors.targetPrice}
-                  onChange={(v) => setField("targetPrice", v)}
-                />
-                <DateField
-                  name="targetDeliveryDate"
-                  label={requirements.targetDeliveryDate.label}
-                  value={values.targetDeliveryDate}
-                  error={errors.targetDeliveryDate}
-                  onChange={(v) => setField("targetDeliveryDate", v)}
-                />
-              </div>
-              <div className="lg:max-w-[480px]">
-                <SelectField
-                  name="preferredCountry"
-                  label={requirements.preferredCountry.label}
-                  placeholder={requirements.preferredCountry.placeholder}
-                  options={requirements.preferredCountry.options}
-                  value={values.preferredCountry}
-                  error={errors.preferredCountry}
-                  onChange={(v) => setField("preferredCountry", v)}
-                />
-              </div>
-              <ChipsField
-                name="certifications"
-                label={requirements.certifications.label}
-                suggestions={requirements.certifications.suggestions}
-                addPlaceholder={requirements.certifications.addPlaceholder}
-                value={values.certifications}
-                error={errors.certifications}
-                onChange={(v) => setField("certifications", v)}
-              />
-              <FileField
-                name="files"
-                label={requirements.files.label}
-                value={files}
-                onChange={setFiles}
-                uploads={uploads}
-                locked={submitting}
-              />
-            </div>
-          ) : null}
-
-          {step === 2 ? (
-            <div className="flex flex-col gap-5.5 lg:gap-6.5">
-              <div className="grid gap-5.5 lg:grid-cols-2 lg:gap-x-6">
-                <TextField
-                  name="contactName"
-                  label={contact.contactName.label}
-                  placeholder={contact.contactName.placeholder}
-                  value={values.contactName}
-                  error={errors.contactName}
-                  onChange={(v) => setField("contactName", v)}
-                />
-                <TextField
-                  name="company"
-                  label={contact.company.label}
-                  optional
-                  placeholder={contact.company.placeholder}
-                  value={values.company}
-                  error={errors.company}
-                  onChange={(v) => setField("company", v)}
-                />
-                <TextField
-                  name="email"
-                  type="email"
-                  label={contact.email.label}
-                  placeholder={contact.email.placeholder}
-                  value={values.email}
-                  error={errors.email}
-                  onChange={(v) => setField("email", v)}
-                />
-                <TextField
-                  name="phone"
-                  type="tel"
-                  label={contact.phone.label}
-                  optional
-                  placeholder={contact.phone.placeholder}
-                  value={values.phone}
-                  error={errors.phone}
-                  onChange={(v) => setField("phone", v)}
-                />
-              </div>
-              <TextareaField
-                name="note"
-                label={contact.note.label}
-                optional
-                placeholder={contact.note.placeholder}
-                rows={4}
-                value={values.note}
-                error={errors.note}
-                onChange={(v) => setField("note", v)}
-              />
-
-              <div>
-                <Button
-                  block
-                  submitting={submitting}
-                  onClick={() => void submit()}
-                >
-                  {submitting ? contact.submittingLabel : contact.submitLabel}
-                </Button>
-                <Turnstile ref={turnstileRef} siteKey={turnstileSiteKey} />
-                <p className="t-node-body text-muted mt-3.5 text-center">
-                  {submitting ? contact.submittingNote : contact.reassurance}
-                </p>
-              </div>
-            </div>
-          ) : null}
-        </fieldset>
-
-        <FormNav
-          current={step}
-          total={total}
-          disabled={submitting}
-          onBack={goBack}
-          onNext={goNext}
-          nextLabel={
-            // The last step submits from the card body; a second advance
-            // button here would be a competing affordance. Regressed once
-            // already when this block was rewritten — keep the guard explicit.
-            lastStep
-              ? null
-              : step === total - 2
-                ? REQUEST_FORM.nav.review
-                : REQUEST_FORM.nav.continue
-          }
-        />
+        </div>
       </div>
-    </Card>
+    </div>
   );
 }

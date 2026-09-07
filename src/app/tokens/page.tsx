@@ -202,6 +202,7 @@ const single = [
   ["t-h2-success-request", "Request success", "52"],
   ["t-h2-success-apply", "Application success", "50"],
   ["t-h3-card-lg", "Large card heading", "26"],
+  ["t-h3-aside", "Form sidebar heading", "26 / 1.15 / -0.025em"],
   ["t-h3-process", "Process step heading", "22"],
   ["t-numeral-row", "Step row numeral", "64 / 700 / lh 0.9"],
   ["t-numeral-criteria", "Criteria card numeral", "56 / 700 / lh 0.9"],

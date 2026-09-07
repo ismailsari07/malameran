@@ -788,15 +788,16 @@ role class is the pattern CLAUDE.md forbids.
 
 ### Type roles with no mobile counterpart
 
-Mobile artboards exist for only 4 of the 12 pages, so 19 of the 36 content roles have a
+Mobile artboards exist for only 4 of the 12 pages, so 20 of the 37 content roles have a
 single size read from a desktop artboard and **do not scale yet**. They carry no breakpoint override.
 When the pages using them are built and checked at 375px, these are the ones that need a
 mobile value decided:
 
 `t-h1-page` 68 · `t-h1-contact` 64 · `t-h2-cta-page` 72 · `t-h2-statement` 44 ·
 `t-h2-industry` 38 · `t-h2-step` 34 · `t-h2-form-card` 30 · `t-h2-success-request` 52 ·
-`t-h2-success-apply` 50 · `t-h3-card-lg` 26 · `t-h3-process` 22 · `t-numeral-row` 64 ·
-`t-numeral-criteria` 56 · `t-numeral-service` 26 · `t-body-lg` 16.5 · `t-body` 16 ·
+`t-h2-success-apply` 50 · `t-h3-card-lg` 26 · `t-h3-aside` 26 · `t-h3-process` 22 ·
+`t-numeral-row` 64 · `t-numeral-criteria` 56 · `t-numeral-service` 26 ·
+`t-body-lg` 16.5 · `t-body` 16 ·
 `t-body-sm` 15.5 · `t-fineprint` 15 · `t-label` 14.5
 
 The last five are single-size because the source gives them the *same* value on both
@@ -981,6 +982,38 @@ Recorded when the page was built, so the next page does not re-discover them.
 | Hero band | closes with a 10% white hairline | none | `<Section divider>`, desktop and mobile both |
 
 Everything else matched between the two artboards.
+
+## The supplier application: notes from the build
+
+The 375 artboard is a **shortened** form — six fields, no group headings — not a
+mobile treatment of the ten-field desktop form. Read as a spec it would collect
+different data from phone users, so it was followed for composition and not for
+field set.
+
+| Artboard | Built | Why |
+| --- | --- | --- |
+| Country and Manufacturing categories tagged "Optional" | Required, no tag | Both are NOT NULL in the migration; categories has a `>= 1` check. The artboard describes a form that fails at the database |
+| Mobile shows 6 of the 10 fields | All 10 at every width | Hiding fields by viewport collects different data by device |
+| Mobile drops the two group headings | Kept at every width | Ten ungrouped fields is worse than ten grouped. The artboard's flat list follows from it showing six |
+| Mobile label "Monthly capacity" | "Monthly production capacity" | One label, the desktop one |
+| `suppliers@malameran.com` in three states | `info@malameran.com` | Nothing references a mailbox nobody has confirmed exists — the rule from 4b |
+| "Company profile or catalogue" dropzone, plus states 2 and 6 | Not built, nothing in its place | Supplier document upload is phase 2. State 2's "Uploading your catalogue" note became a true sentence; state 6 has nothing to describe |
+| Sidebar top rule `rgba(255,255,255,0.14)`, row rules `0.10` | `Rule tone="dark"` (0.12) | The fold taken in 4a and 7a |
+| Page lead 16.5 ↔ 18.5 at 1.5 | `t-lead` (17 ↔ 19 at 1.55) | 0.5px at both ends; the same fold `/request` already took on the line-height |
+| Sidebar body 15 ↔ 15.5 at 1.55 | `t-body-sm` (15.5 / 1.55) | 0.5px; mobile gains it |
+| Success rows' first column `flex: 0 0 150px` | `sm:w-[150px] sm:shrink-0` | Stacks below `sm`, where 150px would leave nothing for the detail |
+
+One new type role: **`t-h3-aside`** (26 / 1.15 / −0.025em / 700), the sidebar
+heading. It cannot fold into `t-h3-card-lg` — see `docs/decisions.md`.
+
+**No new Card tone, Button variant, Rule tone or Eyebrow tone.** The page is
+built from `surface`, `sidebar`, `info` and `error`, all already on `/tokens`.
+
+**The success state is the whole page.** Both form artboards draw it with no
+heading, no sidebar and no form, and at a 96px top band rather than 72px. That
+moved the grid and the heading into the client islands, with the sidebar passed
+down as a prop so it stays a server component. `/request` had been rendering its
+sidebar beside the confirmation since 7a; fixed in the same change.
 
 ## Open questions
 

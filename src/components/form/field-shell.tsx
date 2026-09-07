@@ -3,7 +3,7 @@
 import { useId } from "react";
 
 import { cn } from "@/lib/cn";
-import { REQUEST_FORM } from "@/content/request-form";
+import { FORM_COMMON } from "@/content/form-common";
 
 import type { FieldTone } from "./control-classes";
 
@@ -104,7 +104,7 @@ export function FieldShell({
         </label>
         {optional ? (
           <span className={cn("t-optional", palette.optional)}>
-            {REQUEST_FORM.optionalTag}
+            {FORM_COMMON.optionalTag}
           </span>
         ) : null}
       </div>

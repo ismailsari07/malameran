@@ -3,22 +3,21 @@ import { z } from "zod";
 
 import { MAX_FILES_PER_REQUEST, MAX_FILE_BYTES } from "@/lib/files/verify";
 import { buildStoragePath, createUploadUrl } from "@/lib/files/storage";
-import { checkRateLimit, clientIpFrom } from "@/lib/rate-limit";
 import { sourcingRequestSchema } from "@/lib/schemas/sourcing-request";
+import { guardSubmission } from "@/lib/submission-guard";
 import {
   createSubmissionToken,
   sanitiseFilename,
 } from "@/lib/submission-token";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
-import { verifyTurnstile } from "@/lib/turnstile";
 
 /**
  * Step 1 of the submission: verify, limit, validate, insert, sign uploads.
  *
- * The order is load-bearing and must not be rearranged for convenience —
- * Turnstile and the rate limiter both run BEFORE anything is written, so a
- * rejected submission leaves no trace. Validation is the control, not a repeat
- * of the client's: nothing the client sent is trusted.
+ * The first two gates live in `guardSubmission`, which both public forms share
+ * — Turnstile and the rate limiter run BEFORE anything is written, so a
+ * rejected submission leaves no trace. Validation below is the control, not a
+ * repeat of the client's: nothing the client sent is trusted.
  */
 
 export const runtime = "nodejs";
@@ -30,11 +29,8 @@ const fileIntentSchema = z.object({
   sizeBytes: z.number().int().positive(),
 });
 
-const payloadSchema = z.object({
-  turnstileToken: z.string().min(1).max(4096),
-  values: z.unknown(),
-  files: z.array(fileIntentSchema).max(50).optional(),
-});
+/** The route's own half of the envelope; the shared half is in the guard. */
+const filesSchema = z.array(fileIntentSchema).max(50).optional();
 
 type FieldErrors = Record<string, string>;
 
@@ -43,42 +39,19 @@ function fail(status: number, body: Record<string, unknown>) {
 }
 
 export async function POST(request: Request) {
-  const ip = clientIpFrom(request.headers);
+  // 1-3. Envelope, Turnstile, rate limiter. Nothing is written before this
+  //      returns ok, and the guard is where that ordering is enforced.
+  const guard = await guardSubmission(request, "sourcing-request");
+  if (!guard.ok) return guard.response;
 
-  let raw: unknown;
-  try {
-    raw = await request.json();
-  } catch {
+  const files = filesSchema.safeParse(guard.raw.files);
+  if (!files.success) {
     return fail(400, { error: "invalid", message: "Malformed request." });
-  }
-
-  const envelope = payloadSchema.safeParse(raw);
-  if (!envelope.success) {
-    return fail(400, { error: "invalid", message: "Malformed request." });
-  }
-
-  // 2. Turnstile, before anything is written.
-  const turnstile = await verifyTurnstile(envelope.data.turnstileToken, ip);
-  if (!turnstile.ok) {
-    const expired = /timeout-or-duplicate/.test(turnstile.reason);
-    return fail(403, {
-      error: expired ? "turnstile-expired" : "turnstile",
-      message: "We could not verify that you are human.",
-    });
-  }
-
-  // 3. Rate limiter. Any error from it means refuse.
-  const limit = await checkRateLimit({ ip, endpoint: "sourcing-request" });
-  if (!limit.allowed) {
-    return fail(429, {
-      error: "rate-limited",
-      message: "Too many requests from this connection.",
-    });
   }
 
   // 4. Validation is the control. The client already ran this schema; that is
   //    a convenience for the user, not evidence about the payload.
-  const parsed = sourcingRequestSchema.safeParse(envelope.data.values);
+  const parsed = sourcingRequestSchema.safeParse(guard.values);
   if (!parsed.success) {
     const fieldErrors: FieldErrors = {};
     for (const issue of parsed.error.issues) {
@@ -92,7 +65,7 @@ export async function POST(request: Request) {
 
   // File intents: counted and bounded server-side. The client's own limits are
   // a convenience; these are the control.
-  const intents = envelope.data.files ?? [];
+  const intents = files.data ?? [];
   if (intents.length > MAX_FILES_PER_REQUEST) {
     return fail(400, {
       error: "files",

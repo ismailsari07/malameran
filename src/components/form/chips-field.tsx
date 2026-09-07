@@ -12,22 +12,34 @@ import { FieldShell, type FieldShellProps } from "./field-shell";
  * Suggested values toggle. Anything typed into the dashed input and confirmed
  * with Enter is added as a selected chip. Selecting is idempotent — adding a
  * value that is already selected is a no-op rather than a duplicate.
+ *
+ * `max` and `maxLength` default to the sourcing form's bounds. Both are props
+ * because the two forms differ: supplier certifications allow 20 chips and
+ * manufacturing categories allow 120 characters each. Every default and every
+ * override mirrors a CHECK constraint — these are a convenience for the user,
+ * and the server re-checks them against the same schema regardless.
  */
 
-const MAX_CHIPS = 10;
-const MAX_CHIP_LENGTH = 80;
+const DEFAULT_MAX_CHIPS = 10;
+const DEFAULT_MAX_CHIP_LENGTH = 80;
 
 export function ChipsField({
   suggestions,
   addPlaceholder,
   value,
   onChange,
+  max = DEFAULT_MAX_CHIPS,
+  maxLength = DEFAULT_MAX_CHIP_LENGTH,
   ...shell
 }: Omit<FieldShellProps, "children"> & {
   suggestions: readonly string[];
   addPlaceholder: string;
   value: readonly string[];
   onChange: (value: string[]) => void;
+  /** Most chips that may be selected. Mirrors the array bound in the schema. */
+  max?: number;
+  /** Longest single chip. Mirrors the per-item bound in the schema. */
+  maxLength?: number;
 }) {
   const [draft, setDraft] = useState("");
 
@@ -35,15 +47,15 @@ export function ChipsField({
     onChange(
       value.includes(chip)
         ? value.filter((v) => v !== chip)
-        : value.length < MAX_CHIPS
+        : value.length < max
           ? [...value, chip]
           : [...value],
     );
   };
 
   const commitDraft = () => {
-    const next = draft.trim().slice(0, MAX_CHIP_LENGTH);
-    if (!next || value.includes(next) || value.length >= MAX_CHIPS) {
+    const next = draft.trim().slice(0, maxLength);
+    if (!next || value.includes(next) || value.length >= max) {
       setDraft("");
       return;
     }
@@ -58,7 +70,21 @@ export function ChipsField({
     <FieldShell {...shell}>
       {({ id, describedBy }) => (
         <>
-          <div className="flex flex-wrap gap-2.5" id={id}>
+          {/*
+            `data-field` and the negative tabindex give this group a focus
+            target. A chips group renders no element carrying `name`, so the
+            forms' focusFirstError cannot find it the way it finds an input —
+            and on the supplier form this field is required, so an error here
+            has to be reachable.
+          */}
+          <div
+            id={id}
+            data-field={shell.name}
+            tabIndex={-1}
+            role="group"
+            aria-label={shell.label}
+            className="flex flex-wrap gap-2.5 outline-none"
+          >
             {[...suggestions, ...custom].map((chip) => {
               const selected = value.includes(chip);
               return (
