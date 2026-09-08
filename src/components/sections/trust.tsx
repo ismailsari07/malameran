@@ -6,8 +6,13 @@ import { HOME } from "@/content/home";
 const { trust } = HOME;
 
 /**
- * Four reasons, `repeat(2,1fr)` gap 20. The numeral sits beside the statement
- * from lg and above it below.
+ * `repeat(2,1fr)` gap 20. The numeral sits beside the statement from lg and
+ * above it below.
+ *
+ * The count is whatever `trust.reasons` holds — the grid was written for four
+ * and now renders three, after the client retracted the "contract sits with us"
+ * claim in September 2026. Nothing here depends on the number; a two-column
+ * grid takes an odd count as 2 + 1.
  */
 export function Trust() {
   return (

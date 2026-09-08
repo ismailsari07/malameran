@@ -110,7 +110,7 @@ export const SERVICES = {
     // TODO(copy):
     heading: "Which part is yours?",
     body: "Tell us where the problem sits and we will tell you what we would take on.",
-    cta: { label: "Start a sourcing request", href: "/request" },
+    cta: { label: "Start a Project", href: "/request" },
   },
 } as const;
 

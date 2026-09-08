@@ -118,7 +118,7 @@ export const HOW_IT_WORKS = {
   finalCta: {
     heading: "Start at step one.",
     body: "Send us the specification. We will come back with a shortlist and a plan.",
-    cta: { label: "Start a sourcing request", href: "/request" },
+    cta: { label: "Start a Project", href: "/request" },
   },
 } as const;
 

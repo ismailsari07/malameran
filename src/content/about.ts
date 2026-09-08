@@ -75,7 +75,7 @@ export const ABOUT = {
   finalCta: {
     heading: "Work with us.",
     body: "Send a specification and we will tell you honestly whether we are the right party for it.",
-    cta: { label: "Start a sourcing request", href: "/request" },
+    cta: { label: "Start a Project", href: "/request" },
   },
 } as const;
 

@@ -29,8 +29,8 @@ export const NAV_ITEMS: readonly NavItem[] = [
  * TODO(copy): both.
  */
 export const HEADER_CTA = {
-  label: "Start a sourcing request",
-  labelShort: "Request",
+  label: "Start a Project",
+  labelShort: "Start",
   href: "/request",
 } as const;
 

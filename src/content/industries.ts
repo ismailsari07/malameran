@@ -108,7 +108,7 @@ export const INDUSTRIES = {
 
   finalCta: {
     heading: "Tell us what you need.",
-    cta: { label: "Start a sourcing request", href: "/request" },
+    cta: { label: "Start a Project", href: "/request" },
   },
 } as const;
 

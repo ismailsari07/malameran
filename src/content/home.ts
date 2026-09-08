@@ -27,10 +27,10 @@ export type Industry = {
 /** TODO(copy): every string below. */
 export const HOME = {
   hero: {
-    eyebrow: "Managed global sourcing · Canada",
+    eyebrow: "Global sourcing & procurement · Canada",
     heading: "Tell us what you need. We take it from there.",
     lead: "Malameran finds the right manufacturer, audits them, and manages your order end to end — from quotation to customs clearance.",
-    primaryCta: { label: "Start a sourcing request", href: "/request" },
+    primaryCta: { label: "Start a Project", href: "/request" },
     secondaryCta: { label: "Apply as a supplier", href: "/suppliers/apply" },
     reassurance:
       "No obligation. Nothing is produced until you approve the quote and the sample.",
@@ -116,7 +116,7 @@ export const HOME = {
     touchpoints: {
       label: "Your two touchpoints",
       body: "Steps 01 and 03 need you. The other three run without you, and you are told where they stand.",
-      primaryCta: { label: "Start a sourcing request", href: "/request" },
+      primaryCta: { label: "Start a Project", href: "/request" },
       secondaryCta: { label: "Apply as a supplier", href: "/suppliers/apply" },
     },
   },
@@ -208,7 +208,7 @@ export const HOME = {
       {
         numeral: "01",
         statement:
-          "Every factory is visited, audited and document-checked before we recommend it.",
+          "Suppliers are screened and verified against the requirements of each project before we recommend them.",
       },
       {
         numeral: "02",
@@ -219,27 +219,22 @@ export const HOME = {
         numeral: "03",
         statement: "No commitment until you approve the quote and the sample.",
       },
-      {
-        numeral: "04",
-        statement:
-          "Registered in Canada. The contract sits with us, not with an overseas intermediary.",
-      },
     ],
   },
 
   suppliers: {
     eyebrow: "For suppliers",
     heading: "Manufacture something we should know about?",
-    body: "We are always adding audited factories to our network. Tell us what you make, your capacity and your certifications.",
+    body: "We are continuously expanding our global supplier network. Tell us what you make, your capacity and your certifications.",
     cta: { label: "Apply as a supplier", href: "/suppliers/apply" },
   },
 
   finalCta: {
     heading: "Tell us what you need.",
     body: "Describe your requirement. A sourcing specialist will come back to you with next steps.",
-    cta: { label: "Start a sourcing request", href: "/request" },
+    cta: { label: "Start a Project", href: "/request" },
     reassurance:
-      "No obligation. Nothing is produced until you approve the quote and the sample.",
+      "No obligation to proceed until you review and approve our proposed next step.",
   },
 } as const;
 
