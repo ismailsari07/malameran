@@ -8,7 +8,7 @@ export const ABOUT = {
   hero: {
     eyebrow: "About",
     heading: "One accountable party, on your side of the table.",
-    lead: "Malameran is a Canadian sourcing company. We are paid by the buyer, we are registered where the buyer is, and the contract sits with us.",
+    lead: "Malameran is a Canadian sourcing company. We are paid by the buyer, and we are registered where the buyer is.",
   },
 
   whyWeExist: {
@@ -83,5 +83,5 @@ export const ABOUT = {
 export const ABOUT_META = {
   title: "About",
   description:
-    "Malameran is a Canadian sourcing company. We are paid by the buyer, registered where the buyer is, and the contract sits with us.",
+    "Malameran is a Canadian sourcing company. We are paid by the buyer and registered where the buyer is.",
 } as const;

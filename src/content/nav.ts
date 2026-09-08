@@ -64,7 +64,7 @@ export const FOOTER_COLUMNS: readonly FooterColumn[] = [
 
 /** TODO(copy): one-line positioning statement under the footer wordmark. */
 export const FOOTER_DESCRIPTION =
-  "Managed global sourcing. One accountable party from specification to delivery.";
+  "Global sourcing and procurement. One accountable party from specification to delivery.";
 
 /**
  * TODO(copy): the design reference shows hello@malameran.com and a full street
