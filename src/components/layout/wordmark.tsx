@@ -31,10 +31,8 @@ import { cn } from "@/lib/cn";
  * approved desktop treatment and neither belongs.
  */
 const MARK = {
-  site:
-    "size-9 rounded-8 border border-paper " +
-    "lg:size-[13px] lg:rounded-none lg:border-0",
-  app: "size-[11px] lg:size-3",
+  site: "size-9 " + "lg:size",
+  app: "size-[11px] lg:size-[48px]",
 } as const;
 
 const TYPE = {
@@ -64,15 +62,7 @@ export function Wordmark({
   const inner = (
     <>
       <BrandMark className={MARK[size]} />
-      <span
-        className={cn(
-          TYPE[size],
-          "text-white",
-          hideTextBelowLg && "sr-only lg:not-sr-only",
-        )}
-      >
-        MALAMERAN
-      </span>
+      <span className={cn(TYPE[size], "text-white", hideTextBelowLg && "sr-only lg:not-sr-only")}>MALAMERAN</span>
     </>
   );
 

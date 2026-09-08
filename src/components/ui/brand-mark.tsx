@@ -43,7 +43,7 @@ export function BrandMark({ className }: { className?: string }) {
       width={RENDERED}
       height={RENDERED}
       priority
-      className={cn("shrink-0 object-contain", className)}
+      className={cn("border-paper rounded-12 shrink-0 border object-contain", className)}
     />
   );
 }
