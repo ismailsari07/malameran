@@ -1048,6 +1048,46 @@ the arithmetic said the design's own header-CTA box fits at 320px with 97px to
 spare, so adding one would have been a variant invented to satisfy a plan bullet.
 `block="below-lg"` was added instead, to replace a `className` override.
 
+### Second pass, after the phone
+
+Three reports came back from a real iPhone 11. Measured in headless Chromium at
+414x896, 375x812 and 320x568 with real touch events, before and after.
+
+**The menu not opening was not a code defect.** The click chain was intact at
+every link and the panel opened under touch at all three widths. It was a stale
+client bundle cached on the device — the layout was current, the JS was not, so
+hydration never attached the handler. Confirmed by retesting in a private tab.
+Worth remembering when testing `next dev` over the LAN from a phone.
+
+| Element | Was | Is |
+| --- | --- | --- |
+| CTA position | third of three `justify-between` children, so it floated mid-bar | grouped with the hamburger in a wrapper, `lg:contents` |
+| Mark, mobile | 11px — lost in a 64px bar | **24px** |
+| Panel | `position: fixed` inside the header's flex row | portalled to `<body>` |
+
+**24px and not 28.** Rendered at 13/20/24/26/28/32 against the bar. At 13 the
+mark is a smudge; at 20 the M is just readable; at 24 it reads clearly while the
+clipped globe still passes as texture; from 26 the arc visibly enters and exits
+the top corners and reads as a mistake rather than a mark. A visible crop is
+worse than a smudge, so 24 is the ceiling until the vector arrives. The mark
+stays on the 20px gutter — every other element on every page aligns to that
+line, and insetting the logo alone would read as a misalignment, not as space.
+
+**`lg:contents` on the wrapper** dissolves it from `lg`, so the CTA and the menu
+return to being direct flex children and the desktop row is unchanged.
+Confirmed at 1440: header 88px, mark 13px, wordmark 178px, nav at x=469, CTA
+220px at x=1092, hamburger hidden.
+
+**The panel is portalled to `<body>`.** `position: fixed` resolves against the
+nearest ancestor carrying `transform`, `filter`, `backdrop-filter`,
+`perspective`, `contain` or `will-change` rather than against the viewport, so
+while the panel lived inside the header's flex row, any future one of those on
+the header, the container or the row would have silently trapped a full-screen
+panel inside a 64px bar. Nothing does that today. The portal means nothing can.
+`lg:hidden` moved onto the panel itself, which it used to inherit from the
+trigger's wrapper — without it, a menu left open while the viewport grows past
+`lg` would stay on screen over the desktop layout.
+
 ## Open questions
 
 - ~~**Two supplier application surfaces.**~~ **Resolved 2026-09-05:** the embedded dark form

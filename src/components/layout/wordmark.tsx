@@ -19,8 +19,17 @@ import { cn } from "@/lib/cn";
  * decorative image has no accessible name at all.
  */
 
+/**
+ * `site` is 24px on mobile, where the mark stands alone in a 64px bar and has
+ * to be legible by itself, and the artboard's 13px from `lg`, where the
+ * wordmark text carries the name.
+ *
+ * 24 and not 28: the file is a crop of the emblem, and past 24px the clipped
+ * globe stops reading as texture and starts reading as a mistake. Measured at
+ * 13/20/24/26/28/32 — see docs/design.md.
+ */
 const MARK = {
-  site: "size-[11px] lg:size-[13px]",
+  site: "size-6 lg:size-[13px]",
   app: "size-[11px] lg:size-3",
 } as const;
 

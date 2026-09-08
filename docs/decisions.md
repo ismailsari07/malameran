@@ -5,6 +5,36 @@ Format: date · decision · why · consequence.
 
 ---
 
+## 2026-09-07 · The mobile menu panel is portalled to `<body>`
+
+`MobileMenu` renders its trigger in place and its panel through
+`createPortal(..., document.body)`.
+**Why:** `position: fixed` resolves against the nearest ancestor with a
+`transform`, `filter`, `backdrop-filter`, `perspective`, `contain` or
+`will-change`, not against the viewport. While the panel sat inside the header's
+flex row, any future one of those on the header, the container or the row would
+have trapped a full-screen panel inside a 64px bar, silently. Nothing did that
+today — this is a latent risk closed while the file was open before delivery,
+not a fix for an observed bug.
+**Consequence:** `lg:hidden` moved onto the panel, which it previously inherited
+from the trigger's wrapper; without it a menu left open while the viewport grows
+past `lg` would stay on screen. The client check uses `useSyncExternalStore`
+rather than `setState` in an effect, which `react-hooks/set-state-in-effect`
+rejects. The trigger, the state and every handler are untouched.
+
+## 2026-09-07 · The mobile mark is 24px, and that is the ceiling
+
+**Why 24:** rendered at 13/20/24/26/28/32 against the 64px bar. At 13 it is a
+smudge, at 20 the M is just readable, at 24 it reads clearly while the clipped
+globe still passes as texture. From 26 the arc visibly enters and exits the top
+corners and the crop becomes the thing you see. A visible crop is worse than a
+smudge, so enlarging stops here until the vector arrives.
+**Not done:** the mark stays on the 20px gutter rather than being inset. Every
+other element on every page aligns to that line; insetting the logo alone reads
+as a misalignment, not as breathing room.
+**Desktop is unchanged** at 13px — the wordmark text carries the name there, so
+the mark does not have to.
+
 ## 2026-09-07 · The prototype mark ships for stage A, over my objection
 
 `public/malameran-mark.png` replaces the design's accent square in the wordmark.

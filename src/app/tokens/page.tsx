@@ -513,15 +513,17 @@ export default function TokensPage() {
           public/malameran-mark.png at the sizes the wordmark uses. Stage A
           placeholder, accepted over the objection recorded in
           docs/decisions.md: an opaque cold-navy tile, a crop of the emblem
-          rather than a mark, and a smudge rather than an M at 1x
+          rather than a mark, and a smudge rather than an M at 1x. 24px on
+          mobile is where the M reads while the clipped globe still passes as
+          texture; past 24 it reads as a mistake
         </div>
         <div className="flex flex-wrap items-end gap-8">
           {(
             [
-              ["site, mobile", "size-[11px]"],
-              ["site, lg", "size-[13px]"],
-              ["app + footer, lg", "size-3"],
-              ["legible reference, 20px", "size-5"],
+              ["site, mobile — 24px", "size-6"],
+              ["site, lg — 13px", "size-[13px]"],
+              ["app + footer, lg — 12px", "size-3"],
+              ["app + footer, mobile — 11px", "size-[11px]"],
             ] as const
           ).map(([label, cls]) => (
             <div key={label} className="flex flex-col items-center gap-3">

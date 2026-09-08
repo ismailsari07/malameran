@@ -30,12 +30,21 @@ export function SiteHeader() {
 
           <SiteNav />
 
-          <Button href={HEADER_CTA.href} variant="primary-sm">
-            <span className="lg:hidden">{HEADER_CTA.labelShort}</span>
-            <span className="hidden lg:inline">{HEADER_CTA.label}</span>
-          </Button>
+          {/*
+            The CTA and the menu are one group on the right, so
+            `justify-between` sees two children and the button does not float in
+            the middle of the bar. `lg:contents` dissolves this wrapper from
+            `lg`, putting both back as direct flex children — the desktop row is
+            byte-for-byte what it was, SiteNav's `ml-auto` included.
+          */}
+          <div className="flex items-center gap-3 lg:contents">
+            <Button href={HEADER_CTA.href} variant="primary-sm">
+              <span className="lg:hidden">{HEADER_CTA.labelShort}</span>
+              <span className="hidden lg:inline">{HEADER_CTA.label}</span>
+            </Button>
 
-          <MobileMenu className="lg:hidden" />
+            <MobileMenu className="lg:hidden" />
+          </div>
         </div>
       </Container>
     </header>
