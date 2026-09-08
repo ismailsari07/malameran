@@ -310,10 +310,15 @@
     line-height: 1;
     letter-spacing: -0.035em;
   }
+  /* Paired since block 11. It shipped single-size at 68px, which overflowed the
+     335px mobile column on /for-suppliers and /about — "manufacture" and
+     "accountable" cannot break, so the text painted past the container and the
+     page scrolled sideways. 44px is t-h1-hero's mobile value, the only other
+     page-hero role with a mobile counterpart. */
   .t-h1-page {
     font-family: var(--font-display);
     font-weight: 800;
-    font-size: 68px;
+    font-size: 44px;
     line-height: 1;
     letter-spacing: -0.035em;
   }
@@ -869,6 +874,9 @@
     .t-h1-hero {
       font-size: 82px;
       line-height: 0.98;
+    }
+    .t-h1-page {
+      font-size: 68px;
     }
     .t-h1-request {
       font-size: 56px;

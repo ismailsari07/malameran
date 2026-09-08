@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
 import { AppHeader } from "@/components/layout/app-header";
@@ -11,14 +12,22 @@ import { Card, YouPill } from "@/components/ui/card";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { Marker } from "@/components/ui/marker";
 import { Rule } from "@/components/ui/rule";
+import { isProduction } from "@/lib/env";
 import { pageMetadata } from "@/lib/seo";
 
 /**
- * TEMPORARY — delete before delivery.
+ * The design-system reference. Renders every token, type role and component
+ * variant so the values in globals.css can be checked against docs/design.md
+ * and the artboards in design/ side by side.
  *
- * Renders every design token so the values in globals.css can be checked
- * against docs/design.md and the artboards in design/ side by side.
- * Tracked as an open item in docs/tasks/f1-a.md.
+ * NOT SHIPPED. `notFound()` in production, so the route exists in development
+ * and on previews and does not exist on the live site — it is a complete
+ * inventory of the design system at a guessable URL.
+ *
+ * Kept rather than deleted because CLAUDE.md requires every new Card, Eyebrow,
+ * Rule, Button or Marker variant to be rendered here in the block that
+ * introduces it, and that rule has caught real drift twice. Deleting the page
+ * would delete what the rule points at. It stays noindex and Disallowed too.
  */
 
 export const metadata: Metadata = pageMetadata({
@@ -178,6 +187,7 @@ const grounds = [
 
 const paired = [
   ["t-h1-hero", "Home hero", "44 / 1.0", "82 / 0.98"],
+  ["t-h1-page", "Inner-page hero", "44 / 1.0", "68 / 1.0"],
   ["t-h1-request", "/request hero", "36 / 1.04", "56 / 1.02"],
   ["t-h1-apply", "/suppliers/apply hero", "33 / 1.06", "52 / 1.04"],
   ["t-h2-section", "Section heading", "36 / 1.05", "56 / 1.03"],
@@ -197,7 +207,6 @@ const paired = [
 ] as const;
 
 const single = [
-  ["t-h1-page", "Inner-page hero", "68"],
   ["t-h1-contact", "Contact hero", "64"],
   ["t-h2-cta-page", "Inner-page closing band", "72"],
   ["t-h2-statement", "Centred statement", "44"],
@@ -295,6 +304,8 @@ function SwatchGrid({ title, items }: { title: string; items: Swatch[] }) {
 }
 
 export default function TokensPage() {
+  if (isProduction) notFound();
+
   return (
     <main className="mx-auto w-full max-w-[1200px] px-5 py-12 lg:px-10">
       <div className="rounded-14 border-err-border bg-err-bg border p-4">

@@ -4,6 +4,7 @@ Stage is done when: the site is live, both forms work, incoming requests reach t
 team by email, and the submitter receives a confirmation.
 
 ## Setup
+
 - [x] Next.js project initialised, TypeScript strict mode on
 - [x] Tailwind configured with design tokens from the approved design
 - [x] Repo structure and `.env.example` in place
@@ -11,12 +12,14 @@ team by email, and the submitter receives a confirmation.
 - [ ] Supabase project created (client's account), local CLI linked
 
 ## Design foundation
+
 - [ ] Design brief agreed
 - [ ] Home page design approved — with the client as preview checkpoint 1
 - [x] Shared components: header, footer, buttons, section wrapper
       (form controls are block 7 — see the Sourcing request form section below)
 
 ## Pages
+
 - [x] Home
 - [x] How It Works
 - [x] Services
@@ -29,6 +32,7 @@ team by email, and the submitter receives a confirmation.
 - [x] 404 and error pages
 
 ## Sourcing request form
+
 - [x] Schema and migration for `sourcing_requests`
 - [x] Form UI with all fields from `docs/scope.md`
 - [x] Server-side validation
@@ -39,10 +43,12 @@ team by email, and the submitter receives a confirmation.
 - [x] Rate limiting
 
 ## Supplier application form
+
 - [x] Schema and migration for `supplier_applications`
 - [x] Form UI, validation, success state
 
 ## Email
+
 - [x] Resend configured on the `send.` subdomain
 - [ ] SPF, DKIM, DMARC records verified
 - [x] Buyer confirmation email
@@ -51,6 +57,7 @@ team by email, and the submitter receives a confirmation.
 - [ ] Deliverability test (score checked before launch)
 
 ## Infrastructure
+
 - [ ] Domain DNS on Cloudflare
 - [ ] Business email mailboxes and aliases set up
 - [ ] SSL verified
@@ -58,27 +65,53 @@ team by email, and the submitter receives a confirmation.
 - [ ] Automated database backups confirmed
 
 ## Launch
+
 - [x] SEO: titles, meta descriptions, Open Graph, sitemap, robots.txt
 - [ ] Analytics installed and receiving events — the code is in place and inert;
       this is done when `NEXT_PUBLIC_GA_MEASUREMENT_ID` is set (see below)
-- [ ] Responsive check at 375px and 1440px
+- [x] Responsive check at 375px and 1440px — all 12 routes, no horizontal
+      overflow at either width. Found and fixed `t-h1-page` overflowing on
+      /for-suppliers and /about
 - [ ] Lighthouse pass on performance and accessibility
 - [ ] All `TODO(copy):` placeholders reviewed and flagged to the client
-- [ ] `npm run build` clean
+- [x] `pnpm build` clean, with lint, typecheck, check:css, check:routes and
+      check:classnames
 - [ ] Deployed to production
 - [ ] Client walkthrough and written sign-off
 
 ## Open items carried from the setup block
 
-- [ ] Delete `src/app/tokens/` — temporary internal token verification page
-- [ ] Write a README with setup instructions before delivery
+- [x] `src/app/tokens/` — kept but gated: `notFound()` in production, so it
+      exists in dev and previews and 404s on the live site. See docs/decisions.md
+- [x] Write a README with setup instructions before delivery
 - [x] Decide which supplier application surface wins — the embedded dark form is
       dropped; `/suppliers/apply` wins. See `docs/decisions.md`
-- [ ] Give the 14 single-size type roles a mobile value as the pages using them are built —
-      listed in `docs/design.md` under "Type roles with no mobile counterpart"
+- [ ] Give the remaining single-size type roles a mobile value as the pages using
+      them are built — listed in `docs/design.md`. `t-h1-page` was given one in
+      block 11 because at 68px it overflowed the 375px column; the rest have not
+      caused an overflow on any route at 375px
 - [ ] Revisit `lg: 1024px` when Home is built: the 82px hero is authored at 1440 and
       currently applies from 1024 up
 - [ ] Confirm the Supabase key names against the real project when it is created
+
+## Stage A security pass — 2026-09-08
+
+Run against a local production build. Full detail in the delivery report.
+
+- [x] Rate limiting limits, both forms, independently — 5 pass then 429 on each
+- [x] Bucket unreadable without a signed URL — publishable key sees no contents,
+      no filenames and no bucket names, verified with an object present
+- [x] No secret in the client bundle — all five server secrets, 0 occurrences
+- [x] XSS — one `dangerouslySetInnerHTML` (server-built JSON-LD), no `innerHTML`
+      anywhere; the `<script>` payload renders escaped in all five email templates
+- [x] Security headers — CSP, HSTS, nosniff, Referrer-Policy, X-Frame-Options,
+      Permissions-Policy; `X-Powered-By` removed
+- [x] noindex / robots / sitemap agree, on the production build
+- [x] No secret, token or internal id in any email or error body — the MAL-/SUP-
+      reference is the only identifier that leaves the system
+- [ ] **Yours to run before launch:** confirm the production Turnstile widget's
+      hostname allowlist includes `malameran.com`, and that
+      `NEXT_PUBLIC_SITE_URL=https://malameran.com` in the Production environment
 
 ## Open items carried from the SEO and analytics block
 
@@ -146,7 +179,7 @@ team by email, and the submitter receives a confirmation.
       Vercel / Resend, analytics provider and its cookies, access-request response
       window, privacy-officer requirement, jurisdiction and liability-cap detail
 - [ ] Confirm PIPEDA is the right regime — a BC, Alberta or Quebec footprint changes it
-- [ ] Tell the client at delivery that this text is a template
+- [x] Tell the client at delivery that this text is a template — `docs/delivery-notes.md`
 
 ## Open items carried from the data layer
 

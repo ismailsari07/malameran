@@ -2,31 +2,27 @@
 
 ## Neredeyiz
 
-**Faz 1 · Aşama A — Tanıtım sitesi ve talep toplama.** Devam ediyor.
+**Faz 1 · Aşama A — Tanıtım sitesi ve talep toplama.** Kod tarafı tamamlandı;
+yayına alma bekleniyor.
 
-Tanıtım sitesinin on iki sayfası da yayında: Home, How It Works, Services,
-Industries, For Suppliers, About, Contact, gizlilik, şartlar ve 404. Veri katmanı
-kuruldu — dört tablo, hepsinde RLS açık ve hiç politika yok, dosya erişimi imzalı
-ve süreli, hız sınırlayıcı Postgres içinde ve hata durumunda kapanıyor. Her iki
-form da çalışıyor: sourcing talebi (`/request`, üç adım, dosya ekli) ve tedarikçi
-başvurusu (`/suppliers/apply`, tek adım, dosyasız).
+On iki sayfa, iki form, dört bildirim e-postası, SEO ve güvenlik başlıkları
+yerinde. Veri katmanı: dört tablo, hepsinde RLS açık ve hiç politika yok, dosya
+erişimi imzalı ve süreli, hız sınırlayıcı Postgres içinde ve hata durumunda
+kapanıyor. Aşama A güvenlik geçişi yapıldı ve `docs/tasks/f1-a.md` içinde
+işaretlendi.
 
-Bildirim e-postaları çalışıyor: her iki form da gönderene onay, ekibe de tüm
-alanları içeren bildirim yolluyor. Gönderim `after()` içinde, yanıt gönderildikten
-sonra çalışıyor — veritabanına yazılmış bir kayıt, e-posta gitmese bile başarılıdır.
+Teslim belgeleri hazır: `README.md` (kurulum, ortam değişkenleri, dağıtım) ve
+`docs/delivery-notes.md` (müşterinin bilmesi ve karar vermesi gerekenler).
 
-SEO tamam: her sayfada canonical, Open Graph ve Twitter kartı var, sitemap ve
-robots.txt tek bir rota tablosundan üretiliyor, sosyal kart tasarım sisteminden
-1200x630 olarak oluşturuluyor. Analitik kodu yerinde ama ölçüm kimliği
-girilene kadar hiçbir şey yüklemiyor.
+Sıradaki adım — bunlar müşteri/proje sahibi tarafından yapılır:
+alan adının Vercel'e bağlanması (`NEXT_PUBLIC_SITE_URL=https://malameran.com`),
+Turnstile widget'ının `malameran.com` alan adını içermesi, SPF/DKIM/DMARC
+doğrulaması ve teslimat testi, Lighthouse kontrolü, üretime dağıtım ve müşteri
+onayı.
 
-Sıradaki adım: alan adı ve DNS (Cloudflare), SPF/DKIM/DMARC doğrulaması ve
-teslimat testi, ardından yayına alma.
-
-Yayından önce kapatılması gerekenler `docs/tasks/f1-a.md` içinde: şablon yasal
-metinlerin gerçek metinle değiştirilmesi, `robots.txt` açılması, `/tokens`
-sayfasının silinmesi ve üç Vercel ortamında `RATE_LIMIT_IP_SALT` ile
-`SUBMISSION_TOKEN_SECRET` değerlerinin ayarlanması.
+Yayından önce kapatılması gerekenler: şablon yasal metinlerin gerçek metinle
+değiştirilmesi (21 placeholder), analitik ölçüm kimliğinin gizlilik politikası
+ile birlikte tek seferde ayarlanması, ve logonun vektör sürümü.
 
 ## Faz 1 aşamaları
 

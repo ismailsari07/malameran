@@ -5,6 +5,79 @@ Format: date · decision · why · consequence.
 
 ---
 
+## 2026-09-08 · The CSP is an origin allowlist, not a strict CSP — and why
+
+`next.config.ts` sets a Content-Security-Policy whose `script-src` carries
+`'unsafe-inline'`.
+
+**This is deliberate, and the policy must not be mistaken for strict in a future
+review.** Next inlines the RSC flight payload into the document. Removing
+`'unsafe-inline'` therefore requires a per-request nonce, a nonce requires
+middleware, and middleware makes **all 21 currently-static routes dynamic**.
+
+**Why that trade is wrong here:** this is a marketing site with two public forms.
+There is no authentication, no user-generated HTML, and React escapes every value
+it renders — the one `dangerouslySetInnerHTML` in the codebase takes
+server-constructed JSON-LD. The XSS surface is close to nil. Turning 21 static
+routes into server-rendered ones on every request, to defend that, costs real
+performance and adds a middleware hop for no measurable security gain.
+
+**What the policy does buy, and what would be lost by dropping it:** code cannot
+be loaded from an origin nobody chose; the page cannot be framed
+(`frame-ancestors 'none'`); `<base>` cannot be rewritten; forms cannot post
+off-site; plugins are off (`object-src 'none'`).
+
+**Do not "harden" this into nonce-based middleware without weighing the above.**
+
+**The Supabase origin is derived from `NEXT_PUBLIC_SUPABASE_URL` at build time,
+not hardcoded.** Dev and production are different projects with different refs, so
+a literal origin would pass every local check and then block the direct-to-storage
+upload in production and nowhere else. `next.config.ts` reads `process.env`
+directly; it is build configuration, cannot import from `src/`, and is therefore
+outside the "only `env.ts` reads `process.env`" rule — the file says so in a
+comment.
+
+**`googletagmanager` and `google-analytics` are allowlisted while analytics is
+still inert**, so that setting the measurement ID later turns analytics on rather
+than silently doing nothing.
+
+**Verified before delivery**, on a local production build with the policy live:
+the Turnstile script loads and `window.turnstile` initialises; a real signed-URL
+`PUT` to Supabase Storage from page context returns 200; a same-origin API POST is
+unaffected; a fetch to a non-allowlisted origin is blocked, proving the policy is
+active rather than absent. Zero violations across the form.
+
+## 2026-09-08 · Zod runs jitless, for the CSP rather than for speed
+
+`src/lib/schemas/zod.ts` calls `z.config({ jitless: true })` and re-exports `z`;
+schema modules import from there rather than from `zod`.
+
+**Why:** Zod feature-detects its JIT validator compiler with
+`try { Function(""), true } catch { false }`. Under a CSP with no `'unsafe-eval'`
+that throws, Zod catches it and falls back to the interpreted path — validation
+stays correct — but the browser still reports a `script-src` violation on every
+page that loads a schema. Console noise that looks like a bug and is not one.
+Found by testing the CSP rather than assuming it.
+
+**The alternative was adding `'unsafe-eval'`**, which would allow arbitrary
+string-to-code execution across the whole site to silence one benign warning.
+Asking Zod for the fallback directly costs nothing measurable on a thirteen-field
+form. Parse results verified identical on both the success and failure paths.
+
+## 2026-09-08 · `/tokens` is gated, not deleted
+
+The design-system reference page calls `notFound()` when `NODE_ENV` is
+production, so it exists in development and on previews and returns 404 on the
+live site. It stays `noindex` and `Disallow`ed regardless.
+
+**Why not delete it:** CLAUDE.md requires every new `Card`, `Eyebrow`, `Rule`,
+`Button` or `Marker` variant to be rendered there in the block that introduces it,
+and that rule has caught real drift twice. Deleting the page would delete what the
+rule points at, and Stage B would rebuild it within a block.
+
+**Why not leave it public:** it is a complete inventory of the design system at a
+guessable URL.
+
 ## 2026-09-07 · The mobile menu panel is portalled to `<body>`
 
 `MobileMenu` renders its trigger in place and its panel through
@@ -298,11 +371,11 @@ warning, but it is the right guard for the retry path.
 Measured before changing anything. Verifying two files took 29s in the browser;
 instrumenting the route gave, for a 2MB PDF and a 69-byte PNG:
 
-| phase | production | dev |
-| --- | --- | --- |
-| download the 2MB PDF | 1044ms | **37219ms** |
-| download the 69-byte PNG | 694ms | 499ms |
-| magic-byte detection | **0.3ms** | 0.3ms |
+| phase                    | production | dev         |
+| ------------------------ | ---------- | ----------- |
+| download the 2MB PDF     | 1044ms     | **37219ms** |
+| download the 69-byte PNG | 694ms      | 499ms       |
+| magic-byte detection     | **0.3ms**  | 0.3ms       |
 
 **It was never the ZIP walk and never the detection** — those are sub-millisecond.
 It was downloading whole files, sequentially. Two things compounded: a 69-byte
@@ -321,10 +394,10 @@ concurrently, because the cost is latency.
 Fair comparison, same 5 files (2MB PDF, two 1MB ZIPs, a PNG, and a mislabelled
 file), same machine, same server lifetime:
 
-| | run 1 | run 2 | run 3 |
-| --- | --- | --- | --- |
-| whole-file, sequential | 24.1s | 5.1s | 7.0s |
-| ranged, concurrent | 1.79s | 2.16s | 1.88s |
+|                        | run 1 | run 2 | run 3 |
+| ---------------------- | ----- | ----- | ----- |
+| whole-file, sequential | 24.1s | 5.1s  | 7.0s  |
+| ranged, concurrent     | 1.79s | 2.16s | 1.88s |
 
 Both detection paths were re-tested against real fixtures and agree on all eight,
 including a `.docx` renamed `.xlsx` and a PNG declared as a PDF.

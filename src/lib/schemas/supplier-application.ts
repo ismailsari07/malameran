@@ -1,4 +1,5 @@
-import { z } from "zod";
+// Configured for the CSP — see ./zod.ts. Never import zod directly here.
+import { z } from "./zod";
 
 /**
  * The supplier application form on /suppliers/apply.

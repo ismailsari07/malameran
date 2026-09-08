@@ -788,12 +788,12 @@ role class is the pattern CLAUDE.md forbids.
 
 ### Type roles with no mobile counterpart
 
-Mobile artboards exist for only 4 of the 12 pages, so 20 of the 37 content roles have a
+Mobile artboards exist for only 4 of the 12 pages, so 19 of the 37 content roles have a
 single size read from a desktop artboard and **do not scale yet**. They carry no breakpoint override.
 When the pages using them are built and checked at 375px, these are the ones that need a
 mobile value decided:
 
-`t-h1-page` 68 · `t-h1-contact` 64 · `t-h2-cta-page` 72 · `t-h2-statement` 44 ·
+`t-h1-contact` 64 · `t-h2-cta-page` 72 · `t-h2-statement` 44 ·
 `t-h2-industry` 38 · `t-h2-step` 34 · `t-h2-form-card` 30 · `t-h2-success-request` 52 ·
 `t-h2-success-apply` 50 · `t-h3-card-lg` 26 · `t-h3-aside` 26 · `t-h3-process` 22 ·
 `t-numeral-row` 64 · `t-numeral-criteria` 56 · `t-numeral-service` 26 ·
@@ -803,7 +803,7 @@ mobile value decided:
 The last five are single-size because the source gives them the *same* value on both
 artboards — those are settled, not gaps. The other fourteen are genuine gaps.
 
-The remaining 17 content roles have a real 375 ↔ 1440 pair and change at `lg`. Of the
+The remaining 18 content roles have a real 375 ↔ 1440 pair and change at `lg`. Of the
 fifteen chrome roles, three are pairs and twelve are single-size.
 
 ### Folds applied
@@ -1087,6 +1087,23 @@ panel inside a 64px bar. Nothing does that today. The portal means nothing can.
 `lg:hidden` moved onto the panel itself, which it used to inherit from the
 trigger's wrapper — without it, a menu left open while the viewport grows past
 `lg` would stay on screen over the desktop layout.
+
+
+### `t-h1-page` gained a mobile value in block 11
+
+It shipped single-size at 68px. At 375px the content column is 335px, and a 68px
+`manufacture` or `accountable` cannot break — the text painted past its container
+and `/for-suppliers` and `/about` scrolled sideways by 32px and 18px. Found by
+sweeping every route for horizontal overflow before delivery, not by looking at
+the pages.
+
+It is now **44 / 1.0 ↔ 68 / 1.0**. 44 is `t-h1-hero`'s mobile value, the only
+other page-hero role that had a mobile counterpart, so the two agree. Verified:
+no horizontal overflow on any of the 12 routes at either 375px or 1440px.
+
+The other single-size roles are left alone — none of them overflows on any route
+at 375px, and inventing mobile values for roles that are not misbehaving would be
+guessing at artboards that do not exist.
 
 ## Open questions
 
