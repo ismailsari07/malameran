@@ -20,16 +20,20 @@ import { cn } from "@/lib/cn";
  */
 
 /**
- * `site` is 24px on mobile, where the mark stands alone in a 64px bar and has
- * to be legible by itself, and the artboard's 13px from `lg`, where the
- * wordmark text carries the name.
+ * `site` is 36px on mobile, where the mark stands alone in a 64px bar, and the
+ * artboard's 13px from `lg`, where the wordmark text carries the name.
  *
- * 24 and not 28: the file is a crop of the emblem, and past 24px the clipped
- * globe stops reading as texture and starts reading as a mistake. Measured at
- * 13/20/24/26/28/32 — see docs/design.md.
+ * The rounded corners and the cream hairline are mobile-only, and they are what
+ * makes 36px viable: the file is an opaque cold-navy tile, so at that size it
+ * would otherwise read as a rectangular patch stuck on a warm bar. Rounding it
+ * and outlining it turns the tile into a deliberate badge and hides the worst
+ * of the crop at the edges. Both are reset at `lg`, where the 13px mark is the
+ * approved desktop treatment and neither belongs.
  */
 const MARK = {
-  site: "size-6 lg:size-[13px]",
+  site:
+    "size-9 rounded-8 border border-paper " +
+    "lg:size-[13px] lg:rounded-none lg:border-0",
   app: "size-[11px] lg:size-3",
 } as const;
 

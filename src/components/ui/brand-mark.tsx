@@ -27,13 +27,13 @@ import { cn } from "@/lib/cn";
  */
 
 /**
- * The LARGEST size the mark is ever rendered at — 24px, in the site header
+ * The LARGEST size the mark is ever rendered at — 36px, in the site header
  * below `lg`, where it stands alone. next/image builds its srcset from this,
  * not from the source's 320px, so declaring 320 made every page fetch a 384px
  * image for a slot a fortieth of that. At 24 it generates the small candidates
  * a 1x and a 2x display actually need.
  */
-const RENDERED = 24;
+const RENDERED = 36;
 
 export function BrandMark({ className }: { className?: string }) {
   return (

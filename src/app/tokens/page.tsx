@@ -515,12 +515,17 @@ export default function TokensPage() {
           docs/decisions.md: an opaque cold-navy tile, a crop of the emblem
           rather than a mark, and a smudge rather than an M at 1x. 24px on
           mobile is where the M reads while the clipped globe still passes as
-          texture; past 24 it reads as a mistake
+          texture. It is 36px on mobile with rounded corners and a cream
+          hairline: the rounding and the outline turn an opaque navy tile into a
+          deliberate badge and hide the worst of the crop at the edges
         </div>
         <div className="flex flex-wrap items-end gap-8">
           {(
             [
-              ["site, mobile — 24px", "size-6"],
+              [
+                "site, mobile — 36px badge",
+                "size-9 rounded-8 border border-paper",
+              ],
               ["site, lg — 13px", "size-[13px]"],
               ["app + footer, lg — 12px", "size-3"],
               ["app + footer, mobile — 11px", "size-[11px]"],
