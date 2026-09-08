@@ -23,7 +23,7 @@ import { SITE_NAME } from "@/lib/seo";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = `${SITE_NAME} — managed global sourcing`;
+export const alt = `${SITE_NAME} — global sourcing and procurement`;
 
 const ACCENT = "#E2751B";
 const INK = "#1A191E";
@@ -111,7 +111,7 @@ export default async function Image() {
             maxWidth: 900,
           }}
         >
-          Managed global sourcing.
+          Global sourcing and procurement.
         </div>
         <div
           style={{

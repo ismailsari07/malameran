@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     template: `%s · ${SITE_NAME}`,
   },
   description:
-    "Managed global sourcing. One accountable party from specification to delivery.",
+    "Global sourcing and procurement. One accountable party from specification to delivery.",
   icons: {
     icon: "/favicon.png",
     apple: "/apple-touch-icon.png",

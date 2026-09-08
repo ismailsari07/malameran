@@ -33,7 +33,7 @@ export const HOME = {
     primaryCta: { label: "Start a Project", href: "/request" },
     secondaryCta: { label: "Apply as a supplier", href: "/suppliers/apply" },
     reassurance:
-      "No obligation. Nothing is produced until you approve the quote and the sample.",
+      "No obligation to proceed until you review and approve our proposed next step.",
   },
 
   diagram: {
@@ -217,7 +217,8 @@ export const HOME = {
       },
       {
         numeral: "03",
-        statement: "No commitment until you approve the quote and the sample.",
+        statement:
+          "No commitment until you review and approve the proposed next step.",
       },
     ],
   },
@@ -240,7 +241,7 @@ export const HOME = {
 
 /** TODO(copy): page title, description and social preview text. */
 export const HOME_META = {
-  title: "Malameran — Managed global sourcing",
+  title: "Malameran — Global sourcing and procurement",
   description:
     "Malameran finds the right manufacturer, audits them, and manages your order end to end — from quotation to customs clearance.",
 } as const;

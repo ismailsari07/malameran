@@ -107,7 +107,7 @@ export const REQUEST_FORM = {
     challengeSlot:
       "Reserved for a verification challenge — appears only if triggered",
     reassurance:
-      "No obligation. Nothing is produced until you approve the quote and the sample.",
+      "No obligation to proceed until you review and approve our proposed next step.",
   },
 
   nav: {
@@ -160,7 +160,7 @@ export const REQUEST_FORM = {
 
 /** TODO(copy): page title and description. */
 export const REQUEST_META = {
-  title: "Start a sourcing request",
+  title: "Start a Project",
   description:
     "Tell us what you need made. Three short steps, no account and no obligation.",
 } as const;

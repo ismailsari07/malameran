@@ -27,7 +27,7 @@ const OG_IMAGE = {
   url: "/opengraph-image",
   width: 1200,
   height: 630,
-  alt: `${SITE_NAME} — managed global sourcing`,
+  alt: `${SITE_NAME} — global sourcing and procurement`,
 };
 
 /** Absolute, from NEXT_PUBLIC_SITE_URL, with any trailing slash removed. */
