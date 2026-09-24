@@ -2,6 +2,13 @@
 
 ## Neredeyiz
 
+**Faz 1 · Aşama B — Müşteri paneli ve yönetim paneli.** Başladı. Blok 1 (panel
+kabuğu) bitti: her iki panelin paylaştığı kabuk, gezinme, sayfa başlığı deseni,
+boş ve yükleniyor durumları. Sadece arayüz — kimlik doğrulama, veritabanı ve RLS
+henüz yok, bu yüzden `(panel)` altındaki tüm rotalar üretimde 404 veriyor.
+Sıradaki: Blok 2 (müşteri paneli ekranları) ve Blok 3 (yönetim paneli ekranları);
+ikisi de `docs/tasks/f1-b.md` içindeki açık kararlar netleşince başlar.
+
 **Faz 1 · Aşama A — Tanıtım sitesi ve talep toplama.** Kod tarafı tamamlandı;
 yayına alma bekleniyor.
 
@@ -30,6 +37,7 @@ Her aşama kendi başına yayına alınabilir ve tamamlandığında site çalı�
 kalır.
 
 ### F1-A · Tanıtım sitesi ve talep toplama
+
 Public site, sourcing talep formu, tedarikçi başvuru formu, bildirim e-postaları,
 alan adı ve kurumsal e-posta kurulumu, SEO, analitik, yasal sayfalar, deploy.
 
@@ -37,6 +45,7 @@ alan adı ve kurumsal e-posta kurulumu, SEO, analitik, yasal sayfalar, deploy.
 ulaşıyor, müşteriye onay e-postası gidiyor.
 
 ### F1-B · Müşteri paneli ve yönetim paneli
+
 Hesap sistemi, veritabanı şeması ve RLS, müşteri paneli, süreç takip çizelgesi,
 yönetim paneli, iç notlar, kullanıcı ve başvuru listeleri.
 
@@ -45,6 +54,7 @@ projeleri panelden yönetiyor, bir müşteri başkasının verisine hiçbir yold
 erişemiyor.
 
 ### F1-C · Dosya paylaşımı, mesajlaşma ve güvenlik
+
 Proje bazlı dosya alanı, mesaj alanı, ilgili bildirimler, okunmamış işaretleri,
 detaylı güvenlik kontrolü, teslim ve yönetim paneli eğitimi.
 

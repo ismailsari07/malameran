@@ -2,19 +2,16 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  useCallback,
-  useEffect,
-  useId,
-  useRef,
-  useState,
-  useSyncExternalStore,
-} from "react";
+import { useCallback, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { Button } from "@/components/ui/button";
 import { HEADER_CTA, NAV_ITEMS } from "@/content/nav";
 import { cn } from "@/lib/cn";
+import {
+  useDismissablePanel,
+  useHasMounted,
+} from "@/lib/use-dismissable-panel";
 
 /**
  * The mobile navigation panel.
@@ -32,18 +29,17 @@ import { cn } from "@/lib/cn";
  * silently trapped a full-screen panel inside a 64px bar. Nothing does that
  * today; the portal means nothing can.
  *
- * The trigger, the state and every handler are unchanged. Only where the panel
- * renders moved.
+ * Escape, the Tab cycle, the initial focus move and the scroll lock now come
+ * from `useDismissablePanel`, which the panel shell's section drawer also uses.
+ * The behaviour is unchanged in every respect — the effects moved file, nothing
+ * about them was rewritten, and returning focus to the trigger stays here in
+ * `close()` because this panel also closes on a link click.
  */
-
-const FOCUSABLE =
-  'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 export function MobileMenu({ className }: { className?: string }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const panelId = useId();
-  const panelRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
 
   const close = useCallback(() => {
@@ -51,69 +47,11 @@ export function MobileMenu({ className }: { className?: string }) {
     triggerRef.current?.focus();
   }, []);
 
-  /**
-   * The portal needs a document, and there is none during SSR. This is the
-   * hydration-safe form of "are we on the client yet": the server snapshot is
-   * false, the client snapshot is true, and React re-renders once after
-   * hydrating. Setting state from an effect would do the same thing while
-   * tripping react-hooks/set-state-in-effect.
-   *
-   * The panel is therefore absent from the SSR markup, which costs nothing —
-   * it is closed and `hidden` at that point anyway.
-   */
-  const mounted = useSyncExternalStore(
-    () => () => {},
-    () => true,
-    () => false,
-  );
-
-  // Lock the page behind the panel.
-  useEffect(() => {
-    if (!open) return;
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = previous;
-    };
-  }, [open]);
-
-  // Escape closes; Tab cycles inside the panel.
-  useEffect(() => {
-    if (!open) return;
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        close();
-        return;
-      }
-      if (event.key !== "Tab") return;
-
-      const panel = panelRef.current;
-      if (!panel) return;
-      const items = Array.from(panel.querySelectorAll<HTMLElement>(FOCUSABLE));
-      const first = items[0];
-      const last = items[items.length - 1];
-      if (!first || !last) return;
-
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault();
-        first.focus();
-      }
-    };
-
-    document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
-  }, [open, close]);
-
-  // Move focus into the panel when it opens.
-  useEffect(() => {
-    if (!open) return;
-    panelRef.current?.querySelector<HTMLElement>(FOCUSABLE)?.focus();
-  }, [open]);
+  const panelRef = useDismissablePanel<HTMLDivElement>({
+    open,
+    onClose: close,
+  });
+  const mounted = useHasMounted();
 
   return (
     <div className={className}>

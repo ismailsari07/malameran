@@ -6,12 +6,18 @@ import { MobileMenu } from "@/components/layout/mobile-menu";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { Wordmark } from "@/components/layout/wordmark";
+import { PanelEmptyState } from "@/components/panel/panel-empty-state";
+import { PanelHeader } from "@/components/panel/panel-header";
+import { PanelNav } from "@/components/panel/panel-nav";
+import { PanelPageHeader } from "@/components/panel/panel-page-header";
+import { PanelSkeleton } from "@/components/panel/panel-skeleton";
 import { BrandMark } from "@/components/ui/brand-mark";
 import { Button, type ButtonVariant } from "@/components/ui/button";
 import { Card, YouPill } from "@/components/ui/card";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { Marker } from "@/components/ui/marker";
 import { Rule } from "@/components/ui/rule";
+import { ADMIN_NAV } from "@/content/panel";
 import { isProduction } from "@/lib/env";
 import { pageMetadata } from "@/lib/seo";
 
@@ -757,6 +763,46 @@ export default function TokensPage() {
         <AppHeader />
         <div className="bg-paper h-24" />
         <SiteFooter />
+      </div>
+
+      <h3 className="t-eyebrow text-text-small mt-12">
+        Panel shell — authored, no artboard exists
+      </h3>
+      <p className="t-body-sm text-text-support mt-2">
+        The F1-B shell, on the app-form surface. Zero new colour, radius or type
+        tokens: see &quot;Panel shell&quot; under &quot;Authored, not in the
+        source&quot; in docs/design.md for where each value comes from. The bar
+        is full-bleed below; the sidebar, the page title, the empty state and
+        the loading state follow. Below 1024px the sidebar is replaced by the
+        drawer in the bar — open it there, not here.
+      </p>
+      <div className="-mx-5 mt-4 lg:-mx-10">
+        <PanelHeader kind="admin" home="/admin" nav={ADMIN_NAV} />
+      </div>
+      <div className="border-border-card rounded-20 bg-paper mt-4 border p-6">
+        <div className="lg:grid lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-12">
+          {/*
+            The real sidebar. It marks the current route active, and /tokens is
+            not one of its routes, so every item here renders in its rest state
+            — which is the state worth checking side by side.
+          */}
+          <PanelNav groups={ADMIN_NAV} />
+          <div>
+            <PanelPageHeader
+              eyebrow="Admin"
+              title="Requests"
+              lead="The page-title pattern: eyebrow, 30px title, lead capped at 620px, and an action slot that sits beside the title from lg."
+            />
+            <PanelEmptyState
+              heading="No requests to show"
+              body="The empty state: the app-form card at the mobile card's padding and radius below lg, with an optional secondary button."
+              action={{ label: "Back to site", href: "/" }}
+            />
+            <div className="mt-4">
+              <PanelSkeleton />
+            </div>
+          </div>
+        </div>
       </div>
     </main>
   );

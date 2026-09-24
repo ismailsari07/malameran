@@ -68,6 +68,24 @@ export const ROUTES: readonly RouteEntry[] = [
 
   // Internal, unlinked, and slated for deletion before launch.
   { path: "/tokens", indexable: false, disallow: true },
+
+  // The F1-B panels. UI only so far — no auth, no session, no row-level
+  // security — so the whole group 404s in production, the same gate /tokens
+  // carries. Nothing links them and nothing may rank them, so unlike /request
+  // they are disallowed as well as noindex.
+  //
+  // Only the two roots carry `disallow`. A robots.txt Disallow is a prefix
+  // match, so "/admin" already covers every section under it; repeating it per
+  // child would print six redundant lines and publish the panel's whole URL
+  // structure in a file anyone can read.
+  { path: "/dashboard", indexable: false, disallow: true },
+  { path: "/dashboard/profile", indexable: false },
+  { path: "/admin", indexable: false, disallow: true },
+  { path: "/admin/requests", indexable: false },
+  { path: "/admin/projects", indexable: false },
+  { path: "/admin/companies", indexable: false },
+  { path: "/admin/users", indexable: false },
+  { path: "/admin/supplier-applications", indexable: false },
 ];
 
 export const INDEXABLE_ROUTES = ROUTES.filter((r) => r.indexable);

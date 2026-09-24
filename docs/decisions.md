@@ -5,6 +5,67 @@ Format: date · decision · why · consequence.
 
 ---
 
+## 2026-09-24 · The panel is the app-form surface, and the whole shell is authored
+
+No artboard exists for a panel of any kind — `design/` holds eleven marketing and
+app-form screens and nothing resembling a dashboard — so the customer and admin
+shell is authored end to end, like the mobile menu and the legal pages. It is
+recorded in `docs/design.md` § "Authored, not in the source" **before** any
+component was written, which is the same order a new token goes in.
+**The surface is the app form's**: paper page, white cards, `--line` borders, the
+dark bar. Not the marketing surface, which alternates grounds down the page —
+something a screen of lists cannot do — and not a dark panel, which would mean
+inventing a dark data-table treatment the source has nothing for.
+**It added no colour, no radius and no type role.** The one width with no source
+value is the 240px sidebar, derived as twice the 120px numeral column and stated
+as such; the 48px gap is the app form's own column gap, and the bar reuses the
+app header's 60/76 exactly.
+**Consequence:** the shell sits inside the existing 1280px container rather than
+introducing a second measure, and the body rhythm is the app form's stepped down
+one pair on the scale — a screen returned to daily does not want a marketing
+page's air.
+
+## 2026-09-24 · Both panels 404 in production until auth exists
+
+`(panel)/layout.tsx` calls `notFound()` when `NODE_ENV` is production, so every
+route under `/dashboard` and `/admin` exists in development and on previews and
+does not exist on the live site.
+**Why:** the shell is UI only — no auth, no session, no policies behind any of it
+— and without the gate, merging to main would publish an unauthenticated admin
+panel. Same treatment as `/tokens`, one level up so eight routes are covered by
+one line.
+**Verified:** a production build prerenders `/dashboard` and `/admin/requests`
+with `"status": 404`, identical to `/tokens`.
+**Consequence:** this comes off in the auth block, when real access control
+replaces it — not before. It is on the F1-B task list as its own item.
+
+## 2026-09-24 · Only the two panel roots are disallowed, not all eight routes
+
+`/dashboard` and `/admin` carry `disallow: true`; their six children are noindex
+only.
+**Why:** a robots.txt `Disallow` is a prefix match, so `/admin` already covers
+every section under it. Repeating it per child would print six redundant lines
+and publish the panel's entire URL structure in a file anyone can read.
+**Consequence:** unlike `/request`, these are disallowed as well as noindex —
+nothing links them, so the failure mode that keeps the form pages crawlable does
+not apply here.
+
+## 2026-09-24 · One dismissal hook, two panels
+
+Escape, the Tab cycle, the initial focus move and the body scroll lock moved out
+of `MobileMenu` into `useDismissablePanel`, which the panel drawer also calls.
+**Why:** the site now has two full-screen panels that must behave identically. A
+focus trap that exists twice drifts, and the second copy is where the drift is
+never noticed.
+**What deliberately stayed at the call site:** returning focus to the trigger.
+Both panels also close on a link click, and a hook that moved focus on every
+close would fight the navigation that follows.
+**Verified after the refactor**, since a live component was edited: the mobile
+menu still portals to `<body>`, locks the page, moves focus to the first link,
+wraps Tab from the last item back to the first, marks the current route, and on
+Escape closes, restores the scroll and returns focus to the hamburger. The
+markup and every class string in it are unchanged.
+
 ## 2026-09-08 · The CSP is an origin allowlist, not a strict CSP — and why
 
 `next.config.ts` sets a Content-Security-Policy whose `script-src` carries

@@ -12,10 +12,10 @@ Source files: `Site Header`, `Site Footer`, `Malameran Home`, `How It Works`, `S
 
 The design has two distinct visual modes and they do not share a palette:
 
-| Surface | Where | Background | Text |
-| --- | --- | --- | --- |
-| **Marketing** | Home, How It Works, Services, Industries, For Suppliers, About, Contact, Sourcing Request | alternating `--paper` and dark gradients | dark on paper, white on dark |
-| **App form** | Request Form (`/request`), Supplier Application (`/suppliers/apply`) | `--paper` page, `#fff` form card | dark throughout; one dark sidebar card |
+| Surface       | Where                                                                                     | Background                               | Text                                   |
+| ------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------- | -------------------------------------- |
+| **Marketing** | Home, How It Works, Services, Industries, For Suppliers, About, Contact, Sourcing Request | alternating `--paper` and dark gradients | dark on paper, white on dark           |
+| **App form**  | Request Form (`/request`), Supplier Application (`/suppliers/apply`)                      | `--paper` page, `#fff` form card         | dark throughout; one dark sidebar card |
 
 Notably: the sourcing-request form on `Malameran Sourcing Request` is **dark-on-dark**,
 while the same form rebuilt in `Malameran Request Form` is **light**. The Request Form /
@@ -33,16 +33,16 @@ Request Form pair and `/suppliers/apply` the Supplier Application pair.
 
 ### Declared CSS variables
 
-| Token | Hex | Role |
-| --- | --- | --- |
-| `--ink` | `#1A191E` | Primary text on paper; darkest base colour |
-| `--paper` | `#F9F9F7` | Page background, light sections |
-| `--accent` | `#E2751B` | Brand orange — CTAs, eyebrows, numerals, focus |
-| `--head-bg` | `#1F1E23` | Site header background |
-| `--line` | `#DCDBD6` | Border/divider on form pages only |
-| `--muted` | `#6C6A66` | Secondary text on form pages |
-| `--err` | `#B4402A` | Error borders, error text, error icon fill |
-| `--you` | `= var(--accent)` | Highlight for buyer-owned steps (toggleable prop) |
+| Token       | Hex               | Role                                              |
+| ----------- | ----------------- | ------------------------------------------------- |
+| `--ink`     | `#1A191E`         | Primary text on paper; darkest base colour        |
+| `--paper`   | `#F9F9F7`         | Page background, light sections                   |
+| `--accent`  | `#E2751B`         | Brand orange — CTAs, eyebrows, numerals, focus    |
+| `--head-bg` | `#1F1E23`         | Site header background                            |
+| `--line`    | `#DCDBD6`         | Border/divider on form pages only                 |
+| `--muted`   | `#6C6A66`         | Secondary text on form pages                      |
+| `--err`     | `#B4402A`         | Error borders, error text, error icon fill        |
+| `--you`     | `= var(--accent)` | Highlight for buyer-owned steps (toggleable prop) |
 
 Accent is a canvas prop with alternates offered: `#E2751B` (default), `#D9601F`,
 `#C8791A`, `#E08A2B`. Only `#E2751B` is used in the layouts.
@@ -54,13 +54,13 @@ Layered gradients, not flat fills. The source reuses two names for different val
 compositions. See "Grounds: three `--dark-hero` variants" under Notes for implementation for
 how they are split in code.
 
-| Token | Composition |
-| --- | --- |
-| `--dark-hero` | paper-fade at bottom → radial accent glow `1200px 700px at 76% 16%` at 15% (Home), 14% (inner pages) or 13% with no paper-fade (Contact, Sourcing Request) → `linear-gradient(168deg, #201F24 0%, #1A191E 55%, #17171A 100%)` |
-| `--dark-soft` | paper-fade at bottom → radial accent glow `1000px 620px at 10% 6%` at 9% → `linear-gradient(180deg, #1C1B20 0%, #17171A 100%)` |
-| `--dark-quiet` | `linear-gradient(180deg, #1A191E 0%, #18171C 100%)` (marketing pages) |
-| `--dark-quiet` | `radial-gradient(700px 480px at 90% 4%, accent 10%, transparent)` → `linear-gradient(180deg, #1E1D22 0%, #17171A 100%)` (form pages — same name, different value) |
-| `--dark-strong` | `radial-gradient(1100px 680px at 50% 118%, accent 20%, transparent)` → `linear-gradient(180deg, #17171A 0%, #1E1D22 100%)` — final CTA band |
+| Token           | Composition                                                                                                                                                                                                                   |
+| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--dark-hero`   | paper-fade at bottom → radial accent glow `1200px 700px at 76% 16%` at 15% (Home), 14% (inner pages) or 13% with no paper-fade (Contact, Sourcing Request) → `linear-gradient(168deg, #201F24 0%, #1A191E 55%, #17171A 100%)` |
+| `--dark-soft`   | paper-fade at bottom → radial accent glow `1000px 620px at 10% 6%` at 9% → `linear-gradient(180deg, #1C1B20 0%, #17171A 100%)`                                                                                                |
+| `--dark-quiet`  | `linear-gradient(180deg, #1A191E 0%, #18171C 100%)` (marketing pages)                                                                                                                                                         |
+| `--dark-quiet`  | `radial-gradient(700px 480px at 90% 4%, accent 10%, transparent)` → `linear-gradient(180deg, #1E1D22 0%, #17171A 100%)` (form pages — same name, different value)                                                             |
+| `--dark-strong` | `radial-gradient(1100px 680px at 50% 118%, accent 20%, transparent)` → `linear-gradient(180deg, #17171A 0%, #1E1D22 100%)` — final CTA band                                                                                   |
 
 The bottom paper-fade on `--dark-hero`/`--dark-soft` is:
 `linear-gradient(180deg, rgba(249,249,247,0) calc(100% - 160px), rgba(249,249,247,0.045) calc(100% - 60px), rgba(249,249,247,0.13) 100%)`
@@ -69,116 +69,116 @@ Gradient stop colours in use: `#201F24`, `#1E1D22`, `#1C1B20`, `#1A191E`, `#1817
 
 ### Flat colours — dark surfaces
 
-| Hex | Role |
-| --- | --- |
-| `#1F1E23` | Header bar |
-| `#151418` | Footer |
-| `#101010` | Button label on accent; darkening base for `color-mix` |
-| `#111` | `<option>` text inside dark selects (native dropdown legibility) |
-| `#2A292E` | Border of the dark sidebar card on light form pages |
-| `#8A4408` | Numeral on a completed step pill |
+| Hex       | Role                                                             |
+| --------- | ---------------------------------------------------------------- |
+| `#1F1E23` | Header bar                                                       |
+| `#151418` | Footer                                                           |
+| `#101010` | Button label on accent; darkening base for `color-mix`           |
+| `#111`    | `<option>` text inside dark selects (native dropdown legibility) |
+| `#2A292E` | Border of the dark sidebar card on light form pages              |
+| `#8A4408` | Numeral on a completed step pill                                 |
 
 ### Flat colours — light surfaces
 
-| Hex | Role |
-| --- | --- |
-| `#F9F9F7` | Paper (page background) |
-| `#FFFFFF` | Form card, input, chip, file-row backgrounds |
-| `#FCFCFA` | File dropzone interior |
-| `#F4F3EF` | Info panel background; read-only/locked input background |
-| `#E4E3E0` | Canvas surround outside the artboards — **not a site colour** |
-| `#E4E3DF` | Card border on paper (marketing sections) |
-| `#DDDCD8` | Hairline rule between prose blocks (marketing) |
-| `#DCDBD6` | Border/divider (`--line`, form pages) |
-| `#DEDDD8` | Inactive step-progress track |
-| `#D3D2CC` | Input / select / chip border (light forms) |
-| `#EDECE8` | Upload progress track; divider inside success card |
-| `#E2E1DC` | Dashed border of the reserved verification-challenge slot |
-| `#C4C2BB` | Dashed border of the file dropzone |
-| `#C9C7C0` | Dashed border of the "add another certification" input |
-| `#A9A6A0` | Chip / Back-button border on hover |
-| `#A6A39D` | Input placeholder text (light forms); disabled Back label on mobile |
+| Hex       | Role                                                                   |
+| --------- | ---------------------------------------------------------------------- |
+| `#F9F9F7` | Paper (page background)                                                |
+| `#FFFFFF` | Form card, input, chip, file-row backgrounds                           |
+| `#FCFCFA` | File dropzone interior                                                 |
+| `#F4F3EF` | Info panel background; read-only/locked input background               |
+| `#E4E3E0` | Canvas surround outside the artboards — **not a site colour**          |
+| `#E4E3DF` | Card border on paper (marketing sections)                              |
+| `#DDDCD8` | Hairline rule between prose blocks (marketing)                         |
+| `#DCDBD6` | Border/divider (`--line`, form pages)                                  |
+| `#DEDDD8` | Inactive step-progress track                                           |
+| `#D3D2CC` | Input / select / chip border (light forms)                             |
+| `#EDECE8` | Upload progress track; divider inside success card                     |
+| `#E2E1DC` | Dashed border of the reserved verification-challenge slot              |
+| `#C4C2BB` | Dashed border of the file dropzone                                     |
+| `#C9C7C0` | Dashed border of the "add another certification" input                 |
+| `#A9A6A0` | Chip / Back-button border on hover                                     |
+| `#A6A39D` | Input placeholder text (light forms); disabled Back label on mobile    |
 | `#B0ADA6` | Back label when disabled at step 1; verification-slot placeholder text |
-| `#B9B7B1` | Dimmed step numeral for the steps the buyer does not own (02, 04, 05) |
+| `#B9B7B1` | Dimmed step numeral for the steps the buyer does not own (02, 04, 05)  |
 
 ### Text colours
 
-| Hex | Role |
-| --- | --- |
-| `#1A191E` | Headings and primary text on paper (`--ink`) |
-| `#26251F` | Form field labels |
-| `#1E1E1C` | Long-form prose (Home "the problem", About) |
-| `#3A3936` | Body copy in cards on paper (marketing) |
-| `#3A3833` | Body copy on form pages; chip label |
-| `#5A5852` | Card body / supporting copy on paper |
+| Hex       | Role                                                       |
+| --------- | ---------------------------------------------------------- |
+| `#1A191E` | Headings and primary text on paper (`--ink`)               |
+| `#26251F` | Form field labels                                          |
+| `#1E1E1C` | Long-form prose (Home "the problem", About)                |
+| `#3A3936` | Body copy in cards on paper (marketing)                    |
+| `#3A3833` | Body copy on form pages; chip label                        |
+| `#5A5852` | Card body / supporting copy on paper                       |
 | `#6C6A66` | Muted text, deliverable lines, artboard labels (`--muted`) |
-| `#8A8882` | Muted uppercase eyebrow on paper |
-| `#918E88` | Small print, "Optional" tags, hints, step counters |
-| `#8B8880` | Select chevron stroke (light) |
+| `#8A8882` | Muted uppercase eyebrow on paper                           |
+| `#918E88` | Small print, "Optional" tags, hints, step counters         |
+| `#8B8880` | Select chevron stroke (light)                              |
 
 ### White at opacity (all text/border on dark)
 
-| Value | Role |
-| --- | --- |
-| `rgba(255,255,255,0.9)` | Form label text; chip label on dark |
-| `#fff` | Headings, emphasis, link hover |
-| `0.80` / `0.78` | Sidebar body copy |
-| `0.74` | Hero subheading |
-| `0.72` | Nav link rest state; card body |
-| `0.68` | Card body copy |
-| `0.66` | Footer link |
-| `0.62` / `0.60` | Secondary card copy; "Back to site" link |
-| `0.56` | Reassurance line under the hero CTA |
-| `0.55` / `0.5` | Footer paragraph, label above contact detail |
-| `0.48` | Fine print under a submit button |
-| `0.45` / `0.42` / `0.40` / `0.38` | Uppercase eyebrows and column headings, ascending faintness |
-| `0.32` | Placeholder text in dark inputs |
-| `0.22` | Border of the emphasis card; timeline node ring |
-| `0.18` | Border of nested cards and pills |
-| `0.16` | Timeline connector line |
-| `0.14` | Standard border on dark cards and inputs; hero rules |
-| `0.13` | Hero-panel border |
-| `0.12` | Standard border, dark step/industry cards |
-| `0.10` / `0.09` | Header bottom border; footer top border |
-| `0.06` | Ghost-button hover fill |
-| `0.045` | Dark input background |
-| `0.04` / `0.035` / `0.03` / `0.02` | Card fills on dark, faintest to lightest use order |
+| Value                              | Role                                                        |
+| ---------------------------------- | ----------------------------------------------------------- |
+| `rgba(255,255,255,0.9)`            | Form label text; chip label on dark                         |
+| `#fff`                             | Headings, emphasis, link hover                              |
+| `0.80` / `0.78`                    | Sidebar body copy                                           |
+| `0.74`                             | Hero subheading                                             |
+| `0.72`                             | Nav link rest state; card body                              |
+| `0.68`                             | Card body copy                                              |
+| `0.66`                             | Footer link                                                 |
+| `0.62` / `0.60`                    | Secondary card copy; "Back to site" link                    |
+| `0.56`                             | Reassurance line under the hero CTA                         |
+| `0.55` / `0.5`                     | Footer paragraph, label above contact detail                |
+| `0.48`                             | Fine print under a submit button                            |
+| `0.45` / `0.42` / `0.40` / `0.38`  | Uppercase eyebrows and column headings, ascending faintness |
+| `0.32`                             | Placeholder text in dark inputs                             |
+| `0.22`                             | Border of the emphasis card; timeline node ring             |
+| `0.18`                             | Border of nested cards and pills                            |
+| `0.16`                             | Timeline connector line                                     |
+| `0.14`                             | Standard border on dark cards and inputs; hero rules        |
+| `0.13`                             | Hero-panel border                                           |
+| `0.12`                             | Standard border, dark step/industry cards                   |
+| `0.10` / `0.09`                    | Header bottom border; footer top border                     |
+| `0.06`                             | Ghost-button hover fill                                     |
+| `0.045`                            | Dark input background                                       |
+| `0.04` / `0.035` / `0.03` / `0.02` | Card fills on dark, faintest to lightest use order          |
 
 ### Error palette (form pages)
 
-| Hex | Role |
-| --- | --- |
+| Hex       | Role                                                               |
+| --------- | ------------------------------------------------------------------ |
 | `#B4402A` | `--err` — invalid field border, inline error text, error icon fill |
-| `#7E2C1B` | Error banner heading |
-| `#6B3327` | Error banner body |
-| `#E5C3BA` | Error banner / issue-pill border |
-| `#FCF3F1` | Error banner background |
-| `#FDF7F5` | Invalid input background; rejected-file dropzone background |
-| `#E0BFB6` | Remove-button border on hover |
+| `#7E2C1B` | Error banner heading                                               |
+| `#6B3327` | Error banner body                                                  |
+| `#E5C3BA` | Error banner / issue-pill border                                   |
+| `#FCF3F1` | Error banner background                                            |
+| `#FDF7F5` | Invalid input background; rejected-file dropzone background        |
+| `#E0BFB6` | Remove-button border on hover                                      |
 
 ### Derived colours (`color-mix`, oklab)
 
 These are computed, not literal. Keep them as functions of the accent rather than baking hexes.
 
-| Expression | Role |
-| --- | --- |
-| `accent 88%, #101010` | Step numerals and eyebrow numerals on paper |
-| `accent 82%, #ffffff` | Primary button hover |
-| `accent 74%, #101010` | Section eyebrow (uppercase) on paper |
-| `accent 60%, #101010` | "You" pill border on dark |
-| `accent 45%, #1A191E` | Border of any accent-tinted card: the hero diagram's MALAMERAN card and the Services "End to end" card. Implemented as `--accent-tint-border` |
-| `accent 22%, #ffffff` | Selected chip fill — `--accent-chip-selected` |
-| `accent 20%, #ffffff` | Completed step-pill fill — `--accent-step-complete` |
-| `accent 20%, #17171A` | Active node in the form sidebar's timeline — `--accent-node-active` |
-| `accent 42%, #F4F3EF` | Disabled/submitting button fill |
-| `accent 22%, #ffffff` | Selected chip fill (light) |
-| `accent 20%, #ffffff` | Completed step-pill fill |
-| `accent 20%, #17171A` | Active timeline node fill |
-| `accent 18%, #1A191E` | Accent-tinted "MALAMERAN" card in the hero diagram |
-| `accent 12%, #101010` | Buyer-owned step card fill on dark |
-| `accent 75%, transparent` | Vertical connector line in the hero diagram |
-| `accent 18%, #1A191E` | Accent MALAMERAN card in the hero diagram |
-| `accent 20% / 15% / 14% / 13% / 10% / 9%, transparent` | Radial glow intensities in the dark grounds |
+| Expression                                             | Role                                                                                                                                          |
+| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `accent 88%, #101010`                                  | Step numerals and eyebrow numerals on paper                                                                                                   |
+| `accent 82%, #ffffff`                                  | Primary button hover                                                                                                                          |
+| `accent 74%, #101010`                                  | Section eyebrow (uppercase) on paper                                                                                                          |
+| `accent 60%, #101010`                                  | "You" pill border on dark                                                                                                                     |
+| `accent 45%, #1A191E`                                  | Border of any accent-tinted card: the hero diagram's MALAMERAN card and the Services "End to end" card. Implemented as `--accent-tint-border` |
+| `accent 22%, #ffffff`                                  | Selected chip fill — `--accent-chip-selected`                                                                                                 |
+| `accent 20%, #ffffff`                                  | Completed step-pill fill — `--accent-step-complete`                                                                                           |
+| `accent 20%, #17171A`                                  | Active node in the form sidebar's timeline — `--accent-node-active`                                                                           |
+| `accent 42%, #F4F3EF`                                  | Disabled/submitting button fill                                                                                                               |
+| `accent 22%, #ffffff`                                  | Selected chip fill (light)                                                                                                                    |
+| `accent 20%, #ffffff`                                  | Completed step-pill fill                                                                                                                      |
+| `accent 20%, #17171A`                                  | Active timeline node fill                                                                                                                     |
+| `accent 18%, #1A191E`                                  | Accent-tinted "MALAMERAN" card in the hero diagram                                                                                            |
+| `accent 12%, #101010`                                  | Buyer-owned step card fill on dark                                                                                                            |
+| `accent 75%, transparent`                              | Vertical connector line in the hero diagram                                                                                                   |
+| `accent 18%, #1A191E`                                  | Accent MALAMERAN card in the hero diagram                                                                                                     |
+| `accent 20% / 15% / 14% / 13% / 10% / 9%, transparent` | Radial glow intensities in the dark grounds                                                                                                   |
 
 ---
 
@@ -200,72 +200,72 @@ Weights in use: **500, 600, 700, 800**. 400 is loaded but never applied explicit
 
 ### Type scale as used
 
-| Role | Size | Weight | Line height | Letter spacing | Family |
-| --- | --- | --- | --- | --- | --- |
-| Home hero h1 (desktop) | 82px | 800 | 0.98 | −0.035em | Tight |
-| Final CTA h2 (Home) | 76px | 800 | 1.0 | −0.035em | Tight |
-| Final CTA h2 (inner pages) | 72px | 800 | 1.0 | −0.035em | Tight |
-| Inner-page h1 | 68px | 800 | 1.0 | −0.035em | Tight |
-| Form-page h1 / short h1 | 64px | 800 | 1.02 | −0.035em | Tight |
-| Section h2 | 56px | 800 | 1.03 | −0.03em | Tight |
-| App-form h1 (`/request`) | 56px | 800 | 1.02 | −0.035em | Tight |
-| Why-we-exist h2 (About) | 52px | 800 | 1.03 | −0.03em | Tight |
-| Success h2 | 52px / 50px | 800 | 1.03 / 1.04 | −0.035em | Tight |
-| Supplier-apply h1 | 52px | 800 | 1.04 | −0.035em | Tight |
-| Centred panel h2 | 44px | 700 | 1.08 | −0.028em | Tight |
-| Mobile hero h1 | 44px | 800 | 1.0 | −0.035em | Tight |
-| Stat figure ("2 days") | 44px | 700 | 1 | −0.035em | Tight |
-| Card-CTA h2 | 40px | 700 | 1.08 | −0.025em | Tight |
-| Industry section h2 | 38px | 700 | 1.08 | −0.025em | Tight |
-| Mobile form h1 | 38px / 36px / 33px | 800 | 1.03–1.06 | −0.035em | Tight |
-| Mobile section h2 | 36px | 800 | 1.05 | −0.03em | Tight |
-| Step h2 (How It Works) | 34px | 700 | 1.1 | −0.025em | Tight |
-| Form-card h2 (Contact) | 30px | 700 | — | −0.02em | Tight |
-| Mobile panel h2 | 30px | 700 | 1.1 | −0.025em | Tight |
-| Engagement-model h3 | 28px | 700 | — | −0.02em | Tight |
-| Card h3 (large) | 26px | 700 | — | −0.02em | Tight |
-| Stat value (About) | 26px | 700 | — | −0.02em | Tight |
-| Sidebar heading | 26px | 700 | 1.15 | −0.025em | Tight |
-| Card h3 (industries) | 24px | 700 | — | −0.02em | Tight |
-| Step card h3 | 23px | 700 | — | −0.015em | Tight |
-| Process h3 | 22px | 700 | — | −0.015em | Tight |
-| Mobile step h3 | 21px | 700 | — | −0.015em | Tight |
-| Service card h3 | 20px | 700 | — | −0.012em | Tight |
-| Diagram node title | 20px / 19px | 700 | — | — | Tight |
-| Wordmark (header) | 21px desktop / 19px compact / 17px mobile | 700 | — | +0.10em | Tight |
-| Numeral, large | 64px | 800 (700 in step lists) | 1 / 0.9 | −0.045em | Tight |
-| Numeral, medium | 56px / 48px / 46px | 700–800 | 0.9 / 1 | −0.045em | Tight |
-| Numeral, small | 26px / 23px | 800 (700 on Services) | 1 | −0.03em | Tight/Inter |
-| Hero lead paragraph | 19px | 400 | 1.55 | — | Inter |
-| Lead / success paragraph | 19px | 400 | 1.5–1.55 | — | Inter |
-| Long-form prose | 18px | 400 | 1.65 | — | Inter |
-| Trust-card statement | 20px / 18px | 500 | 1.45 | — | Inter |
-| Body (form page intro) | 18.5px / 18px | 400 | 1.5–1.6 | — | Inter |
-| Body (step / industry copy) | 17.5px | 400 | 1.6 | — | Inter |
-| Primary button label | 17px | 700 | — | — | Inter |
-| Mobile body | 17px | 400 | 1.55 | — | Inter |
-| Card body (large) | 16.5px | 400 | 1.6 | — | Inter |
-| Dropzone title | 16.5px | 600 | — | — | Inter |
-| Error banner heading | 16.5px | 700 | — | — | Inter |
-| Input / textarea / select text | 16px | 400 | 1.5 (textarea) | — | Inter |
-| Body / list row | 16px | 400 | 1.5–1.6 | — | Inter |
-| Secondary button label | 16px | 600 | — | — | Inter |
-| Card body (small) | 15.5px | 400 | 1.5–1.55 | — | Inter |
-| Step-nav button label | 15.5px | 600 / 700 | — | — | Inter |
-| Nav link / footer link | 15px | 500 / 400 | — | — | Inter |
-| Fine print, reassurance | 15px | 400 | 1.5–1.55 | — | Inter |
-| Field label | 14.5px | 600 | — | — | Inter |
-| "Back to site" link | 14.5px | 500 | — | — | Inter |
-| Inline error message | 14px | 500 | 1.45 | — | Inter |
-| Legal / copyright | 14px | 400 | — | — | Inter |
-| Hint under a field | 13.5px / 13px | 400 | — | — | Inter |
-| Remove/Cancel button | 13.5px | 600 | — | — | Inter |
-| Eyebrow, section (desktop) | 12.5px | 600 | — | +0.06em, uppercase | Inter |
-| State label (states gallery) | 12.5px | 700 | — | +0.05em, uppercase | Inter |
-| Artboard label | 12px | 600 | — | +0.06em, uppercase | Inter |
-| Eyebrow, card / sidebar | 11.5px | 600 | — | +0.06em, uppercase | Inter |
-| "Optional" tag | 11.5px / 11px | 500 | — | +0.05em, uppercase | Inter |
-| Eyebrow, small / mobile | 11px | 600 | — | +0.06em, uppercase | Inter |
+| Role                           | Size                                      | Weight                  | Line height    | Letter spacing     | Family      |
+| ------------------------------ | ----------------------------------------- | ----------------------- | -------------- | ------------------ | ----------- |
+| Home hero h1 (desktop)         | 82px                                      | 800                     | 0.98           | −0.035em           | Tight       |
+| Final CTA h2 (Home)            | 76px                                      | 800                     | 1.0            | −0.035em           | Tight       |
+| Final CTA h2 (inner pages)     | 72px                                      | 800                     | 1.0            | −0.035em           | Tight       |
+| Inner-page h1                  | 68px                                      | 800                     | 1.0            | −0.035em           | Tight       |
+| Form-page h1 / short h1        | 64px                                      | 800                     | 1.02           | −0.035em           | Tight       |
+| Section h2                     | 56px                                      | 800                     | 1.03           | −0.03em            | Tight       |
+| App-form h1 (`/request`)       | 56px                                      | 800                     | 1.02           | −0.035em           | Tight       |
+| Why-we-exist h2 (About)        | 52px                                      | 800                     | 1.03           | −0.03em            | Tight       |
+| Success h2                     | 52px / 50px                               | 800                     | 1.03 / 1.04    | −0.035em           | Tight       |
+| Supplier-apply h1              | 52px                                      | 800                     | 1.04           | −0.035em           | Tight       |
+| Centred panel h2               | 44px                                      | 700                     | 1.08           | −0.028em           | Tight       |
+| Mobile hero h1                 | 44px                                      | 800                     | 1.0            | −0.035em           | Tight       |
+| Stat figure ("2 days")         | 44px                                      | 700                     | 1              | −0.035em           | Tight       |
+| Card-CTA h2                    | 40px                                      | 700                     | 1.08           | −0.025em           | Tight       |
+| Industry section h2            | 38px                                      | 700                     | 1.08           | −0.025em           | Tight       |
+| Mobile form h1                 | 38px / 36px / 33px                        | 800                     | 1.03–1.06      | −0.035em           | Tight       |
+| Mobile section h2              | 36px                                      | 800                     | 1.05           | −0.03em            | Tight       |
+| Step h2 (How It Works)         | 34px                                      | 700                     | 1.1            | −0.025em           | Tight       |
+| Form-card h2 (Contact)         | 30px                                      | 700                     | —              | −0.02em            | Tight       |
+| Mobile panel h2                | 30px                                      | 700                     | 1.1            | −0.025em           | Tight       |
+| Engagement-model h3            | 28px                                      | 700                     | —              | −0.02em            | Tight       |
+| Card h3 (large)                | 26px                                      | 700                     | —              | −0.02em            | Tight       |
+| Stat value (About)             | 26px                                      | 700                     | —              | −0.02em            | Tight       |
+| Sidebar heading                | 26px                                      | 700                     | 1.15           | −0.025em           | Tight       |
+| Card h3 (industries)           | 24px                                      | 700                     | —              | −0.02em            | Tight       |
+| Step card h3                   | 23px                                      | 700                     | —              | −0.015em           | Tight       |
+| Process h3                     | 22px                                      | 700                     | —              | −0.015em           | Tight       |
+| Mobile step h3                 | 21px                                      | 700                     | —              | −0.015em           | Tight       |
+| Service card h3                | 20px                                      | 700                     | —              | −0.012em           | Tight       |
+| Diagram node title             | 20px / 19px                               | 700                     | —              | —                  | Tight       |
+| Wordmark (header)              | 21px desktop / 19px compact / 17px mobile | 700                     | —              | +0.10em            | Tight       |
+| Numeral, large                 | 64px                                      | 800 (700 in step lists) | 1 / 0.9        | −0.045em           | Tight       |
+| Numeral, medium                | 56px / 48px / 46px                        | 700–800                 | 0.9 / 1        | −0.045em           | Tight       |
+| Numeral, small                 | 26px / 23px                               | 800 (700 on Services)   | 1              | −0.03em            | Tight/Inter |
+| Hero lead paragraph            | 19px                                      | 400                     | 1.55           | —                  | Inter       |
+| Lead / success paragraph       | 19px                                      | 400                     | 1.5–1.55       | —                  | Inter       |
+| Long-form prose                | 18px                                      | 400                     | 1.65           | —                  | Inter       |
+| Trust-card statement           | 20px / 18px                               | 500                     | 1.45           | —                  | Inter       |
+| Body (form page intro)         | 18.5px / 18px                             | 400                     | 1.5–1.6        | —                  | Inter       |
+| Body (step / industry copy)    | 17.5px                                    | 400                     | 1.6            | —                  | Inter       |
+| Primary button label           | 17px                                      | 700                     | —              | —                  | Inter       |
+| Mobile body                    | 17px                                      | 400                     | 1.55           | —                  | Inter       |
+| Card body (large)              | 16.5px                                    | 400                     | 1.6            | —                  | Inter       |
+| Dropzone title                 | 16.5px                                    | 600                     | —              | —                  | Inter       |
+| Error banner heading           | 16.5px                                    | 700                     | —              | —                  | Inter       |
+| Input / textarea / select text | 16px                                      | 400                     | 1.5 (textarea) | —                  | Inter       |
+| Body / list row                | 16px                                      | 400                     | 1.5–1.6        | —                  | Inter       |
+| Secondary button label         | 16px                                      | 600                     | —              | —                  | Inter       |
+| Card body (small)              | 15.5px                                    | 400                     | 1.5–1.55       | —                  | Inter       |
+| Step-nav button label          | 15.5px                                    | 600 / 700               | —              | —                  | Inter       |
+| Nav link / footer link         | 15px                                      | 500 / 400               | —              | —                  | Inter       |
+| Fine print, reassurance        | 15px                                      | 400                     | 1.5–1.55       | —                  | Inter       |
+| Field label                    | 14.5px                                    | 600                     | —              | —                  | Inter       |
+| "Back to site" link            | 14.5px                                    | 500                     | —              | —                  | Inter       |
+| Inline error message           | 14px                                      | 500                     | 1.45           | —                  | Inter       |
+| Legal / copyright              | 14px                                      | 400                     | —              | —                  | Inter       |
+| Hint under a field             | 13.5px / 13px                             | 400                     | —              | —                  | Inter       |
+| Remove/Cancel button           | 13.5px                                    | 600                     | —              | —                  | Inter       |
+| Eyebrow, section (desktop)     | 12.5px                                    | 600                     | —              | +0.06em, uppercase | Inter       |
+| State label (states gallery)   | 12.5px                                    | 700                     | —              | +0.05em, uppercase | Inter       |
+| Artboard label                 | 12px                                      | 600                     | —              | +0.06em, uppercase | Inter       |
+| Eyebrow, card / sidebar        | 11.5px                                    | 600                     | —              | +0.06em, uppercase | Inter       |
+| "Optional" tag                 | 11.5px / 11px                             | 500                     | —              | +0.05em, uppercase | Inter       |
+| Eyebrow, small / mobile        | 11px                                      | 600                     | —              | +0.06em, uppercase | Inter       |
 
 `text-wrap: pretty` is set on nearly every heading and lead paragraph.
 
@@ -296,61 +296,61 @@ Common gaps: `8`, `10`, `12`, `14`, `16`, `20`, `26` (within components); `20`, 
 
 Distinctive paddings:
 
-| Value | Where |
-| --- | --- |
-| `14px 16px` | Input / select / textarea (light form) |
-| `15px 16px` | Input / select / textarea (dark form) |
-| `15px` | Input on mobile |
-| `19px 30px` | Primary button (desktop) |
-| `19px 24px` / `18px` | Primary button (mobile) |
-| `15px 28px` | Step-nav "Continue" button |
-| `14px 22px` / `13px 22px` | Secondary and inline buttons |
-| `9px 15px` / `10px 14px` | Chip |
-| `6px 12px` / `5px 11px` | Tag pill |
-| `5px 10px` / `4px 9px` | "You" pill |
-| `7px 12px` | Remove / Cancel button |
-| `16px 18px` | Bullet card (How It Works) |
-| `14px 16px` | Bullet card (Industries), file row |
-| `22px` | Mobile card |
-| `26px 24px 28px` | Service card |
-| `30px 28px 32px` | Industry / stat card |
-| `30px 30px 34px` | Step card |
-| `32px 32px 36px` | Service card (Services page) |
-| `34px 32px 38px` | Rule / criteria card |
-| `36px 34px 40px` | Trust card |
-| `36px 40px 40px` | Form card (app forms) |
-| `44px 44px 48px` / `44px 48px 48px` | Form card (dark forms) |
-| `32px 30px 34px` | Sidebar card |
-| `32px 24px` | File dropzone |
-| `52px 56px 56px` | Centred CTA panel |
+| Value                               | Where                                  |
+| ----------------------------------- | -------------------------------------- |
+| `14px 16px`                         | Input / select / textarea (light form) |
+| `15px 16px`                         | Input / select / textarea (dark form)  |
+| `15px`                              | Input on mobile                        |
+| `19px 30px`                         | Primary button (desktop)               |
+| `19px 24px` / `18px`                | Primary button (mobile)                |
+| `15px 28px`                         | Step-nav "Continue" button             |
+| `14px 22px` / `13px 22px`           | Secondary and inline buttons           |
+| `9px 15px` / `10px 14px`            | Chip                                   |
+| `6px 12px` / `5px 11px`             | Tag pill                               |
+| `5px 10px` / `4px 9px`              | "You" pill                             |
+| `7px 12px`                          | Remove / Cancel button                 |
+| `16px 18px`                         | Bullet card (How It Works)             |
+| `14px 16px`                         | Bullet card (Industries), file row     |
+| `22px`                              | Mobile card                            |
+| `26px 24px 28px`                    | Service card                           |
+| `30px 28px 32px`                    | Industry / stat card                   |
+| `30px 30px 34px`                    | Step card                              |
+| `32px 32px 36px`                    | Service card (Services page)           |
+| `34px 32px 38px`                    | Rule / criteria card                   |
+| `36px 34px 40px`                    | Trust card                             |
+| `36px 40px 40px`                    | Form card (app forms)                  |
+| `44px 44px 48px` / `44px 48px 48px` | Form card (dark forms)                 |
+| `32px 30px 34px`                    | Sidebar card                           |
+| `32px 24px`                         | File dropzone                          |
+| `52px 56px 56px`                    | Centred CTA panel                      |
 
 Cards are consistently **bottom-heavy**: the bottom padding is 2–4px greater than the top.
 
 ### Border radius
 
-| Value | Applied to |
-| --- | --- |
-| `999px` | Pills, chips, step numerals, timeline nodes, spinner |
-| `28px` | Largest panels — dark form card, hero diagram panel, centred CTA panel |
-| `24px` | App-form card, sidebar card, mobile hero panel |
-| `22px` | Standard large card (steps, trust, rules, engagement models, contact aside) |
-| `20px` | Standard card (services, industries, stats, state cards, image slots) |
-| `18px` | Mobile card; nested node in the hero diagram |
-| `16px` | File dropzone; nested node on mobile |
-| `14px` | Primary button; bullet card; info/error panel |
-| `12px` | Input, select, textarea, secondary button, header CTA, file row |
-| `8px` | Remove / Cancel button |
-| `6px` | Checkbox |
-| `2px` | Progress track; small accent square marker |
+| Value   | Applied to                                                                  |
+| ------- | --------------------------------------------------------------------------- |
+| `999px` | Pills, chips, step numerals, timeline nodes, spinner                        |
+| `28px`  | Largest panels — dark form card, hero diagram panel, centred CTA panel      |
+| `24px`  | App-form card, sidebar card, mobile hero panel                              |
+| `22px`  | Standard large card (steps, trust, rules, engagement models, contact aside) |
+| `20px`  | Standard card (services, industries, stats, state cards, image slots)       |
+| `18px`  | Mobile card; nested node in the hero diagram                                |
+| `16px`  | File dropzone; nested node on mobile                                        |
+| `14px`  | Primary button; bullet card; info/error panel                               |
+| `12px`  | Input, select, textarea, secondary button, header CTA, file row             |
+| `8px`   | Remove / Cancel button                                                      |
+| `6px`   | Checkbox                                                                    |
+| `2px`   | Progress track; small accent square marker                                  |
 
 ### Shadows
 
 Only two real shadows exist:
 
-| Value | Role |
-| --- | --- |
-| `0 24px 60px rgba(0,0,0,0.16)` | Artboard drop shadow — canvas presentation only, **not part of the site** |
-| `0 0 0 3px rgba(226,117,27,0.20)` | Focus ring on light form fields |
+| Value                             | Role                                                                      |
+| --------------------------------- | ------------------------------------------------------------------------- |
+| `0 24px 60px rgba(0,0,0,0.16)`    | Artboard drop shadow — canvas presentation only, **not part of the site** |
+| `0 0 0 3px rgba(226,117,27,0.20)` | Focus ring on light form fields                                           |
 
 Everything else written as `box-shadow` is a **borderless hairline trick**, not elevation:
 `box-shadow: inset 0 0 0 1px <same colour as border>` paired with `background-clip: padding-box`,
@@ -378,39 +378,39 @@ The design has **no elevation system**. Depth comes from gradient grounds and ha
 
 ### Vertical rhythm (desktop)
 
-| Region | Padding |
-| --- | --- |
-| Standard section | `112px 0 120px` |
-| Page hero (inner pages) | `96px 0 112px` |
-| Home hero | `104px 0 120px` |
-| Compact hero (Contact, Sourcing Request) | `88px 0 72px` |
-| Final CTA band | `128px 0 140px` |
-| Supplier-page CTA band | `112px 0 124px` |
-| Success page | `96px 40px 104px` |
-| App form body | `72px` top, `104px` bottom |
-| Contact form band | `56px` top, `112px` bottom |
-| Footer | `64px 0 36px` |
+| Region                                   | Padding                    |
+| ---------------------------------------- | -------------------------- |
+| Standard section                         | `112px 0 120px`            |
+| Page hero (inner pages)                  | `96px 0 112px`             |
+| Home hero                                | `104px 0 120px`            |
+| Compact hero (Contact, Sourcing Request) | `88px 0 72px`              |
+| Final CTA band                           | `128px 0 140px`            |
+| Supplier-page CTA band                   | `112px 0 124px`            |
+| Success page                             | `96px 40px 104px`          |
+| App form body                            | `72px` top, `104px` bottom |
+| Contact form band                        | `56px` top, `112px` bottom |
+| Footer                                   | `64px 0 36px`              |
 
 Mobile compresses everything to `64px 20px` for standard sections, `52px 20px 60px` for the
 hero, `80px 20px 88px` for the final CTA, and `44px 20px 32px` for the footer.
 
 ### Grid patterns
 
-| Pattern | Used for |
-| --- | --- |
-| `repeat(4, 1fr)` gap `16px` | Service tiles (Home), company stats (About) |
-| `repeat(3, 1fr)` gap `20px` | Step cards, industry cards, engagement models, commitments |
-| `repeat(2, 1fr)` / `1fr 1fr` gap `20px` | Trust cards, rule cards, service cards (Services) |
-| `1fr 480px` gap `80px` | Home hero — copy + diagram panel |
-| `1fr 520px` gap `96px` | Two-column prose (Home problem, About) |
-| `1fr 420px` gap `80px` / `64px` | Hero with aside (How It Works); Contact form + aside |
-| `minmax(0,1fr) 372px` gap `48px` | App form + sticky sidebar |
-| `120px 1fr 1fr` gap `48px` | Numbered step row (How It Works) |
-| `1fr 1fr` gap `72px` | Industry section — copy + capability chips |
-| `1fr 1fr` gap `26px 24px` | Paired form fields (light) |
-| `1fr 1fr` gap `22px 24px` | Paired form fields (dark) |
-| `1.4fr 1fr 1fr 1.2fr` gap `40px` | Footer columns (desktop) |
-| `1fr 1fr` gap `28px` | Footer columns (mobile) |
+| Pattern                                 | Used for                                                   |
+| --------------------------------------- | ---------------------------------------------------------- |
+| `repeat(4, 1fr)` gap `16px`             | Service tiles (Home), company stats (About)                |
+| `repeat(3, 1fr)` gap `20px`             | Step cards, industry cards, engagement models, commitments |
+| `repeat(2, 1fr)` / `1fr 1fr` gap `20px` | Trust cards, rule cards, service cards (Services)          |
+| `1fr 480px` gap `80px`                  | Home hero — copy + diagram panel                           |
+| `1fr 520px` gap `96px`                  | Two-column prose (Home problem, About)                     |
+| `1fr 420px` gap `80px` / `64px`         | Hero with aside (How It Works); Contact form + aside       |
+| `minmax(0,1fr) 372px` gap `48px`        | App form + sticky sidebar                                  |
+| `120px 1fr 1fr` gap `48px`              | Numbered step row (How It Works)                           |
+| `1fr 1fr` gap `72px`                    | Industry section — copy + capability chips                 |
+| `1fr 1fr` gap `26px 24px`               | Paired form fields (light)                                 |
+| `1fr 1fr` gap `22px 24px`               | Paired form fields (dark)                                  |
+| `1.4fr 1fr 1fr 1.2fr` gap `40px`        | Footer columns (desktop)                                   |
+| `1fr 1fr` gap `28px`                    | Footer columns (mobile)                                    |
 
 On mobile every grid collapses to a single flex column, gap `12px` for card stacks and
 `20–22px` for form fields.
@@ -463,14 +463,14 @@ desktop value.
 The wordmark has three sizes across the site, not two. The footer takes the app-header size,
 so it is not a special case:
 
-| Context | Square | Text | Gap |
-| --- | --- | --- | --- |
-| Site header, desktop | 13×13 | 21px | 12px |
-| App header, desktop | 12×12 | 19px | 12px |
-| Footer, desktop | 12×12 | 19px | 12px |
-| Site header, mobile | 11×11 | 17px | 9px |
-| App header, mobile | 11×11 | 17px | 10px |
-| Footer, mobile | 11×11 | 17px | 10px |
+| Context              | Square | Text | Gap  |
+| -------------------- | ------ | ---- | ---- |
+| Site header, desktop | 13×13  | 21px | 12px |
+| App header, desktop  | 12×12  | 19px | 12px |
+| Footer, desktop      | 12×12  | 19px | 12px |
+| Site header, mobile  | 11×11  | 17px | 9px  |
+| App header, mobile   | 11×11  | 17px | 10px |
+| Footer, mobile       | 11×11  | 17px | 10px |
 
 The 9px site-header mobile gap is a one-pixel disagreement with the other two mobile
 artboards. **Resolved to 10px everywhere.**
@@ -496,17 +496,17 @@ do not add placeholders for them.
 
 ### Buttons
 
-| Variant | Fill | Label | Padding | Radius | Hover |
-| --- | --- | --- | --- | --- | --- |
-| Primary (hero/submit) | `--accent` | `#101010` 17px/700 | `19px 30px` | 14 | `accent 82%, #ffffff` |
-| Primary (header) | `--accent` | `#101010` 15px/700 | `13px 22px` | 12 | same |
-| Primary (step-nav) | `--accent` | `#101010` 15.5px/700 | `15px 28px` | 12 | same |
-| Primary (inline retry) | `--accent` | `#101010` 15px/700 | `13px 22px` | 12 | — |
-| Ghost on dark | transparent, `1px rgba(255,255,255,0.45)` | `#fff` 16px/600 | `16px 26px` | 12 | border `#fff`, fill `rgba(255,255,255,0.06)` |
-| Secondary on light | transparent, `1px --line` | `--muted` 15.5px/600 | `14px 22px` | 12 | border `#A9A6A0` |
-| Small destructive | transparent, `1px --line` | `--muted` 13.5px/600 | `7px 12px` | 8 | text `--err`, border `#E0BFB6` |
-| Disabled / submitting | `accent 42%, #F4F3EF` | `rgba(16,16,16,0.55)` 17px/700 | `19px 30px` | 14 | `cursor: not-allowed` |
-| Text link CTA | — | `rgba(255,255,255,0.72)` 16px/500, underlined, `text-underline-offset:4px`, decoration `rgba(255,255,255,0.3)` | — | — | text and decoration → `#fff` |
+| Variant                | Fill                                      | Label                                                                                                          | Padding     | Radius | Hover                                        |
+| ---------------------- | ----------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ----------- | ------ | -------------------------------------------- |
+| Primary (hero/submit)  | `--accent`                                | `#101010` 17px/700                                                                                             | `19px 30px` | 14     | `accent 82%, #ffffff`                        |
+| Primary (header)       | `--accent`                                | `#101010` 15px/700                                                                                             | `13px 22px` | 12     | same                                         |
+| Primary (step-nav)     | `--accent`                                | `#101010` 15.5px/700                                                                                           | `15px 28px` | 12     | same                                         |
+| Primary (inline retry) | `--accent`                                | `#101010` 15px/700                                                                                             | `13px 22px` | 12     | —                                            |
+| Ghost on dark          | transparent, `1px rgba(255,255,255,0.45)` | `#fff` 16px/600                                                                                                | `16px 26px` | 12     | border `#fff`, fill `rgba(255,255,255,0.06)` |
+| Secondary on light     | transparent, `1px --line`                 | `--muted` 15.5px/600                                                                                           | `14px 22px` | 12     | border `#A9A6A0`                             |
+| Small destructive      | transparent, `1px --line`                 | `--muted` 13.5px/600                                                                                           | `7px 12px`  | 8      | text `--err`, border `#E0BFB6`               |
+| Disabled / submitting  | `accent 42%, #F4F3EF`                     | `rgba(16,16,16,0.55)` 17px/700                                                                                 | `19px 30px` | 14     | `cursor: not-allowed`                        |
+| Text link CTA          | —                                         | `rgba(255,255,255,0.72)` 16px/500, underlined, `text-underline-offset:4px`, decoration `rgba(255,255,255,0.3)` | —           | —      | text and decoration → `#fff`                 |
 
 Submitting state carries a 17px spinner: `border: 2px solid rgba(16,16,16,0.25)` with
 `border-top-color: rgba(16,16,16,0.7)`, `animation: mal-spin 0.8s linear infinite`.
@@ -594,11 +594,11 @@ Rejected file: the dropzone repeats with a dashed `--err` border on `#FDF7F5`, h
 Three equal flex tracks, `10px` apart. Each is a 3px `radius:2px` bar over a `14px`-spaced row
 holding a `22px` circular numeral pill and a 14.5px/600 label.
 
-| Step state | Track | Pill fill | Pill text | Pill border | Label |
-| --- | --- | --- | --- | --- | --- |
-| Complete | accent | `color-mix(accent 20%, #ffffff)` | `#8A4408` | accent | `#6C6A66` |
-| Current | accent | accent | `#101010` | accent | `#1A191E` |
-| Upcoming | `#DEDDD8` | `#ffffff` | `#918E88` | `#D3D2CC` | `#6C6A66` |
+| Step state | Track     | Pill fill                        | Pill text | Pill border | Label     |
+| ---------- | --------- | -------------------------------- | --------- | ----------- | --------- |
+| Complete   | accent    | `color-mix(accent 20%, #ffffff)` | `#8A4408` | accent      | `#6C6A66` |
+| Current    | accent    | accent                           | `#101010` | accent      | `#1A191E` |
+| Upcoming   | `#DEDDD8` | `#ffffff`                        | `#918E88` | `#D3D2CC`   | `#6C6A66` |
 
 A step carrying errors gains an issue pill beside the label: 11.5px/700 `--err`,
 `1px #E5C3BA` on `#FCF3F1`, radius 999, `2px 8px`, reading `! 1 issue`.
@@ -650,14 +650,14 @@ radius 20), each capped at `460px` wide. No photography is specified anywhere el
 The design system is implemented in `src/app/globals.css`. Tailwind v4 has no
 `tailwind.config.ts` — configuration is CSS-first, in three parts:
 
-| Part | Holds | Why there |
-|---|---|---|
-| `@theme static` | Colour, font-family, radius and breakpoint tokens | Generates utilities (`text-ink`, `rounded-12`) **and** emits every token as a CSS variable. `static` is deliberate: without it Tailwind tree-shakes tokens no utility references yet, which would empty out a design system defined ahead of the components that use it. |
-| `:root` | The seven gradient grounds and `--paper-fade` | Layered multi-stop gradients are not a scale, so they must not become utilities. Kept as variables and applied through the `.ground-*` classes. |
-| `:root`, second block | The six derived accent `color-mix()` expressions | Computed values, not a scale. Kept as expressions so changing `--color-accent` propagates. |
-| `@layer components` | `.ground-*` classes and the 76 `.t-*` typography roles | Applied wholesale to an element; each role carries size, weight, line-height, letter-spacing and family together so a heading cannot be assembled wrongly. |
-| `@utility` | `.focus-ring`, `.focus-ring-dark`, `.focus-outline` | Declared with `@utility`, not `@layer components`, because only utilities accept variants — components need `focus:focus-ring` on the field itself and `focus-visible:focus-outline` on links and buttons. |
-| top level | `@keyframes mal-spin` | Tailwind does not manage keyframes. |
+| Part                  | Holds                                                  | Why there                                                                                                                                                                                                                                                                |
+| --------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `@theme static`       | Colour, font-family, radius and breakpoint tokens      | Generates utilities (`text-ink`, `rounded-12`) **and** emits every token as a CSS variable. `static` is deliberate: without it Tailwind tree-shakes tokens no utility references yet, which would empty out a design system defined ahead of the components that use it. |
+| `:root`               | The seven gradient grounds and `--paper-fade`          | Layered multi-stop gradients are not a scale, so they must not become utilities. Kept as variables and applied through the `.ground-*` classes.                                                                                                                          |
+| `:root`, second block | The six derived accent `color-mix()` expressions       | Computed values, not a scale. Kept as expressions so changing `--color-accent` propagates.                                                                                                                                                                               |
+| `@layer components`   | `.ground-*` classes and the 76 `.t-*` typography roles | Applied wholesale to an element; each role carries size, weight, line-height, letter-spacing and family together so a heading cannot be assembled wrongly.                                                                                                               |
+| `@utility`            | `.focus-ring`, `.focus-ring-dark`, `.focus-outline`    | Declared with `@utility`, not `@layer components`, because only utilities accept variants — components need `focus:focus-ring` on the field itself and `focus-visible:focus-outline` on links and buttons.                                                               |
+| top level             | `@keyframes mal-spin`                                  | Tailwind does not manage keyframes.                                                                                                                                                                                                                                      |
 
 Other rules that survive from the extraction:
 
@@ -677,15 +677,15 @@ Other rules that survive from the extraction:
 The source defines `--dark-hero` three times and `--dark-quiet` twice, with different values
 under the same name. They are separate variables in the implementation:
 
-| Variable | Glow | Paper-fade | Used by |
-|---|---|---|---|
-| `--dark-hero-home` | 15% | yes | Home hero |
-| `--dark-hero` | 14% | yes | About, Services, Industries, For Suppliers, How It Works |
-| `--dark-hero-form` | 13% | no | Contact |
-| `--dark-soft` | 9% | yes | Alternating sections |
-| `--dark-quiet` | — | no | Marketing quiet band |
-| `--dark-quiet-form` | 10% | no | Form-page sidebar |
-| `--dark-strong` | 20% | no | Final CTA band |
+| Variable            | Glow | Paper-fade | Used by                                                  |
+| ------------------- | ---- | ---------- | -------------------------------------------------------- |
+| `--dark-hero-home`  | 15%  | yes        | Home hero                                                |
+| `--dark-hero`       | 14%  | yes        | About, Services, Industries, For Suppliers, How It Works |
+| `--dark-hero-form`  | 13%  | no         | Contact                                                  |
+| `--dark-soft`       | 9%   | yes        | Alternating sections                                     |
+| `--dark-quiet`      | —    | no         | Marketing quiet band                                     |
+| `--dark-quiet-form` | 10%  | no         | Form-page sidebar                                        |
+| `--dark-strong`     | 20%  | no         | Final CTA band                                           |
 
 ### Chrome typography roles
 
@@ -726,16 +726,16 @@ The wordmark is written as two paired roles rather than three flat ones because 
 
 Eight more, added when the Home page was built:
 
-| Class | Mobile | Desktop | Used by | Nearest role, and why it is not that |
-| --- | --- | --- | --- | --- |
-| `t-node-body` | 14.5 / 1.45 | flat | Hero diagram node body | `t-label` is 14.5 but weight 600 |
-| `t-diagram-title` | 17 / 700 / +.02em | 18 | The accent MALAMERAN card | nothing within 2px |
-| `t-chip` | 13 / 500 | 13.5 | Diagram capability chips | nothing within 2px |
-| `t-statement` | 18 / 500 / 1.45 | 20 | Trust card statement | nothing within 2px |
-| `t-panel-body` | 17 / 1.6 | 18 | Centred panel paragraph | `t-prose` is the same pair at 1.65 |
-| `t-marker-line` | 17 / 1.5 | 19 | Line beside an accent marker | `t-lead` is the same pair at 1.55 |
-| `t-card-note` | 15.5 / 1.55 | 16 | Statement-cell body | `t-body-sm` is the same value but flat |
-| `t-btn-panel` | 16 / 700 | 15 | CTA label inside a card | between `t-btn` and `t-btn-sm`; larger on mobile |
+| Class             | Mobile            | Desktop | Used by                      | Nearest role, and why it is not that             |
+| ----------------- | ----------------- | ------- | ---------------------------- | ------------------------------------------------ |
+| `t-node-body`     | 14.5 / 1.45       | flat    | Hero diagram node body       | `t-label` is 14.5 but weight 600                 |
+| `t-diagram-title` | 17 / 700 / +.02em | 18      | The accent MALAMERAN card    | nothing within 2px                               |
+| `t-chip`          | 13 / 500          | 13.5    | Diagram capability chips     | nothing within 2px                               |
+| `t-statement`     | 18 / 500 / 1.45   | 20      | Trust card statement         | nothing within 2px                               |
+| `t-panel-body`    | 17 / 1.6          | 18      | Centred panel paragraph      | `t-prose` is the same pair at 1.65               |
+| `t-marker-line`   | 17 / 1.5          | 19      | Line beside an accent marker | `t-lead` is the same pair at 1.55                |
+| `t-card-note`     | 15.5 / 1.55       | 16      | Statement-cell body          | `t-body-sm` is the same value but flat           |
+| `t-btn-panel`     | 16 / 700          | 15      | CTA label inside a card      | between `t-btn` and `t-btn-sm`; larger on mobile |
 
 The last three follow the `t-body` / `t-body-lg` precedent: identical size pair,
 different line-height, kept apart.
@@ -743,24 +743,24 @@ different line-height, kept apart.
 Four more, added for How It Works, Services and Industries. All flat — none of those
 three pages has a 375px artboard:
 
-| Class | Value | Used by | Nearest role, and why it is not that |
-| --- | --- | --- | --- |
-| `t-prose-step` | 17.5 / 1.6 | Step-row and sector-row body | `t-prose` is 17→18 at 1.65 |
-| `t-body-panel` | 16 / 1.6 | Engagement-model card body | `t-body` is the same size at 1.5 |
-| `t-stat-value` | 15.5 / 600 | Timeline value | `t-body-sm` is the same size at 400 |
-| `t-fineprint-sm` | 14.5 / 1.5 | Timeline footnote | `t-node-body` is the same size at 1.45 |
+| Class            | Value      | Used by                      | Nearest role, and why it is not that   |
+| ---------------- | ---------- | ---------------------------- | -------------------------------------- |
+| `t-prose-step`   | 17.5 / 1.6 | Step-row and sector-row body | `t-prose` is 17→18 at 1.65             |
+| `t-body-panel`   | 16 / 1.6   | Engagement-model card body   | `t-body` is the same size at 1.5       |
+| `t-stat-value`   | 15.5 / 600 | Timeline value               | `t-body-sm` is the same size at 400    |
+| `t-fineprint-sm` | 14.5 / 1.5 | Timeline footnote            | `t-node-body` is the same size at 1.45 |
 
 `t-prose-step` was already in the type scale above as "Body (step / industry copy)";
 it simply had no class until the pages using it were built.
 
 Four more, added for For Suppliers, About and Contact. Also flat:
 
-| Class | Value | Used by | Nearest role, and why it is not that |
-| --- | --- | --- | --- |
-| `t-h2-why` | 52 / 1.03 / −0.03 / 800 | About "Why we exist" | `t-h2-success-request` is 52/1.03 at −0.035em |
-| `t-h2-cta-supplier` | 56 / 1.02 / −0.035 / 800 | For Suppliers closing band | `t-h2-section` is 56 at 1.03 / −0.03em |
-| `t-contact-value` | 17 / 600 | Contact email address | nothing within 2px at that weight |
-| `t-stat-figure` | 44 / 700 / lh 1 / −0.035 | Contact "2 days" | `t-h2-statement` is 44/700 at line-height 1.08 |
+| Class               | Value                    | Used by                    | Nearest role, and why it is not that           |
+| ------------------- | ------------------------ | -------------------------- | ---------------------------------------------- |
+| `t-h2-why`          | 52 / 1.03 / −0.03 / 800  | About "Why we exist"       | `t-h2-success-request` is 52/1.03 at −0.035em  |
+| `t-h2-cta-supplier` | 56 / 1.02 / −0.035 / 800 | For Suppliers closing band | `t-h2-section` is 56 at 1.03 / −0.03em         |
+| `t-contact-value`   | 17 / 600                 | Contact email address      | nothing within 2px at that weight              |
+| `t-stat-figure`     | 44 / 700 / lh 1 / −0.035 | Contact "2 days"           | `t-h2-statement` is 44/700 at line-height 1.08 |
 
 `t-h2-why` and `t-stat-figure` were both already in the type scale ("Why-we-exist h2",
 "Stat figure") without a class.
@@ -768,17 +768,17 @@ Four more, added for For Suppliers, About and Contact. Also flat:
 Nine more, added for the sourcing request form. The light treatment is the canonical
 one and the only one implemented:
 
-| Class | Mobile | Desktop | Used by |
-| --- | --- | --- | --- |
-| `t-step-pill` | 11.5 / 700 | — | Step numeral, issue pill, error badge |
-| `t-optional` | 11 / 500 / +.05em | 11.5 | The "Optional" tag |
-| `t-field-desc` | 13.5 / 1.5 | 14 | Description under a label; rejected-file body |
-| `t-field-link` | 13.5 / 600 | 14 | "browse your device", "Choose a different file" |
-| `t-error-msg` | 14 / 1.45 / 500 | — | Inline validation message |
-| `t-chip-option` | 14.5 / 500 | — | Unselected chip; selected uses `t-label` at 600 |
-| `t-dropzone-title` | 16.5 / 600 | — | "Drag files here" |
-| `t-banner-heading` | 16.5 / 700 | — | Error and rate-limit banner headings |
-| `t-step-name` | 15 / 700 | — | Mobile current-step name |
+| Class              | Mobile            | Desktop | Used by                                         |
+| ------------------ | ----------------- | ------- | ----------------------------------------------- |
+| `t-step-pill`      | 11.5 / 700        | —       | Step numeral, issue pill, error badge           |
+| `t-optional`       | 11 / 500 / +.05em | 11.5    | The "Optional" tag                              |
+| `t-field-desc`     | 13.5 / 1.5        | 14      | Description under a label; rejected-file body   |
+| `t-field-link`     | 13.5 / 600        | 14      | "browse your device", "Choose a different file" |
+| `t-error-msg`      | 14 / 1.45 / 500   | —       | Inline validation message                       |
+| `t-chip-option`    | 14.5 / 500        | —       | Unselected chip; selected uses `t-label` at 600 |
+| `t-dropzone-title` | 16.5 / 600        | —       | "Drag files here"                               |
+| `t-banner-heading` | 16.5 / 700        | —       | Error and rate-limit banner headings            |
+| `t-step-name`      | 15 / 700          | —       | Mobile current-step name                        |
 
 Note `t-optional` uses **+0.05em** tracking where every eyebrow role uses +0.06em; the
 source really does differ. `t-chip` was already taken by the hero diagram's 13/13.5
@@ -800,7 +800,7 @@ mobile value decided:
 `t-body-lg` 16.5 · `t-body` 16 ·
 `t-body-sm` 15.5 · `t-fineprint` 15 · `t-label` 14.5
 
-The last five are single-size because the source gives them the *same* value on both
+The last five are single-size because the source gives them the _same_ value on both
 artboards — those are settled, not gaps. The other fourteen are genuine gaps.
 
 The remaining 18 content roles have a real 375 ↔ 1440 pair and change at `lg`. Of the
@@ -811,9 +811,9 @@ fifteen chrome roles, three are pairs and twelve are single-size.
 Two near-duplicate source values were collapsed. Both are recorded because each moves a real
 value; reverse either by splitting the class:
 
-| Fold | Delta |
-|---|---|
-| Engagement-model h3 28px → `t-h3-card-lg` 26px | −2px; weight and line-height unchanged |
+| Fold                                                         | Delta                                                              |
+| ------------------------------------------------------------ | ------------------------------------------------------------------ |
+| Engagement-model h3 28px → `t-h3-card-lg` 26px               | −2px; weight and line-height unchanged                             |
 | Home "the problem" h2 line-height 1.02 → `t-h2-section` 1.03 | +0.01 lh on a 56px heading; mobile counterpart identical (36/1.05) |
 
 Everything else that looked foldable was kept separate, because the size delta hid a change
@@ -845,16 +845,16 @@ state.
 375px artboard. Nothing new was invented; every rule below is one the Home artboards
 already set:
 
-| Desktop | Below `lg` |
-| --- | --- |
-| Any multi-column card grid | one column, gap 12 |
-| Card padding | `22px` |
-| Card radius | two steps down (22→20, 20→18) |
-| Section head bottom margin 52–56 | 28–32 |
-| Page hero `1fr 420px` gap 80 | stacked, gap 40, aside below the lead |
-| Step row `120px 1fr 1fr` gap 48, padding 44 | stacked, gap 24, padding 32; numeral above the heading, point list below the copy |
-| Sector row `1fr 1fr` gap 72, padding 48 | stacked, gap 24, padding 32; the chip grid stays two columns, because the chips are short and one column leaves the row very tall |
-| CTA heading 72px | unchanged — `t-h2-cta-page` is one of the roles with no mobile value, and stays flat until an artboard gives one |
+| Desktop                                     | Below `lg`                                                                                                                        |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| Any multi-column card grid                  | one column, gap 12                                                                                                                |
+| Card padding                                | `22px`                                                                                                                            |
+| Card radius                                 | two steps down (22→20, 20→18)                                                                                                     |
+| Section head bottom margin 52–56            | 28–32                                                                                                                             |
+| Page hero `1fr 420px` gap 80                | stacked, gap 40, aside below the lead                                                                                             |
+| Step row `120px 1fr 1fr` gap 48, padding 44 | stacked, gap 24, padding 32; numeral above the heading, point list below the copy                                                 |
+| Sector row `1fr 1fr` gap 72, padding 48     | stacked, gap 24, padding 32; the chip grid stays two columns, because the chips are short and one column leaves the row very tall |
+| CTA heading 72px                            | unchanged — `t-h2-cta-page` is one of the roles with no mobile value, and stays flat until an artboard gives one                  |
 
 **Legal pages and the 404.** The artboards have no legal or error screens. All three
 are composed from existing pieces rather than a new visual language:
@@ -875,21 +875,80 @@ are composed from existing pieces rather than a new visual language:
 **Mobile layout for For Suppliers, About and Contact.** Same position as the three pages
 above — no 375px artboard — and the same patterns:
 
-| Desktop | Below `lg` |
-| --- | --- |
-| Any card grid | one column, gap 12 |
-| Card padding / radius | `22px`, two radius steps down |
+| Desktop                                          | Below `lg`                                       |
+| ------------------------------------------------ | ------------------------------------------------ |
+| Any card grid                                    | one column, gap 12                               |
+| Card padding / radius                            | `22px`, two radius steps down                    |
 | Criteria card, numeral beside the copy at gap 26 | numeral above the heading, as Home's trust cards |
-| About `1fr 520px` gap 96 | stacked, as Home's "the problem" |
-| For Suppliers three-up process row | one column, gap 24 |
-| Contact `1fr 420px` gap 64 | stacked, form first, the three aside cards below |
-| Contact field pairs `1fr 1fr` gap 22/24 | one column, gap 22 |
-| Contact form card `44px 44px 48px` | `22px` |
+| About `1fr 520px` gap 96                         | stacked, as Home's "the problem"                 |
+| For Suppliers three-up process row               | one column, gap 24                               |
+| Contact `1fr 420px` gap 64                       | stacked, form first, the three aside cards below |
+| Contact field pairs `1fr 1fr` gap 22/24          | one column, gap 22                               |
+| Contact form card `44px 44px 48px`               | `22px`                                           |
 
 **Keyboard focus for links and buttons.** The source has a focus state for form fields only
 (`.focus-ring`, `.focus-ring-dark`). `.focus-outline` is a 2px accent outline at 2px offset,
 applied as `focus-visible:focus-outline`. An outline rather than a box-shadow so it reads on
 both the paper and the dark grounds.
+
+**Panel shell (F1-B, block 1).** **No artboard exists for any panel screen.** `design/`
+holds eleven marketing and app-form artboards and nothing resembling a dashboard, a
+sidebar or a data screen, so the entire customer and admin shell is authored. Like the
+mobile menu and the legal pages, it stays strictly inside the existing tokens: **it adds
+no colour, no radius and no type role.** Every value below is either already in the
+spacing scale or is stated here with the source value it is derived from.
+
+_Surface._ The panel is the **app-form surface**, not the marketing one: a `--paper` page,
+white `surface` cards, `--line` borders, the dark `#1F1E23` header bar. Decided because
+the panel is a working screen rather than a sales page — and because the marketing surface
+alternates grounds top to bottom, which a screen of lists cannot do. No gradient ground
+appears anywhere in the panel.
+
+_Frame._ The existing `<Container>` — 1280px with 20/40 gutters — unchanged. The panel
+introduces no second measure.
+
+| Region        | Below `lg`                  | From `lg`                                          |
+| ------------- | --------------------------- | -------------------------------------------------- |
+| Shell columns | one column, nav in a drawer | `240px` sidebar + `minmax(0,1fr)` main, gap `48px` |
+| Body rhythm   | `32px` top, `48px` bottom   | `48px` top, `72px` bottom                          |
+| Header bar    | `60px`                      | `76px`                                             |
+
+`240px` is the one width with no direct source value. It is twice the `120px` numeral
+column of the How It Works step row, which is the source's only narrow column; the `48px`
+gap is the app form's own column gap (`minmax(0,1fr) 372px gap 48px`). The body rhythm is
+the app form's `72px/104px` stepped down one pair on the scale — a panel is returned to
+repeatedly and does not want a marketing page's air. The bar reuses the app header's
+exact heights.
+
+_Sidebar._ Sticky at `48px` from the top, from `lg` only. Group headings are the 11px
+eyebrow, muted on paper. A nav link is `t-nav` (15px/500) at `10px 14px` padding, radius
+`12` — the input and secondary-button radius, the smallest box radius in the source. The
+active link is a white `--surface` fill inside a `--line` hairline with `--ink` text; the
+rest are `--muted`, going to `--ink` on hover. That is the same "fill plus hairline means
+selected" device the chip row already uses, at the chip's own colours.
+
+_Drawer._ Below `lg`, the same authored panel behaviour as the mobile menu — portalled to
+`<body>`, fixed below the bar, Escape closes, Tab cycles, focus returns to the trigger, the
+page behind does not scroll — on the light surface instead of `--dark-quiet`, with `--line`
+rules between rows rather than white-at-9%. The dismissal behaviour is one shared hook, so
+the two panels cannot drift apart.
+
+_Page title pattern._ The panel's counterpart to `PageHero`: an optional 11px eyebrow, the
+title at `t-h2-form-card` (30px), an optional lead at `t-body-sm`, and an optional action
+slot that sits beside the title from `lg` and under it below. **30px is flat at both
+widths** — it is already the source's mobile panel h2, so it needs no mobile step, the
+same position `t-h2-cta-page` is in. Bottom margin `28px` mobile, `32px` desktop, from the
+authored section-head rule (52-56 → 28-32).
+
+_Empty state._ A `surface` card at the mobile card's `22px` padding and radius `20` below
+`lg`, stepping to the app-form card's `36px 40px 40px` and radius `24` from `lg`. Heading
+at `t-h3-card-sm` (19/20px), body at `t-body-sm` in `--color-text-body-alt`, an optional
+secondary button. Left-aligned, not centred: every other card in the design is.
+
+_Loading state._ Flat grey bars on `--track` (#EDECE8, the upload progress track) at radius
+`8`, inside the same card as the empty state, at `12px` and `16px` heights. **No pulse, no
+shimmer, no animation** — the design has one keyframe in total (the button spinner), and a
+pulse would be a new token. If a moving skeleton is ever wanted, it is added here first.
 
 ## How It Works, Services, Industries: notes from the build
 
@@ -898,13 +957,13 @@ see "Authored, not in the source".
 
 Where the artboards did not match this document:
 
-| Element | Artboard | This document said | Resolution |
-| --- | --- | --- | --- |
-| Commitment card h3 (How It Works) | 23px at −0.02em | step card h3 is 23/−0.015; industry card h3 is 24/−0.02 | `t-h3-card` (23 at −0.015); tracking only |
-| Timeline row rules | `rgba(255,255,255,0.10)` | 0.10 is listed as a header/footer edge, not an in-card divider | `Rule tone="dark"` (0.12) |
-| Engagement card inner rule | `rgba(255,255,255,0.14)` | 0.14 is listed as a card *border*, not a divider | `Rule tone="dark"` (0.12) |
-| Timeline aside border | `rgba(255,255,255,0.14)` | undifferentiated from the hero panel's 0.13 | kept apart: `Card tone="dark-panel"` is 0.14, the hero diagram stays 0.13 |
-| "Not on the list" eyebrow | 12px | `t-eyebrow` is 11 → 12.5 | the same 0.5px fold already taken on Home's suppliers panel |
+| Element                           | Artboard                 | This document said                                             | Resolution                                                                |
+| --------------------------------- | ------------------------ | -------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| Commitment card h3 (How It Works) | 23px at −0.02em          | step card h3 is 23/−0.015; industry card h3 is 24/−0.02        | `t-h3-card` (23 at −0.015); tracking only                                 |
+| Timeline row rules                | `rgba(255,255,255,0.10)` | 0.10 is listed as a header/footer edge, not an in-card divider | `Rule tone="dark"` (0.12)                                                 |
+| Engagement card inner rule        | `rgba(255,255,255,0.14)` | 0.14 is listed as a card _border_, not a divider               | `Rule tone="dark"` (0.12)                                                 |
+| Timeline aside border             | `rgba(255,255,255,0.14)` | undifferentiated from the hero panel's 0.13                    | kept apart: `Card tone="dark-panel"` is 0.14, the hero diagram stays 0.13 |
+| "Not on the list" eyebrow         | 12px                     | `t-eyebrow` is 11 → 12.5                                       | the same 0.5px fold already taken on Home's suppliers panel               |
 
 First real use of two tokens declared in block 1 and unused until now:
 `--color-numeral-idle` (`#B9B7B1`) on the three steps Malameran owns, and
@@ -919,14 +978,14 @@ the limit.
 
 Other deliberate deviations, all recorded rather than silent:
 
-| Artboard | Built | Why |
-| --- | --- | --- |
-| File row shows a progress track and "uploading 64%" | Size plus "ready to send", no track | Nothing uploads until block 7b. A progress bar with no upload behind it is a lie |
-| File row example is 6.1 MB | n/a | Over the real 4MB limit — mockup data |
-| Footer nav shows an advance button on every step | Hidden on the last step | The artboard also puts a full-width "Send request" in the card body. Two submit affordances in one view is worse than one |
-| States gallery draws the step progress at 20px pill / 13.5px label | 22px / 14.5px | The gallery is a compressed presentation of the same component, not a second size. The live form's values win |
-| Desktop sidebar is a numbered timeline | Same, but mobile collapses to the 375 artboard's single summary line | Both are in the source |
-| Sidebar divider `rgba(255,255,255,0.14)` | `Rule tone="dark"` (0.12) | The same fold taken in 4a |
+| Artboard                                                           | Built                                                                | Why                                                                                                                       |
+| ------------------------------------------------------------------ | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| File row shows a progress track and "uploading 64%"                | Size plus "ready to send", no track                                  | Nothing uploads until block 7b. A progress bar with no upload behind it is a lie                                          |
+| File row example is 6.1 MB                                         | n/a                                                                  | Over the real 4MB limit — mockup data                                                                                     |
+| Footer nav shows an advance button on every step                   | Hidden on the last step                                              | The artboard also puts a full-width "Send request" in the card body. Two submit affordances in one view is worse than one |
+| States gallery draws the step progress at 20px pill / 13.5px label | 22px / 14.5px                                                        | The gallery is a compressed presentation of the same component, not a second size. The live form's values win             |
+| Desktop sidebar is a numbered timeline                             | Same, but mobile collapses to the 375 artboard's single summary line | Both are in the source                                                                                                    |
+| Sidebar divider `rgba(255,255,255,0.14)`                           | `Rule tone="dark"` (0.12)                                            | The same fold taken in 4a                                                                                                 |
 
 **Route groups.** `/request` uses the reduced app header and has no footer, so the
 chrome moved out of the root layout into `(site)` and `(form)` group layouts. No URL
@@ -947,17 +1006,17 @@ colour-only property, and every `Card` tone is rendered on `/tokens`.
 
 None of these three has a 375px artboard either.
 
-| Element | Artboard | This document said | Resolution |
-| --- | --- | --- | --- |
-| Contact closing band | none — the page ends on the form | every marketing page ends on `--dark-strong` | followed the artboard; the section-rhythm note above now records the exception |
-| For Suppliers closing band | 56px heading, ghost `mailto:` button, `112px 0 124px` | the rhythm is recorded; a 56px CTA heading is not | its own section and the new `t-h2-cta-supplier`; `FinalCtaBand` is untouched |
-| For Suppliers application band | `112px 0 112px` | standard is `112px 0 120px` | folded to `standard`; 8px at the bottom |
-| Contact form band | `56px` top, `112px` bottom | no matching entry | new `form-band` rhythm |
-| Dark card fills | 0.02 on both form cards, 0.03 on the Contact sidebar cards | four fills listed, "faintest to lightest use order" | real tones — `dark-form` and `dark-aside`. Only the 0.04 → 0.035 fold from block 3 stands |
-| Email and office card rules | `rgba(255,255,255,0.10)` | listed as a header/footer edge | `Rule tone="dark"` (0.12), as in 4a |
-| Contact office hours line | 15 / 1.55 | `t-fineprint` is 15 / 1.5 | folded; a one-line footnote |
-| Contact email label | 14.5, no line-height | `t-node-body` is 14.5 / 1.45 | folded; single line |
-| Contact hero lead | `margin-top: 26px` | every other page uses 28 | folded to 28 |
+| Element                        | Artboard                                                   | This document said                                  | Resolution                                                                                |
+| ------------------------------ | ---------------------------------------------------------- | --------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| Contact closing band           | none — the page ends on the form                           | every marketing page ends on `--dark-strong`        | followed the artboard; the section-rhythm note above now records the exception            |
+| For Suppliers closing band     | 56px heading, ghost `mailto:` button, `112px 0 124px`      | the rhythm is recorded; a 56px CTA heading is not   | its own section and the new `t-h2-cta-supplier`; `FinalCtaBand` is untouched              |
+| For Suppliers application band | `112px 0 112px`                                            | standard is `112px 0 120px`                         | folded to `standard`; 8px at the bottom                                                   |
+| Contact form band              | `56px` top, `112px` bottom                                 | no matching entry                                   | new `form-band` rhythm                                                                    |
+| Dark card fills                | 0.02 on both form cards, 0.03 on the Contact sidebar cards | four fills listed, "faintest to lightest use order" | real tones — `dark-form` and `dark-aside`. Only the 0.04 → 0.035 fold from block 3 stands |
+| Email and office card rules    | `rgba(255,255,255,0.10)`                                   | listed as a header/footer edge                      | `Rule tone="dark"` (0.12), as in 4a                                                       |
+| Contact office hours line      | 15 / 1.55                                                  | `t-fineprint` is 15 / 1.5                           | folded; a one-line footnote                                                               |
+| Contact email label            | 14.5, no line-height                                       | `t-node-body` is 14.5 / 1.45                        | folded; single line                                                                       |
+| Contact hero lead              | `margin-top: 26px`                                         | every other page uses 28                            | folded to 28                                                                              |
 
 This block is the first real use of the **dark field treatment** and of `.focus-ring-dark`,
 both declared in block 1 and unused until now. Both render as documented: a 4.5% white
@@ -968,18 +1027,18 @@ focus with no ring.
 
 Recorded when the page was built, so the next page does not re-discover them.
 
-| Element | Desktop 1440 | Mobile 375 | Resolution |
-| --- | --- | --- | --- |
-| "You" / "Us" pill | 11px | **11.5px** | flat 11 (`t-eyebrow-xs`) — the same backwards scaling as the footer column heading |
-| Hero diagram node eyebrow | 11.5px | 11.5px | `t-eyebrow-sm` (11 → 11.5); mobile loses 0.5px |
-| For-suppliers eyebrow | 12px | 11px | `t-eyebrow` (11 → 12.5); desktop gains 0.5px |
-| Hero diagram node title | 20px, no tracking | 19px | `t-h3-card-sm`, which adds −0.012em at `lg` |
-| Dark card fill | 0.04 on step cards | 0.035 elsewhere | folded to 0.035 |
-| Statement-cell link | 15px / white 70% | same | `t-link-cta` (16 / white 72%) |
-| Statement-cell CTA | 15/700, `14px 22px` | 16/700, `17px 22px` | `primary-panel`, a real pair |
-| How-it-works band | `112px 0 120px` | `64px 20px 72px` | `standard` rhythm; mobile loses 8px of bottom padding |
-| Industry card grid | gap **16** | — | Home only. The Industries *page* uses gap 20 for the same card |
-| Hero band | closes with a 10% white hairline | none | `<Section divider>`, desktop and mobile both |
+| Element                   | Desktop 1440                     | Mobile 375          | Resolution                                                                         |
+| ------------------------- | -------------------------------- | ------------------- | ---------------------------------------------------------------------------------- |
+| "You" / "Us" pill         | 11px                             | **11.5px**          | flat 11 (`t-eyebrow-xs`) — the same backwards scaling as the footer column heading |
+| Hero diagram node eyebrow | 11.5px                           | 11.5px              | `t-eyebrow-sm` (11 → 11.5); mobile loses 0.5px                                     |
+| For-suppliers eyebrow     | 12px                             | 11px                | `t-eyebrow` (11 → 12.5); desktop gains 0.5px                                       |
+| Hero diagram node title   | 20px, no tracking                | 19px                | `t-h3-card-sm`, which adds −0.012em at `lg`                                        |
+| Dark card fill            | 0.04 on step cards               | 0.035 elsewhere     | folded to 0.035                                                                    |
+| Statement-cell link       | 15px / white 70%                 | same                | `t-link-cta` (16 / white 72%)                                                      |
+| Statement-cell CTA        | 15/700, `14px 22px`              | 16/700, `17px 22px` | `primary-panel`, a real pair                                                       |
+| How-it-works band         | `112px 0 120px`                  | `64px 20px 72px`    | `standard` rhythm; mobile loses 8px of bottom padding                              |
+| Industry card grid        | gap **16**                       | —                   | Home only. The Industries _page_ uses gap 20 for the same card                     |
+| Hero band                 | closes with a 10% white hairline | none                | `<Section divider>`, desktop and mobile both                                       |
 
 Everything else matched between the two artboards.
 
@@ -990,18 +1049,18 @@ mobile treatment of the ten-field desktop form. Read as a spec it would collect
 different data from phone users, so it was followed for composition and not for
 field set.
 
-| Artboard | Built | Why |
-| --- | --- | --- |
-| Country and Manufacturing categories tagged "Optional" | Required, no tag | Both are NOT NULL in the migration; categories has a `>= 1` check. The artboard describes a form that fails at the database |
-| Mobile shows 6 of the 10 fields | All 10 at every width | Hiding fields by viewport collects different data by device |
-| Mobile drops the two group headings | Kept at every width | Ten ungrouped fields is worse than ten grouped. The artboard's flat list follows from it showing six |
-| Mobile label "Monthly capacity" | "Monthly production capacity" | One label, the desktop one |
-| `suppliers@malameran.com` in three states | `info@malameran.com` | Nothing references a mailbox nobody has confirmed exists — the rule from 4b |
+| Artboard                                                     | Built                           | Why                                                                                                                                    |
+| ------------------------------------------------------------ | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| Country and Manufacturing categories tagged "Optional"       | Required, no tag                | Both are NOT NULL in the migration; categories has a `>= 1` check. The artboard describes a form that fails at the database            |
+| Mobile shows 6 of the 10 fields                              | All 10 at every width           | Hiding fields by viewport collects different data by device                                                                            |
+| Mobile drops the two group headings                          | Kept at every width             | Ten ungrouped fields is worse than ten grouped. The artboard's flat list follows from it showing six                                   |
+| Mobile label "Monthly capacity"                              | "Monthly production capacity"   | One label, the desktop one                                                                                                             |
+| `suppliers@malameran.com` in three states                    | `info@malameran.com`            | Nothing references a mailbox nobody has confirmed exists — the rule from 4b                                                            |
 | "Company profile or catalogue" dropzone, plus states 2 and 6 | Not built, nothing in its place | Supplier document upload is phase 2. State 2's "Uploading your catalogue" note became a true sentence; state 6 has nothing to describe |
-| Sidebar top rule `rgba(255,255,255,0.14)`, row rules `0.10` | `Rule tone="dark"` (0.12) | The fold taken in 4a and 7a |
-| Page lead 16.5 ↔ 18.5 at 1.5 | `t-lead` (17 ↔ 19 at 1.55) | 0.5px at both ends; the same fold `/request` already took on the line-height |
-| Sidebar body 15 ↔ 15.5 at 1.55 | `t-body-sm` (15.5 / 1.55) | 0.5px; mobile gains it |
-| Success rows' first column `flex: 0 0 150px` | `sm:w-[150px] sm:shrink-0` | Stacks below `sm`, where 150px would leave nothing for the detail |
+| Sidebar top rule `rgba(255,255,255,0.14)`, row rules `0.10`  | `Rule tone="dark"` (0.12)       | The fold taken in 4a and 7a                                                                                                            |
+| Page lead 16.5 ↔ 18.5 at 1.5                                 | `t-lead` (17 ↔ 19 at 1.55)      | 0.5px at both ends; the same fold `/request` already took on the line-height                                                           |
+| Sidebar body 15 ↔ 15.5 at 1.55                               | `t-body-sm` (15.5 / 1.55)       | 0.5px; mobile gains it                                                                                                                 |
+| Success rows' first column `flex: 0 0 150px`                 | `sm:w-[150px] sm:shrink-0`      | Stacks below `sm`, where 150px would leave nothing for the detail                                                                      |
 
 One new type role: **`t-h3-aside`** (26 / 1.15 / −0.025em / 700), the sidebar
 heading. It cannot fold into `t-h3-card-lg` — see `docs/decisions.md`.
@@ -1022,21 +1081,21 @@ desktop CTA was never hidden. `<Button className="hidden lg:inline-flex">` loses
 to `Button`'s own `inline-flex` base in the cascade, so the button rendered at
 every width. Measured with the real Inter metrics:
 
-| Width | Before | After |
-| --- | --- | --- |
-| 320 | — | row needs 183px of 280px · 97px spare |
-| 375 | row needs **519px of 335px** · overflows by 184px | row needs 183px of 335px · 152px spare |
-| 1440 | 1127px of 1360px | unchanged |
+| Width | Before                                            | After                                  |
+| ----- | ------------------------------------------------- | -------------------------------------- |
+| 320   | —                                                 | row needs 183px of 280px · 97px spare  |
+| 375   | row needs **519px of 335px** · overflows by 184px | row needs 183px of 335px · 152px spare |
+| 1440  | 1127px of 1360px                                  | unchanged                              |
 
 What changed below `lg`, and nothing above it:
 
-| Element | Before | After |
-| --- | --- | --- |
-| Wordmark text | 17px MALAMERAN, 124px wide | `sr-only`, mark alone. The link keeps its accessible name |
-| CTA label | "Start a sourcing request" (176px) | "Request" (60px), a second real label in `nav.ts`, not a truncation |
-| CTA box | `primary-sm`, wrapped to three lines | `primary-sm` unchanged — it fits at 104px, so no compact variant was added |
-| Row gap | `gap-10` (40px) | `gap-3` below `lg`, `lg:gap-10` unchanged |
-| Hamburger | appeared to overflow | **unchanged.** `size-11` with `items-end` already puts the 44px box's right edge on the container's inner edge, 20px from the viewport. The overflow was entirely the button pushing it |
+| Element       | Before                               | After                                                                                                                                                                                   |
+| ------------- | ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Wordmark text | 17px MALAMERAN, 124px wide           | `sr-only`, mark alone. The link keeps its accessible name                                                                                                                               |
+| CTA label     | "Start a sourcing request" (176px)   | "Request" (60px), a second real label in `nav.ts`, not a truncation                                                                                                                     |
+| CTA box       | `primary-sm`, wrapped to three lines | `primary-sm` unchanged — it fits at 104px, so no compact variant was added                                                                                                              |
+| Row gap       | `gap-10` (40px)                      | `gap-3` below `lg`, `lg:gap-10` unchanged                                                                                                                                               |
+| Hamburger     | appeared to overflow                 | **unchanged.** `size-11` with `items-end` already puts the 44px box's right edge on the container's inner edge, 20px from the viewport. The overflow was entirely the button pushing it |
 
 **The accent square is now the logo mark**, everywhere the `Wordmark` appears —
 site header, app header, footer. `src/app/opengraph-image.tsx` keeps the square:
@@ -1059,11 +1118,11 @@ client bundle cached on the device — the layout was current, the JS was not, s
 hydration never attached the handler. Confirmed by retesting in a private tab.
 Worth remembering when testing `next dev` over the LAN from a phone.
 
-| Element | Was | Is |
-| --- | --- | --- |
+| Element      | Was                                                              | Is                                                     |
+| ------------ | ---------------------------------------------------------------- | ------------------------------------------------------ |
 | CTA position | third of three `justify-between` children, so it floated mid-bar | grouped with the hamburger in a wrapper, `lg:contents` |
-| Mark, mobile | 11px — lost in a 64px bar | **24px** |
-| Panel | `position: fixed` inside the header's flex row | portalled to `<body>` |
+| Mark, mobile | 11px — lost in a 64px bar                                        | **24px**                                               |
+| Panel        | `position: fixed` inside the header's flex row                   | portalled to `<body>`                                  |
 
 **24px and not 28.** Rendered at 13/20/24/26/28/32 against the bar. At 13 the
 mark is a smudge; at 20 the M is just readable; at 24 it reads clearly while the
@@ -1087,7 +1146,6 @@ panel inside a 64px bar. Nothing does that today. The portal means nothing can.
 `lg:hidden` moved onto the panel itself, which it used to inherit from the
 trigger's wrapper — without it, a menu left open while the viewport grows past
 `lg` would stay on screen over the desktop layout.
-
 
 ### `t-h1-page` gained a mobile value in block 11
 
