@@ -101,8 +101,8 @@ export const PANEL_SCREENS = {
     title: "Requests",
     lead: "Incoming sourcing requests, before any of them becomes a project.",
     empty: {
-      heading: "No requests to show",
-      body: "This screen is built in a later block. The shell around it is what is being reviewed now.",
+      heading: "No requests yet",
+      body: "Requests submitted through the public form arrive here first.",
       action: null,
     },
   },
@@ -111,8 +111,8 @@ export const PANEL_SCREENS = {
     title: "Projects",
     lead: "Every open and closed project, across all clients.",
     empty: {
-      heading: "No projects to show",
-      body: "This screen is built in a later block. The shell around it is what is being reviewed now.",
+      heading: "No projects yet",
+      body: "A project is created from a request once it has been qualified.",
       action: null,
     },
   },
@@ -121,8 +121,8 @@ export const PANEL_SCREENS = {
     title: "Companies",
     lead: "One record per client company: contact, country, sector, source and last contact.",
     empty: {
-      heading: "No companies to show",
-      body: "This screen is built in a later block. Source and last-contact date are not captured anywhere today, so it becomes an editable form rather than a read-only list.",
+      heading: "No companies yet",
+      body: "A company record is created the first time someone from it gets in touch.",
       action: null,
     },
   },
@@ -131,8 +131,8 @@ export const PANEL_SCREENS = {
     title: "Users",
     lead: "Everyone with an account, and which company they belong to.",
     empty: {
-      heading: "No users to show",
-      body: "This screen is built in a later block. The shell around it is what is being reviewed now.",
+      heading: "No users yet",
+      body: "Accounts appear here once the accounts block lands.",
       action: null,
     },
   },
@@ -141,8 +141,8 @@ export const PANEL_SCREENS = {
     title: "Supplier applications",
     lead: "Manufacturers who have applied through the public form.",
     empty: {
-      heading: "No applications to show",
-      body: "This screen is built in a later block. The shell around it is what is being reviewed now.",
+      heading: "No applications yet",
+      body: "Applications submitted through the public form arrive here.",
       action: null,
     },
   },
@@ -250,6 +250,135 @@ export const PROFILE = {
     country: "Country",
     sector: "Sector",
   },
+} as const;
+
+/**
+ * The admin's five-stage pipeline, from the client feedback in
+ * `docs/change-requests.md`.
+ *
+ * NOT the customer's eight-stage tracker in PROJECT_STAGES. Different stages,
+ * different audience, different screen — the two are related only through
+ * docs/design.md, and neither component imports the other.
+ *
+ * TODO(copy): PROVISIONAL. The client described this pipeline in feedback; the
+ * wording has not been confirmed and the stage set has not been signed off.
+ */
+export const ADMIN_STAGES = [
+  "New Lead",
+  "Reviewing",
+  "Qualified",
+  "Project Created",
+  "Sourcing",
+] as const;
+
+/**
+ * Supplier application triage labels.
+ *
+ * TODO(copy): PROVISIONAL, and deliberately so. Whether supplier applications
+ * carry a status of their own is an open decision in
+ * `docs/change-requests.md` — this block DISPLAYS a value and offers no control
+ * to change one. These four are plausible placeholders, not a taxonomy anybody
+ * has agreed to, and they are rendered in one neutral treatment so that no
+ * outcome is implied by colour.
+ */
+export const SUPPLIER_STATUSES = [
+  "New",
+  "Reviewing",
+  "Approved",
+  "Declined",
+] as const;
+
+/** TODO(copy): column headings across the five admin lists. */
+export const ADMIN_LIST = {
+  columns: {
+    company: "Company",
+    stage: "Stage",
+    status: "Status",
+    updated: "Last updated",
+    received: "Received",
+    country: "Country",
+    sector: "Sector",
+    source: "Source",
+    lastContact: "Last contact",
+    projects: "Projects",
+    role: "Role",
+    categories: "Categories",
+  },
+  search: {
+    label: "Search",
+    placeholder: "Search by name, reference or company",
+    /** The list is not empty — the query simply matched nothing. */
+    noMatchHeading: "Nothing matches that search",
+    noMatchBody:
+      "Try a shorter query, or clear the field to see every record again.",
+    clear: "Clear",
+    /** Announced to a screen reader when the filtered count changes. */
+    resultCount: (shown: number, total: number) =>
+      `Showing ${shown} of ${total}`,
+  },
+} as const;
+
+/** TODO(copy): the admin detail screens. */
+export const ADMIN_DETAIL = {
+  eyebrow: "Admin",
+  backToRequests: "All requests",
+  backToProjects: "All projects",
+  backToCompanies: "All companies",
+  backToUsers: "All users",
+  backToSuppliers: "All applications",
+  pipelineHeading: "Pipeline stage",
+  customerViewHeading: "What the client sees",
+  customerViewNote:
+    "The eight-stage tracker on the client's own project screen, shown here so the two views cannot drift apart.",
+  requestHeading: "What was asked for",
+  commercialHeading: "Commercial terms",
+  contactHeading: "Contact",
+  companyHeading: "Company",
+  applicationHeading: "Application",
+  accountHeading: "Account",
+  relatedProjectsHeading: "Projects",
+  relatedUsersHeading: "People",
+  noRelated: "Nothing linked yet.",
+  labels: {
+    reference: "Reference",
+    received: "Received",
+    company: "Company",
+    contact: "Contact",
+    email: "Email",
+    phone: "Phone",
+    country: "Country",
+    sector: "Sector",
+    source: "Source",
+    lastContact: "Last contact",
+    role: "Role",
+    joined: "Joined",
+    status: "Status",
+    website: "Website",
+    categories: "Manufacturing categories",
+    capacity: "Capacity",
+    certifications: "Certifications",
+    projectCount: "Projects",
+    stage: "Current stage",
+  },
+} as const;
+
+/**
+ * Internal notes.
+ *
+ * The heading says who cannot see this, not who can: on a screen the team
+ * shares with nobody, the useful fact is the boundary.
+ *
+ * TODO(copy): all three strings.
+ */
+export const INTERNAL_NOTES = {
+  heading: "Internal notes — not visible to the client",
+  empty: "No notes on this record yet.",
+  /**
+   * There is no box to type in, not even a disabled one: nothing on these
+   * screens persists, and a disabled input still advertises that it will work.
+   */
+  footnote:
+    "Notes are written from the admin panel once it is connected to the database.",
 } as const;
 
 /** The drawer trigger's accessible name, both states. */

@@ -49,15 +49,32 @@ Carried forward from this block:
       detail screen actually waits on a query and ownership is checked before
       the stream starts
 
-## Block 3 — Admin panel
+## Block 3 — Admin panel (UI only, mock data)
 
-- [ ] Requests list, filter and search
-- [ ] Project list, filter and search
-- [ ] Project detail, status update, internal notes closed to the client
-- [ ] Companies — an editable form, not a read-only list: `source` and
-      `last-contact date` are captured nowhere today
-- [ ] User list
-- [ ] Supplier applications
+- [x] Five patterns written into `docs/design.md` before the components — stage
+      badge, stage rail, admin data row, internal-note block, filter bar
+- [x] Requests list + detail, with the five-stage pipeline displayed
+- [x] Projects list + detail, carrying the client's own eight-stage tracker
+- [x] Companies list + detail, read-only
+- [x] Users list + detail, read-only
+- [x] Supplier applications list + detail, read-only, status displayed only
+- [x] Internal notes displayed on request and project detail, marked as closed
+      to the client, with no box to write one in
+- [x] Client-side search on every list; no status dropdown
+- [x] Nothing mutates: no control on any admin screen writes, saves or changes
+      a status
+- [x] Five dynamic routes declared, each 404ing on an unknown id
+- [x] Rendered on `/tokens`
+- [x] Zero new colour, radius or type tokens
+
+Still owed, and deliberately not built as UI:
+
+- [ ] **Status update** on a project. Changing a stage writes, and there is
+      nothing to write to; the control arrives with the backend turn
+- [ ] **Companies as an editable form.** `source` and `last-contact date`
+      display here and are captured nowhere in the product
+- [ ] **Supplier triage.** Whether an application carries a status at all is an
+      open decision; the four labels shown are placeholders
 
 ## Accounts, schema and RLS
 

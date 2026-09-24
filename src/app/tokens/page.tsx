@@ -14,6 +14,11 @@ import { PanelSkeleton } from "@/components/panel/panel-skeleton";
 import { ProjectRow } from "@/components/panel/project-row";
 import { StatusTracker } from "@/components/panel/status-tracker";
 import { DetailList } from "@/components/panel/detail-list";
+import { DataRow } from "@/components/panel/data-row";
+import { InternalNotes } from "@/components/panel/internal-notes";
+import { ListFilter } from "@/components/panel/list-filter";
+import { StageBadge } from "@/components/panel/stage-badge";
+import { StageRail } from "@/components/panel/stage-rail";
 import { BrandMark } from "@/components/ui/brand-mark";
 import { Button, type ButtonVariant } from "@/components/ui/button";
 import { Card, YouPill } from "@/components/ui/card";
@@ -21,6 +26,7 @@ import { Eyebrow } from "@/components/ui/eyebrow";
 import { Marker } from "@/components/ui/marker";
 import { Rule } from "@/components/ui/rule";
 import { MOCK_PROJECTS } from "@/content/mock/projects";
+import { MOCK_SUPPLIERS } from "@/content/mock/suppliers";
 import { ADMIN_NAV } from "@/content/panel";
 import { isProduction } from "@/lib/env";
 import { pageMetadata } from "@/lib/seo";
@@ -859,6 +865,58 @@ export default function TokensPage() {
             ]}
           />
         </Card>
+      </div>
+
+      <h3 className="t-eyebrow text-text-small mt-12">
+        Admin badge, stage rail, data row, notes and filter — authored
+      </h3>
+      <p className="t-body-sm text-text-support mt-2">
+        The badge is the spacing table&apos;s tag pill in the chip&apos;s two
+        treatments. Colour carries position, never outcome: every status —
+        Approved and Declined included — takes the rest treatment, because the
+        palette has no success colour and inventing one here would settle a
+        taxonomy nobody has agreed. The rail is the admin&apos;s five-stage
+        pipeline, a separate component from the client&apos;s eight-stage
+        tracker above. The filter really filters; type in it.
+      </p>
+      <div className="bg-paper border-border-card rounded-20 mt-4 border p-6">
+        <div className="flex flex-wrap items-center gap-2">
+          <StageBadge>Rest</StageBadge>
+          <StageBadge active>Active</StageBadge>
+          {MOCK_SUPPLIERS.map((supplier) => (
+            <StageBadge key={supplier.id}>{supplier.status}</StageBadge>
+          ))}
+        </div>
+
+        <div className="mt-6">
+          <StageRail currentIndex={2} />
+        </div>
+
+        <div className="mt-6">
+          <ListFilter
+            rows={MOCK_PROJECTS.slice(0, 3).map((project) => ({
+              key: project.id,
+              search: `${project.name} ${project.reference}`.toLowerCase(),
+              node: (
+                <DataRow
+                  key={project.id}
+                  href={`/admin/projects/${project.id}`}
+                  title={project.name}
+                  subtitle={project.reference}
+                  columns="2-1-1"
+                  cells={[
+                    { label: "Incoterm", value: project.incoterm },
+                    { label: "Purchase type", value: project.purchaseType },
+                  ]}
+                />
+              ),
+            }))}
+          />
+        </div>
+
+        <div className="mt-6">
+          <InternalNotes notes={MOCK_PROJECTS[0]?.notes ?? []} />
+        </div>
       </div>
     </main>
   );

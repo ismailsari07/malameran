@@ -33,6 +33,19 @@ export type MockProject = {
   destination: string;
   purchaseType: string;
   existingSupplier: string;
+  /** Admin-only, added in block 3. The client panel does not read either. */
+  companyId: string;
+  notes: readonly MockNote[];
+};
+
+/**
+ * An internal note. Never rendered on a client screen — the customer panel does
+ * not import this, and the admin block that does says so on the heading.
+ */
+export type MockNote = {
+  author: string;
+  date: string;
+  body: string;
 };
 
 /**
@@ -55,6 +68,19 @@ export const MOCK_PROJECTS: readonly MockProject[] = [
     destination: "Port of Montreal, Canada",
     purchaseType: "Recurring",
     existingSupplier: "No",
+    companyId: "mock-co-northbrook",
+    notes: [
+      {
+        author: "Dana Whitfield",
+        date: "22 September 2026",
+        body: "Three Türkiye mills shortlisted. Two can hold the RAL 7016 finish at this volume; the third quoted a longer lead time than the client's March target allows.",
+      },
+      {
+        author: "Dana Whitfield",
+        date: "15 September 2026",
+        body: "Client confirmed the 2.3mm wall is a hard requirement, not a preference. Ruled out one supplier on that alone.",
+      },
+    ],
   },
   {
     id: "mock-40224",
@@ -71,6 +97,14 @@ export const MOCK_PROJECTS: readonly MockProject[] = [
     destination: "Calgary, Alberta, Canada",
     purchaseType: "One-off",
     existingSupplier: "No",
+    companyId: "mock-co-harbourline",
+    notes: [
+      {
+        author: "Sam Okonkwo",
+        date: "23 September 2026",
+        body: "New request. Quantity is small for a first order — worth asking whether this is a trial for a larger rollout before we shortlist.",
+      },
+    ],
   },
   {
     id: "mock-39880",
@@ -87,6 +121,19 @@ export const MOCK_PROJECTS: readonly MockProject[] = [
     destination: "Port of Vancouver, Canada",
     purchaseType: "Recurring",
     existingSupplier: "Yes",
+    companyId: "mock-co-northbrook",
+    notes: [
+      {
+        author: "Dana Whitfield",
+        date: "18 September 2026",
+        body: "Second round of pricing came back 6% under the first. Holding before we take it to the client — one more mill still to respond.",
+      },
+      {
+        author: "Priya Raman",
+        date: "2 September 2026",
+        body: "Client has an incumbent supplier for this line. Any move has to beat them on lead time, not just price.",
+      },
+    ],
   },
   {
     id: "mock-39642",
@@ -103,6 +150,14 @@ export const MOCK_PROJECTS: readonly MockProject[] = [
     destination: "Port of Halifax, Canada",
     purchaseType: "One-off",
     existingSupplier: "No",
+    companyId: "mock-co-brightfold",
+    notes: [
+      {
+        author: "Priya Raman",
+        date: "20 September 2026",
+        body: "Production started. First-off samples photographed and sent; client approved the stitching on the pocket seam.",
+      },
+    ],
   },
   {
     id: "mock-39301",
@@ -119,6 +174,14 @@ export const MOCK_PROJECTS: readonly MockProject[] = [
     destination: "Mississauga, Ontario, Canada",
     purchaseType: "Recurring",
     existingSupplier: "Yes",
+    companyId: "mock-co-harbourline",
+    notes: [
+      {
+        author: "Sam Okonkwo",
+        date: "16 September 2026",
+        body: "Container booked. Awaiting the bill of lading from the forwarder.",
+      },
+    ],
   },
   {
     id: "mock-38975",
@@ -135,6 +198,14 @@ export const MOCK_PROJECTS: readonly MockProject[] = [
     destination: "Port of Montreal, Canada",
     purchaseType: "Recurring",
     existingSupplier: "No",
+    companyId: "mock-co-brightfold",
+    notes: [
+      {
+        author: "Priya Raman",
+        date: "29 August 2026",
+        body: "Delivered and signed for. No quality claims raised inside the 14-day window.",
+      },
+    ],
   },
 ];
 

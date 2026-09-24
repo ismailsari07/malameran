@@ -6,20 +6,40 @@ Nothing on this list gets built until it has a decision and, where relevant, a p
 Rule: requests are never refused outright — they are logged, priced, and scheduled
 into the current stage's tail or a later phase.
 
-| Date       | Request                                                           | Source          | Decision                                                                                                            | Effect                                                                                                                                                                           | Status              |
-| ---------- | ----------------------------------------------------------------- | --------------- | ------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
-| 2026-09-08 | Lead → Qualified → Project pipeline in the admin panel            | Client feedback | **2026-09-24: accepted.** An unconverted `sourcing_requests` row is the lead; a project is a record created from it | Two admin sections, Requests and Projects, each with a list and a detail screen. Both are in the shell as of block 1                                                             | accepted            |
-| 2026-09-08 | Simple CRM in the admin panel                                     | Client feedback | **2026-09-24: accepted** as its own Companies section                                                               | In the admin nav as of block 1. `source` and `last-contact date` are captured nowhere today, so block 3's screen is an editable form, not a read-only list                       | accepted            |
-| 2026-09-08 | Supplier category hierarchy replacing the flat `text[]`           | Client feedback | Deferred to F1-B                                                                                                    | Schema + migration; affects Phase 3 matching quality                                                                                                                             | logged              |
-| 2026-09-08 | Extended funnel analytics to Customer                             | Client feedback | **2026-09-24: stays phase 2**, per `docs/scope.md`                                                                  | No admin dashboard and no funnel screen in F1-B. `/admin` redirects to Requests rather than opening on an overview                                                               | deferred to phase 2 |
-| 2026-09-08 | Four commercial fields on the sourcing form                       | Client feedback | Deferred to F1-B. **2026-09-24: displayed, not yet collected**                                                      | The project detail shows all four read-only against mock values. The public form still does not ask for them; the field types and which step each belongs in are still undecided | logged              |
-| 2026-09-08 | Supplier performance score                                        | Client feedback | Deferred to phase 2                                                                                                 | Feeds Phase 3 AI matching                                                                                                                                                        | logged              |
-| 2026-09-08 | Platform section, Sign In, dashboard mockup on the marketing site | Client feedback | Not accepted for Stage A. **2026-09-24: Sign In deliberately not added in F1-B block 1**                            | `SiteHeader` untouched, no `/login` route. A client still has no way to reach `/dashboard`; that arrives with the auth block                                                     | logged              |
-| 2026-09-08 | Business model: reseller or agent?                                | Client feedback | **Blocking** — client meeting                                                                                       | Determines liability, tax, import, insurance, payment flow, revenue model, and the legal copy                                                                                    | open question       |
+| Date       | Request                                                           | Source          | Decision                                                                                                            | Effect                                                                                                                                                                                                         | Status              |
+| ---------- | ----------------------------------------------------------------- | --------------- | ------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| 2026-09-08 | Lead → Qualified → Project pipeline in the admin panel            | Client feedback | **2026-09-24: accepted.** An unconverted `sourcing_requests` row is the lead; a project is a record created from it | Two admin sections, Requests and Projects, each with a list and a detail screen. Both are in the shell as of block 1                                                                                           | accepted            |
+| 2026-09-08 | Simple CRM in the admin panel                                     | Client feedback | **2026-09-24: accepted** as its own Companies section; read-only this turn                                          | List and detail are built against mock rows. `source` and `last-contact date` display but are captured nowhere in the product — the editable admin form is the backend turn, not a UI gap                      | accepted            |
+| 2026-09-08 | Supplier category hierarchy replacing the flat `text[]`           | Client feedback | Deferred to F1-B. **2026-09-24: still open**                                                                        | The admin application screen displays the current flat `text[]`. That screen is what a hierarchy changes, so it is built and waiting; the decision is whether the tree is a hardcoded list or admin-maintained | logged              |
+| 2026-09-08 | Extended funnel analytics to Customer                             | Client feedback | **2026-09-24: stays phase 2**, per `docs/scope.md`                                                                  | No admin dashboard and no funnel screen in F1-B. `/admin` redirects to Requests rather than opening on an overview                                                                                             | deferred to phase 2 |
+| 2026-09-08 | Four commercial fields on the sourcing form                       | Client feedback | Deferred to F1-B. **2026-09-24: displayed, not yet collected**                                                      | The project detail shows all four read-only against mock values. The public form still does not ask for them; the field types and which step each belongs in are still undecided                               | logged              |
+| 2026-09-08 | Supplier performance score                                        | Client feedback | Deferred to phase 2                                                                                                 | Feeds Phase 3 AI matching                                                                                                                                                                                      | logged              |
+| 2026-09-08 | Platform section, Sign In, dashboard mockup on the marketing site | Client feedback | Not accepted for Stage A. **2026-09-24: Sign In deliberately not added in F1-B block 1**                            | `SiteHeader` untouched, no `/login` route. A client still has no way to reach `/dashboard`; that arrives with the auth block                                                                                   | logged              |
+| 2026-09-08 | Business model: reseller or agent?                                | Client feedback | **Blocking** — client meeting                                                                                       | Determines liability, tax, import, insurance, payment flow, revenue model, and the legal copy                                                                                                                  | open question       |
 
 Status values: `logged` · `priced` · `accepted` · `deferred to phase 2` · `declined`
 
 ---
+
+---
+
+## 2026-09-24 · Supplier application triage — displayed, not decided
+
+The admin panel now shows a status on every supplier application and offers **no
+control to change one**. The four labels in `SUPPLIER_STATUSES` — New, Reviewing,
+Approved, Declined — are **placeholders**, not a taxonomy anybody has agreed to,
+and they are marked as such in the source.
+
+Whether an application carries a status at all is a data decision: it is a third
+pipeline alongside the customer's eight stages and the admin's five, and it needs
+a set of values, a rule for who moves an application between them, and a view on
+whether a declined applicant is ever told. That belongs with the backend turn, or
+Phase 2 if the supplier portal absorbs it.
+
+**Why the UI went ahead anyway:** the screen that displays a status is the screen
+that will carry the control, and building it now means the decision changes a
+value set rather than a layout. Every status renders in one neutral badge, so
+nothing about the outcome is implied by colour — see `docs/decisions.md`.
 
 ## 2026-09-24 · Decisions taken before F1-B block 1
 

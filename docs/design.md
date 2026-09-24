@@ -1007,6 +1007,56 @@ greeting a user who is not signed in. The token table's "read-only / locked inpu
 is for a disabled input, and there is no input here to disable — so the pattern is the pairs,
 not a row of dead fields.
 
+**Admin panel screens (F1-B, block 3).** Five more patterns with no artboard behind them.
+As with the two blocks before it: **no new colour, radius or type token.**
+
+_Stage badge._ The spacing table's own **tag pill** — `6px 12px`, radius `999` — carrying a
+`t-chip` label, in the chip's two existing treatments:
+
+| Badge state | Fill                     | Label         | Border           |
+| ----------- | ------------------------ | ------------- | ---------------- |
+| Rest        | `--surface`              | `#3A3833`     | `--border-field` |
+| Active      | `--accent-chip-selected` | `--on-accent` | accent           |
+
+Those are the unselected and selected capability chips, unchanged.
+
+**Colour carries position, never outcome.** The palette has no success colour, so an
+"Approved" in green and a "Declined" in red would each be a new token and a semantic this
+design has never made. Every status badge — supplier triage included — therefore takes the
+REST treatment, and the active treatment means only "this is where the record currently
+is". The word in the badge carries the outcome. If the client ever wants outcome colour,
+it starts as a token here, not as a one-off in a component.
+
+_Stage rail._ The admin's five-stage pipeline as a wrapping row of badges at gap `8`, the
+current one active. It is a **separate component from the customer's status tracker** and
+deliberately shares no code with it: a different set of stages, a different audience, and no
+dates. The two are related only through this document. Wrapping rather than scrolling,
+because five short labels fit two rows at 375px and a horizontally scrolling strip hides
+state on the screen where state is the point.
+
+_Admin data row._ The same file-row treatment the customer's project row uses — radius `12`,
+`1px --line` on `--surface`, `14px 16px` stepping to `18px 20px` from `lg` — with its columns
+as `fr` fractions rather than pixel widths. Each list states its own fraction set; none of
+them states a width. A primary cell (title at `t-h3-card-sm`, secondary line at
+`t-fineprint-sm` in `--text-small`) plus up to three further cells, each a `t-label` over a
+`t-fineprint-sm`.
+
+_Internal-note block._ The form pages' info panel — `1px --line` on `--surface-info`, radius
+`14`, `16px 18px` — opened by an accent-free eyebrow that says plainly the contents are not
+visible to the client, with notes separated by `Rule tone="form"`. Author and date sit at
+`t-fineprint-sm` in `--text-small` above the body at `t-body-sm`.
+
+**There is no box to add a note in, not even a disabled one.** A disabled input still
+advertises that typing into it will work later, in a screen where nothing persists; the
+block ends with one line saying notes are written in the backend turn. Same rule as the
+profile with no Save and the header that greets nobody.
+
+_Filter bar._ The light input exactly as the form pages draw it — `1px --border-field` on
+`--surface`, radius `12`, the control's own `14px 16px`, placeholder `--placeholder`, and the
+existing focus ring — above the list at `20px`. One text field per list and **no status
+dropdown**: a dropdown would publish a status taxonomy as settled, and that decision has not
+been taken (`docs/change-requests.md`).
+
 ## How It Works, Services, Industries: notes from the build
 
 None of these three has a 375px artboard, so all of their mobile behaviour is authored —

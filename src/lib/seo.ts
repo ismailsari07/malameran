@@ -86,10 +86,15 @@ export const ROUTES: readonly RouteEntry[] = [
   { path: "/dashboard/profile", indexable: false },
   { path: "/admin", indexable: false, disallow: true },
   { path: "/admin/requests", indexable: false },
+  { path: "/admin/requests/[id]", indexable: false },
   { path: "/admin/projects", indexable: false },
+  { path: "/admin/projects/[id]", indexable: false },
   { path: "/admin/companies", indexable: false },
+  { path: "/admin/companies/[id]", indexable: false },
   { path: "/admin/users", indexable: false },
+  { path: "/admin/users/[id]", indexable: false },
   { path: "/admin/supplier-applications", indexable: false },
+  { path: "/admin/supplier-applications/[id]", indexable: false },
 ];
 
 export const INDEXABLE_ROUTES = ROUTES.filter((r) => r.indexable);

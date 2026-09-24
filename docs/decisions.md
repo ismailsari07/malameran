@@ -5,6 +5,61 @@ Format: date · decision · why · consequence.
 
 ---
 
+## 2026-09-24 · Badge colour carries position, never outcome
+
+Every status badge in the admin panel — supplier triage included — renders in
+the chip's REST treatment. The accent-tinted treatment means only "this is where
+the record currently is".
+**Why:** the palette has no success colour. A green "Approved" and a red
+"Declined" would each be a new token, and they would encode a judgement about a
+status set that nobody has agreed to — `docs/change-requests.md` still has
+whether supplier applications carry a status at all as an open question. The
+word in the badge carries the outcome; if the client ever wants outcome colour
+it starts as a token in `docs/design.md`, not as a one-off in a component.
+**Consequence:** the badge is the spacing table's tag pill in the capability
+chip's two existing treatments. Zero new tokens, and the screen reads correctly
+in greyscale.
+
+## 2026-09-24 · The admin rail and the client tracker are separate components
+
+`StageRail` renders the five-stage admin pipeline; `StatusTracker` renders the
+client's eight stages. Neither imports the other.
+**Why:** they are not the same thing at two sizes. A request moves through the
+admin pipeline and stops existing as a lead once a project opens; a project moves
+through the client's eight stages and is shown to the client. Different stage
+sets, different audiences, different lifetimes.
+**What the admin project screen shows:** the CLIENT's tracker, not a third view.
+The team needs to see exactly what the client sees, and two renderings of one
+project's progress would drift apart.
+
+## 2026-09-24 · The admin loading boundary went into a route group before it could bite
+
+`admin/loading.tsx` moved to `admin/(lists)/loading.tsx`, with the five list
+screens inside the group and the five `[id]` routes outside it.
+**Why, in advance this time:** block 2 established that a `loading.tsx` above a
+segment makes it stream, and a streamed response has sent its headers before
+`notFound()` runs — an unknown id then answers 200 with the not-found page in
+the body. The admin tree already had that file in place, so every detail route
+added here would have inherited the bug.
+**Settled in the first build, not the last:** a group-held `requests/page.tsx`
+and a sibling `requests/[id]/page.tsx` resolve to different paths and coexist —
+verified with a throwaway route before any screen was written.
+**Verified after:** all five admin detail routes answer 404 for an unknown id.
+
+## 2026-09-24 · Nothing in the admin panel mutates, and the search really filters
+
+No status control, no note box — not even a disabled one — and no save button
+anywhere in the five sections. The only interactive thing in the block is the
+list search.
+**The line between them:** filtering is a view operation over an array already
+in the browser. It changes nothing and persists nothing, so it is honest. A
+disabled note box would advertise that typing into it works later, on a screen
+where nothing can be written at all — that is the same lie as a Save button that
+saves nothing, which is why the profile has none.
+**Consequence:** the rows are rendered on the server and handed to a small
+client island as nodes, so each list screen stays a server component and one
+input reaches the bundle.
+
 ## 2026-09-24 · The tracker restates the step colours rather than importing them
 
 `StatusTracker` carries its own three-state colour map instead of sharing one with

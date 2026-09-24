@@ -2,12 +2,19 @@
 
 ## Neredeyiz
 
-**Faz 1 · Aşama B — Müşteri paneli ve yönetim paneli.** Başladı. Blok 1 (panel
-kabuğu) bitti: her iki panelin paylaştığı kabuk, gezinme, sayfa başlığı deseni,
-boş ve yükleniyor durumları. Sadece arayüz — kimlik doğrulama, veritabanı ve RLS
-henüz yok, bu yüzden `(panel)` altındaki tüm rotalar üretimde 404 veriyor.
-Sıradaki: Blok 2 (müşteri paneli ekranları) ve Blok 3 (yönetim paneli ekranları);
-ikisi de `docs/tasks/f1-b.md` içindeki açık kararlar netleşince başlar.
+**Faz 1 · Aşama B — Müşteri paneli ve yönetim paneli.** Arayüz tarafı bitti.
+Blok 1 panel kabuğu, blok 2 müşteri ekranları, blok 3 yönetim ekranları —
+üçü de yalnızca arayüz, sahte veriyle. Kimlik doğrulama, veritabanı, RLS ve
+sunucu eylemleri hiç yok; bu yüzden `(panel)` altındaki her rota üretimde 404
+veriyor ve o kapı ancak gerçek erişim denetimi geldiğinde kalkar.
+
+Hiçbir yönetim ekranı veri değiştirmiyor: durum değiştiren bir kontrol, not
+yazma kutusu veya kaydet düğmesi yok — yazacak bir yer olmadığı için. Tek
+etkileşimli öğe listelerdeki arama, o da yalnızca görünümü süzüyor.
+
+Sıradaki: hesap sistemi, şema ve RLS turu. Onunla birlikte kapatılacak açık
+kararlar `docs/tasks/f1-b.md` içinde; iş modeli sorusu (aracı mı, satıcı mı)
+hâlâ panelin sözlüğünü ve dört alanı bekletiyor.
 
 **Faz 1 · Aşama A — Tanıtım sitesi ve talep toplama.** Kod tarafı tamamlandı;
 yayına alma bekleniyor.
