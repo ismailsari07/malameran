@@ -91,7 +91,8 @@ export function PanelDrawer({ groups }: { groups: readonly PanelNavGroup[] }) {
               <nav aria-label="Sections">
                 {groups.map((group) => (
                   <div key={group.heading} className="mb-6 last:mb-0">
-                    <p className="t-eyebrow-xs text-text-eyebrow mb-1">
+                    {/* Same heading treatment as the sidebar. */}
+                    <p className="t-eyebrow-xs text-text-body-alt mb-1">
                       {group.heading}
                     </p>
                     <ul>

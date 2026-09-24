@@ -921,7 +921,21 @@ repeatedly and does not want a marketing page's air. The bar reuses the app head
 exact heights.
 
 _Sidebar._ Sticky at `48px` from the top, from `lg` only. Group headings are the 11px
-eyebrow, muted on paper. A nav link is `t-nav` (15px/500) at `10px 14px` padding, radius
+eyebrow (`t-eyebrow-xs`, 600, `+0.06em`, uppercase) in **`--text-body-alt` (#3A3833)**.
+They began on `--text-eyebrow` (#8A8882), the muted paper eyebrow, and read as a faint
+caption rather than a heading — at 11px, on a screen whose nav links are 15px, the muted
+grey has too little weight to divide the list. `--text-body-alt` is the form pages' body
+colour, already in the token set, and is the darkest text colour used on paper short of
+`--ink`, which belongs to the active link.
+
+**Deliberately unchanged: the tracking.** Widening it past `+0.06em` would mean either
+editing `t-eyebrow-xs`, which ten call sites on the live marketing site share — the two
+footer column headings, the "You" pill, the sector, stat, engagement and step rows — or
+adding a type role for one label. Neither is worth it for a panel heading, and the design
+has no attested uppercase tracking between `+0.06em` and the wordmark's `+0.10em`. The
+colour alone does the work. Both panels' navs and the mobile drawer share this treatment.
+
+A nav link is `t-nav` (15px/500) at `10px 14px` padding, radius
 `12` — the input and secondary-button radius, the smallest box radius in the source. The
 active link is a white `--surface` fill inside a `--line` hairline with `--ink` text; the
 rest are `--muted`, going to `--ink` on hover. That is the same "fill plus hairline means

@@ -33,7 +33,14 @@ export function PanelNav({ groups }: { groups: readonly PanelNavGroup[] }) {
     >
       {groups.map((group) => (
         <div key={group.heading} className="mb-7 last:mb-0">
-          <p className="t-eyebrow-xs text-text-eyebrow mb-3 px-3.5">
+          {/*
+            `--text-body-alt`, not the muted paper eyebrow it started on: at
+            11px above 15px links, the muted grey read as a caption rather than
+            as the thing dividing the list. The tracking stays at the role's
+            +0.06em — see "Panel shell" in docs/design.md for why widening it is
+            not worth what it would cost ten call sites on the live site.
+          */}
+          <p className="t-eyebrow-xs text-text-body-alt mb-3 px-3.5">
             {group.heading}
           </p>
           <ul className="flex flex-col gap-1">
