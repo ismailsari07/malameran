@@ -30,9 +30,33 @@ import { cn } from "@/lib/cn";
  * of the crop at the edges. Both are reset at `lg`, where the 13px mark is the
  * approved desktop treatment and neither belongs.
  */
+/**
+ * Each entry is a complete class string, and every utility in it carries a
+ * value. `site` read `"size-9 " + "lg:size"` between 5b59cb4 and this fix:
+ * `lg:size` is not a utility, so Tailwind emitted nothing for it and the
+ * header mark stayed at its 36px mobile size on desktop, where the approved
+ * treatment is a bare 13px mark. Verified against the built CSS rather than
+ * the class attribute — the same "a rule that exists is not a rule that is
+ * valid" lesson the gradient grounds taught in stage A.
+ *
+ * The badge treatment — the 8px radius and the cream hairline that turn an
+ * opaque navy tile into a deliberate mark — belongs to the site mark below
+ * `lg` and is reset at `lg`, where the 13px mark is the approved desktop
+ * treatment and neither belongs. It lives here rather than inside `BrandMark`
+ * so that one map decides the mark's whole box per size; 5b59cb4 had moved it
+ * onto the image itself, which applied it to every instance at every width and
+ * left nothing able to reset it.
+ */
 const MARK = {
-  site: "size-9 " + "lg:size",
-  app: "size-[11px] lg:size-[48px]",
+  site:
+    "size-9 rounded-8 border border-paper " +
+    "lg:size-[13px] lg:rounded-none lg:border-0",
+  /**
+   * 11px mobile, 48px from `lg`, with the badge treatment at both widths —
+   * exactly what 5b59cb4 shipped and what is live today. Deliberately not
+   * touched by this fix: those values are a client decision, not a bug.
+   */
+  app: "size-[11px] rounded-12 border border-paper lg:size-[48px]",
 } as const;
 
 const TYPE = {
@@ -62,7 +86,15 @@ export function Wordmark({
   const inner = (
     <>
       <BrandMark className={MARK[size]} />
-      <span className={cn(TYPE[size], "text-white", hideTextBelowLg && "sr-only lg:not-sr-only")}>MALAMERAN</span>
+      <span
+        className={cn(
+          TYPE[size],
+          "text-white",
+          hideTextBelowLg && "sr-only lg:not-sr-only",
+        )}
+      >
+        MALAMERAN
+      </span>
     </>
   );
 

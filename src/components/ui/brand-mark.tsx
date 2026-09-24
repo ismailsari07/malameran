@@ -43,7 +43,15 @@ export function BrandMark({ className }: { className?: string }) {
       width={RENDERED}
       height={RENDERED}
       priority
-      className={cn("border-paper rounded-12 shrink-0 border object-contain", className)}
+      /*
+       * Bare: the image and nothing else. How big the mark is, and whether it
+       * wears the badge treatment, is decided per size in `Wordmark`'s MARK
+       * map — one place, and one that can reset it at a breakpoint. A radius
+       * and a border set here applied to every instance at every width, which
+       * put a cream ring on the 11px app mark and left the desktop site mark
+       * unable to drop it.
+       */
+      className={cn("shrink-0 object-contain", className)}
     />
   );
 }
