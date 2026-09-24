@@ -89,7 +89,7 @@ export const PANEL_SCREENS = {
   "dashboard/profile": {
     eyebrow: "Client portal",
     title: "Profile",
-    lead: "Your contact details and company information.",
+    lead: "Your contact details and company information, as we hold them.",
     empty: {
       heading: "Nothing to edit yet",
       body: "Profile fields arrive with the accounts block. Until then this screen exists to hold the shell in place.",
@@ -145,6 +145,110 @@ export const PANEL_SCREENS = {
       body: "This screen is built in a later block. The shell around it is what is being reviewed now.",
       action: null,
     },
+  },
+} as const;
+
+/**
+ * The eight customer-facing stages, in order, from `docs/scope.md`.
+ *
+ * This is the CUSTOMER's view of a project. The five-stage admin pipeline in
+ * `docs/change-requests.md` — New Lead → Reviewing → Qualified → Project
+ * Created → Sourcing — is a different thing on a different screen, and is not
+ * this list.
+ *
+ * TODO(copy): the client's own wording for each stage.
+ */
+export const PROJECT_STAGES = [
+  "Request Received",
+  "Supplier Research",
+  "Quote Collection",
+  "Negotiation",
+  "Production",
+  "Quality Control",
+  "Shipping",
+  "Delivered",
+] as const;
+
+export type ProjectStage = (typeof PROJECT_STAGES)[number];
+
+/** Screen-reader state words for a tracker row — state is never colour alone. */
+export const STAGE_STATE_LABELS = {
+  done: "Completed",
+  current: "Current stage",
+  upcoming: "Not started",
+} as const;
+
+/** TODO(copy): column headings and row labels on the project list. */
+export const PROJECT_LIST = {
+  columns: { project: "Project", stage: "Stage", updated: "Last updated" },
+  /** Reads out the position without relying on the tracker being visible. */
+  stageCounter: (index: number) =>
+    `Stage ${index + 1} of ${PROJECT_STAGES.length}`,
+} as const;
+
+/**
+ * The project detail screen.
+ *
+ * `pending` is the wording for a field that cannot be filled until the business
+ * model is decided — see PENDING_FIELDS below.
+ */
+export const PROJECT_DETAIL = {
+  eyebrow: "Client portal",
+  backLabel: "All projects",
+  trackerHeading: "Progress",
+  summaryHeading: "Project details",
+  commercialHeading: "Commercial terms",
+  pendingHeading: "Not yet confirmed",
+  pendingValue: "—",
+  pendingNote:
+    "These depend on how the engagement is structured, which is being confirmed with you. They are left blank deliberately rather than filled with a placeholder figure.",
+  labels: {
+    reference: "Reference",
+    opened: "Opened",
+    updated: "Last updated",
+    stage: "Current stage",
+    category: "Category",
+    quantity: "Quantity",
+    manufacturingCountry: "Preferred manufacturing country",
+    targetDelivery: "Target delivery",
+    incoterm: "Incoterm",
+    destination: "Delivery destination",
+    purchaseType: "Purchase type",
+    existingSupplier: "Existing supplier",
+  },
+} as const;
+
+/**
+ * The fields the business-model question blocks, named in one place.
+ *
+ * Until `docs/change-requests.md`'s reseller-versus-agent question is answered,
+ * nothing here can be given a value: a price implies whose price it is, a
+ * supplier's name implies the client may deal with them directly, and the
+ * contracting party is the question itself. The labels render; the values are a
+ * dash marked as pending.
+ *
+ * TODO(copy): all four, once the model is decided.
+ */
+export const PENDING_FIELDS = [
+  "Indicative price",
+  "Landed cost",
+  "Supplier",
+  "Contracting party",
+] as const;
+
+/** TODO(copy): the profile screen's field labels and its read-only notice. */
+export const PROFILE = {
+  contactHeading: "Contact",
+  companyHeading: "Company",
+  readOnlyNote:
+    "Shown as we hold it. Editing arrives with accounts; until then, email us to change anything here.",
+  labels: {
+    name: "Name",
+    email: "Email",
+    phone: "Phone",
+    company: "Company",
+    country: "Country",
+    sector: "Sector",
   },
 } as const;
 

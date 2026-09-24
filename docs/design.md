@@ -950,6 +950,63 @@ _Loading state._ Flat grey bars on `--track` (#EDECE8, the upload progress track
 shimmer, no animation** — the design has one keyframe in total (the button spinner), and a
 pulse would be a new token. If a moving skeleton is ever wanted, it is added here first.
 
+**Customer panel screens (F1-B, block 2).** Three more patterns with no artboard behind
+them, each a fold of two things the source already has. Still **no new colour, radius or
+type token.**
+
+_Status tracker._ The eight customer-facing stages from `docs/scope.md`, vertical, one row
+per stage. **Its geometry is the request sidebar's numbered timeline** — a 26px circular
+node, a 1px connector running between consecutive nodes, 16px from node to label, 22px of
+space below each row — transposed from the dark sidebar onto the panel's light surface.
+**Its colours are the three-step form's own state table**, unchanged:
+
+| Stage state | Node fill                | Numeral   | Node border      | Label     | Connector above |
+| ----------- | ------------------------ | --------- | ---------------- | --------- | --------------- |
+| Done        | `--accent-step-complete` | `#8A4408` | accent           | `--muted` | accent          |
+| Current     | accent                   | `#101010` | accent           | `--ink`   | accent          |
+| Upcoming    | `--surface`              | `#918E88` | `--border-field` | `--muted` | `#DEDDD8`       |
+
+Both connector colours are the step progress's own track colours. The stage name is
+`t-label`, the numeral `t-step-pill`, and a done or current stage carries a date beneath at
+`t-fineprint-sm` in `--text-small`.
+
+**State is never carried by colour alone.** The list is an `<ol>`, the current stage carries
+`aria-current="step"`, and every row carries a visually hidden state word. The design ships
+no icon set, so a tick is not available and none is invented.
+
+The colour map is deliberately **restated** in the tracker rather than imported from the
+step-progress component: the two share colours but no geometry — one is a horizontal bar
+track with issue pills, the other a vertical connector — and this table is the single source
+both of them point at.
+
+_Project list row._ The file row's treatment, which is the only list row the source has:
+radius `12`, `1px --line` on `--surface`, `14px 16px`, stepping to `18px 20px` from `lg`
+where the row carries its stage and date columns as well as its name, at `2fr 1fr 1fr`
+gap `24px` — fractions, as every grid in the source is expressed, rather than pixel widths
+nobody measured. Project name at
+`t-h3-card-sm`, reference at `t-fineprint-sm` in `--text-small`, stage at `t-label`. The
+whole row is one link; the card never receives a display utility from outside it.
+
+_Detail pairs._ The timeline aside's `<dl>` — label and value per row, rows separated by
+hairlines — on light: `Rule tone="form"`, `dt` at `t-body-sm` in `--muted`, `dd` at
+`t-body-sm` in `--ink`. Two columns from `lg`, one below it.
+
+_Pending-decision placeholder._ Some fields cannot be filled until the business model is
+decided (`docs/change-requests.md`): anything carrying a price, the supplier's identity or
+location, and who the purchase contract sits with. Those render with the label present and
+an em dash in `--color-disabled` where the value goes, plus one line at `t-fineprint-sm` in
+`--text-small` under the block saying the field awaits that decision. **An empty value and a
+zero are both lies**; a dash that is labelled as pending is not. The row geometry is
+identical either way, so deciding the model fills these in without the screen being redrawn.
+
+_Read-only fields (profile)._ The same detail pairs, in `surface` cards, closed by a notice
+on the form pages' own info panel — `--line` on `--surface-info`, radius `14`, `16px 18px`.
+There is no control and no submit: the screen is a `<dl>`, not a form, because nothing can be
+saved until accounts exist and a Save button that saves nothing is the same lie as a header
+greeting a user who is not signed in. The token table's "read-only / locked input background"
+is for a disabled input, and there is no input here to disable — so the pattern is the pairs,
+not a row of dead fields.
+
 ## How It Works, Services, Industries: notes from the build
 
 None of these three has a 375px artboard, so all of their mobile behaviour is authored —

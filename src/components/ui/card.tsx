@@ -108,6 +108,9 @@ const PADDING_LG = {
 } as const;
 
 const RADIUS = {
+  /** The control radius — input, select, secondary button, file row — and so
+   *  the radius of a list row built on the file row's treatment. */
+  12: "rounded-12",
   14: "rounded-14",
   16: "rounded-16",
   18: "rounded-18",
@@ -119,6 +122,7 @@ const RADIUS = {
 
 /** The `lg:` half of every radius above. */
 const RADIUS_LG = {
+  12: "lg:rounded-12",
   14: "lg:rounded-14",
   16: "lg:rounded-16",
   18: "lg:rounded-18",

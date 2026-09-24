@@ -11,12 +11,16 @@ import { PanelHeader } from "@/components/panel/panel-header";
 import { PanelNav } from "@/components/panel/panel-nav";
 import { PanelPageHeader } from "@/components/panel/panel-page-header";
 import { PanelSkeleton } from "@/components/panel/panel-skeleton";
+import { ProjectRow } from "@/components/panel/project-row";
+import { StatusTracker } from "@/components/panel/status-tracker";
+import { DetailList } from "@/components/panel/detail-list";
 import { BrandMark } from "@/components/ui/brand-mark";
 import { Button, type ButtonVariant } from "@/components/ui/button";
 import { Card, YouPill } from "@/components/ui/card";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { Marker } from "@/components/ui/marker";
 import { Rule } from "@/components/ui/rule";
+import { MOCK_PROJECTS } from "@/content/mock/projects";
 import { ADMIN_NAV } from "@/content/panel";
 import { isProduction } from "@/lib/env";
 import { pageMetadata } from "@/lib/seo";
@@ -803,6 +807,58 @@ export default function TokensPage() {
             </div>
           </div>
         </div>
+      </div>
+
+      <h3 className="t-eyebrow text-text-small mt-12">
+        Status tracker — authored, no artboard exists
+      </h3>
+      <p className="t-body-sm text-text-support mt-2">
+        The eight customer stages at three positions. Geometry from the request
+        form&apos;s sidebar timeline, colours from the three-step form&apos;s
+        own state table — see docs/design.md. Every row also states its state in
+        text for a screen reader; none of it is carried by colour alone.
+      </p>
+      <div className="mt-4 grid gap-4 lg:grid-cols-3">
+        {[0, 3, 7].map((index) => (
+          <Card
+            key={index}
+            tone="surface"
+            pad="22"
+            radius={20}
+            className="bg-paper"
+          >
+            <Eyebrow tone="muted-paper" size="card" className="mb-5">
+              stage {index + 1}
+            </Eyebrow>
+            <StatusTracker currentIndex={index} updatedOn="22 September 2026" />
+          </Card>
+        ))}
+      </div>
+
+      <h3 className="t-eyebrow text-text-small mt-12">
+        Project row and detail pairs
+      </h3>
+      <p className="t-body-sm text-text-support mt-2">
+        The row reproduces the file row — radius 12, --line on --surface, 14/16
+        stepping to 18/20 — with three columns at 2fr 1fr 1fr from lg. The pairs
+        are the timeline aside&apos;s dl on light; the last one is the pending
+        placeholder used for every field the business-model question blocks.
+      </p>
+      <div className="bg-paper border-border-card rounded-20 mt-4 border p-6">
+        <ul className="flex flex-col gap-3">
+          {MOCK_PROJECTS.slice(0, 2).map((project) => (
+            <ProjectRow key={project.id} project={project} />
+          ))}
+        </ul>
+        <Card tone="surface" pad="22" radius={20} className="mt-4">
+          <DetailList
+            rows={[
+              { label: "Reference", value: "MAL-MOCK-40219" },
+              { label: "Incoterm", value: "FOB" },
+              { label: "Indicative price", value: null },
+            ]}
+          />
+        </Card>
       </div>
     </main>
   );

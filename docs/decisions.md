@@ -5,6 +5,82 @@ Format: date · decision · why · consequence.
 
 ---
 
+## 2026-09-24 · The tracker restates the step colours rather than importing them
+
+`StatusTracker` carries its own three-state colour map instead of sharing one with
+`step-progress.tsx`.
+**Why this is the opposite call from the dismissal hook:** there, two panels had
+identical _behaviour_, and a focus trap that exists twice drifts. Here the two
+components share colours and nothing else — one is a horizontal bar track with
+validation-issue pills, the other a vertical connector with dates — and the
+shared thing is the state table in `docs/design.md`, which both are written from.
+Extracting three small objects would couple a panel screen to a form component
+that is `"use client"` and bound to `REQUEST_FORM.steps`.
+**Consequence:** the design.md table is load-bearing. Changing a state colour
+means changing it there and in both components, and the table says so.
+
+## 2026-09-24 · Stage state is never carried by colour alone
+
+Every tracker row carries a visually hidden state word — Completed, Current
+stage, Not started — and the current row carries `aria-current="step"`.
+**Why:** the design ships no icon set, so there is no tick available and
+inventing one would add a shape the design does not have. Without the text, a
+screen reader gets eight stage names and no indication which one the project is
+at, and so does anyone who cannot separate the accent from the grey.
+
+## 2026-09-24 · The loading boundary sits in a route group, so an unknown id is a real 404
+
+`dashboard/loading.tsx` moved to `dashboard/(overview)/loading.tsx`, with the
+list and the profile inside that group and `[id]` outside it.
+**What it cost before the move:** a `loading.tsx` above a segment makes it
+stream, and a streamed response has already sent its headers by the time
+`notFound()` runs. `/dashboard/<unknown>` answered **200** with the not-found
+page in the body — a soft 404. Measured both ways: with the file at
+`dashboard/`, 200; with it scoped to the group, 404.
+**Why the status wins over the skeleton:** once row-level security decides what
+a client may open, this is the "not yours" path, and that has to be a 404 rather
+than a 200 that happens to look like one. The skeleton still covers the two
+screens that will actually wait on a query.
+**Consequence:** no URL changed, and `pnpm check:routes` is unaffected — it
+skips route-group segments by design.
+
+## 2026-09-24 · `pageMetadata` gained a canonical argument, additively
+
+A dynamic route's ROUTES key has to be the template — `/dashboard/[id]` — because
+that is what `pnpm check:routes` reads off the directory. Publishing the template
+as a canonical would publish a URL that resolves to nothing, so the page passes
+the resolved one.
+**Additive by construction:** the argument is optional and defaults to `path`; no
+existing call site changed.
+**Verified rather than assumed:** the canonical of every prerendered page was
+captured from a production build before the change and diffed against one after
+— identical, including `og:url`, the sitemap's nine entries and robots.txt.
+
+## 2026-09-24 · Fields the business model blocks render as a labelled dash
+
+Price, landed cost, supplier identity and contracting party appear on the project
+detail with their labels and no values, on the info panel, under a line saying
+they depend on a decision still being made.
+**Why not omit them:** an omitted field is indistinguishable from a field that
+does not exist, and the client asked what the screen will hold. **Why not fill
+them:** a figure implies whose figure it is and a supplier name implies the
+client may approach them directly — both are the reseller-versus-agent question
+itself, which is still open in `docs/change-requests.md`.
+**Consequence:** the row geometry is identical either way, so answering the
+question fills these in without the screen being redrawn. `PENDING_FIELDS` in
+`src/content/panel.ts` is the one place the list lives.
+
+## 2026-09-24 · Mock fixtures live outside `src/content/`, and look mock
+
+`src/content/mock/projects.ts` holds the panel's fixtures; UI copy stays in
+`src/content/panel.ts`.
+**Why the split:** `src/content/` holds strings someone has to approve. Fixtures
+are invented rows nobody should ever approve, and mixing them would put made-up
+company names into the same review as the client's own copy.
+**Why the references read `MAL-MOCK-40219`:** the real format is `MAL-40219`, and
+a screenshot of this screen will circulate. A reference that cannot be mistaken
+for a real one is cheaper than explaining later that the record was never real.
+
 ## 2026-09-24 · The panel is the app-form surface, and the whole shell is authored
 
 No artboard exists for a panel of any kind — `design/` holds eleven marketing and

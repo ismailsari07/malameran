@@ -79,6 +79,10 @@ export const ROUTES: readonly RouteEntry[] = [
   // child would print six redundant lines and publish the panel's whole URL
   // structure in a file anyone can read.
   { path: "/dashboard", indexable: false, disallow: true },
+  // The template, not a URL: `pnpm check:routes` reads the directory name, so
+  // this is the only spelling that matches. The page passes its resolved URL to
+  // `pageMetadata` as `canonical`.
+  { path: "/dashboard/[id]", indexable: false },
   { path: "/dashboard/profile", indexable: false },
   { path: "/admin", indexable: false, disallow: true },
   { path: "/admin/requests", indexable: false },
@@ -117,10 +121,23 @@ export function pageMetadata({
   title,
   description,
   path,
+  canonical,
 }: {
   title: string;
   description: string;
   path: string;
+  /**
+   * The URL to publish as the canonical, when it is not `path` itself.
+   *
+   * Only a dynamic route needs this. `path` has to be the ROUTES key, which for
+   * a dynamic route is the template — "/dashboard/[id]" — because that is what
+   * `pnpm check:routes` sees on disk. Publishing the template as a canonical
+   * would be publishing a URL that resolves to nothing, so the page passes the
+   * resolved one here.
+   *
+   * Additive: every existing call omits it and is unchanged.
+   */
+  canonical?: string;
 }): Metadata {
   const route = routeFor(path);
 
@@ -129,14 +146,16 @@ export function pageMetadata({
   const home = path === "/";
   const fullTitle = home ? title : `${title} · ${SITE_NAME}`;
 
+  const url = canonical ?? path;
+
   return {
     title: home ? { absolute: title } : title,
     description,
-    alternates: { canonical: path },
+    alternates: { canonical: url },
     openGraph: {
       type: "website",
       siteName: SITE_NAME,
-      url: path,
+      url,
       title: fullTitle,
       description,
       locale: "en_CA",

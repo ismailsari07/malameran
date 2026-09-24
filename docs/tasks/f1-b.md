@@ -25,11 +25,29 @@ taken on it are recorded in `docs/decisions.md`.
 - [x] Rendered on `/tokens` in its own block
 - [x] Zero new colour, radius or type tokens
 
-## Block 2 — Customer panel
+## Block 2 — Customer panel (UI only, mock data)
 
-- [ ] Project list
-- [ ] Project detail with the eight-stage status tracker
-- [ ] Profile
+- [x] Three patterns written into `docs/design.md` before the components —
+      status tracker, project list row, detail pairs and the pending placeholder
+- [x] Project list at `/dashboard`, against `src/content/mock/projects.ts`
+- [x] Project detail at `/dashboard/[id]` with the eight-stage tracker, the
+      request summary and the four commercial fields, read-only
+- [x] Fields the business model blocks render as a labelled dash, not a guess
+- [x] Profile — a read-only `<dl>`, no form and no Save
+- [x] Tracker state carried in text as well as colour
+- [x] Unknown project id is a real 404, not a streamed 200
+- [x] Rendered on `/tokens`: the tracker at three positions, the row, the pairs
+- [x] Zero new colour or type tokens (`Card` gained radius 12, which the token
+      table already carries as the control radius)
+
+Carried forward from this block:
+
+- [ ] A delivered project reads as "Current stage: Delivered" — once a project
+      has a real completed state, the tracker needs a fourth case so the last
+      stage can be done rather than current
+- [ ] `/dashboard/[id]` has no loading skeleton, deliberately; revisit when the
+      detail screen actually waits on a query and ownership is checked before
+      the stream starts
 
 ## Block 3 — Admin panel
 
